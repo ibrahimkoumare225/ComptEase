@@ -1,11 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="auth" stylesheets="@../css/auth.css" translateY="7.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fill="#a4c2e0" layoutX="515.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Accédez à votre compte">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Text>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="fr.koumare.comptease.controllers.AuthController"
-            prefHeight="400.0" prefWidth="600.0">
+   <Text fill="#a4c2e0" layoutX="573.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bienvenue">-->
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Text>
+      <Label layoutX="552.0" layoutY="427.0" text="Mot de passe oublié ?" AnchorPane.bottomAnchor="145.0" AnchorPane.rightAnchor="310.0">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <FontAwesomeIconView fill="#a4c2e0" glyphName="LOCK" layoutX="516.0" layoutY="418.0" size="30" translateY="7.0" AnchorPane.rightAnchor="464.0" />
+      <FontAwesomeIconView fill="#a4c2e0" glyphName="USER_CIRCLE" layoutX="516.0" layoutY="367.0" size="30" text="" translateY="5.0" AnchorPane.rightAnchor="460.0" />
+      <Button layoutX="590.0" layoutY="479.0" prefHeight="56.0" prefWidth="200.0" styleClass="btn1" text="Connexion" textFill="WHITE" />
+      <ImageView fitHeight="108.0" fitWidth="242.0" layoutX="647.0" layoutY="216.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/user.jpg" />
+         </image>
+      </ImageView>
+      <AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="vbox1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="9.0" layoutY="66.0" text="Vous n'avez pas de compte" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <Text fill="WHITE" layoutX="28.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrez vos données personnelles et commencez  votre voyage avec nous." textAlignment="CENTER" wrappingWidth="310.08013916015625">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Button layoutX="100.0" layoutY="245.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="200.0" styleClass="btn1" text="S'inscrire" textFill="WHITE" />
+         </children>
+      </AnchorPane>
+      <TextField layoutX="553.0" layoutY="348.0" prefHeight="30.0" prefWidth="347.0" promptText="Pseudo" AnchorPane.rightAnchor="100.0" />
+      <PasswordField layoutX="552.0" layoutY="399.0" prefHeight="30.0" prefWidth="347.0" promptText="Password" AnchorPane.rightAnchor="100.0" />
 
+   </children>
 </AnchorPane>
