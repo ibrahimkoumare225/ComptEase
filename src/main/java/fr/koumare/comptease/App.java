@@ -12,7 +12,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/fr/koumare/comptease/fxml/auth.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
         stage.setTitle("Connexion");
         stage.setScene(scene);
         stage.show();
@@ -20,7 +20,7 @@ public class App extends Application {
 
     public static void main(String[] args) {
         // 🔥 Initialisation de Hibernate avant de lancer JavaFX
-        HibernateUtil.getSessionFactory();
+         HibernateUtil.getSessionFactory();
         System.out.println("✅ Hibernate est bien initialisé depuis App !");
 
         // Lancement de l'application JavaFX
