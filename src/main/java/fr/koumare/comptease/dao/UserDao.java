@@ -4,8 +4,7 @@ import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import java.util.List;
+import java.util.Optional;
 
 public class UserDao {
 
@@ -22,14 +21,18 @@ public class UserDao {
             e.printStackTrace();
         }
     }
-
-    public List<User> getAllUsers() {
+    public Optional<User> findByPseudo(String pseudo) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from User", User.class).list();
+            System.out.println("Session opened");
+            Optional<User> user = session.createQuery("FROM User WHERE pseudo = :pseudo", User.class)
+                    .setParameter("pseudo", pseudo)
+                    .uniqueResultOptional();
+            System.out.println("User found: " + user.orElse(null));
+            return user;
         }
-    }
 
-    public void updatePatient(User user) {
+    }
+    public void updateUser(User user) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -43,20 +46,5 @@ public class UserDao {
         }
     }
 
-    public void deleteUser(Long userId) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            User user = session.get(User.class, userId);
-            if (user != null) {
-                session.delete(user);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
+
 }
