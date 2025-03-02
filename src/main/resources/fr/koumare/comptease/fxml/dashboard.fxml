@@ -1,12 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.*?>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="body">
+            <children>
+                <BorderPane layoutX="236.0" layoutY="2.0" prefHeight="647.0" prefWidth="1057.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <left>
+                        <AnchorPane prefHeight="650.0" prefWidth="300.0" styleClass="menu_container" BorderPane.alignment="CENTER">
+                            <children>
+                                <Text fill="WHITE" layoutX="77.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Compt" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="15.0">
+                                    <font>
+                                        <Font name="System Bold" size="28.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="#9747ff" layoutX="165.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ease" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="15.0">
+                                    <font>
+                                        <Font name="System Bold" size="28.0" />
+                                    </font>
+                                </Text>
+                                <Circle fill="#53c22b" layoutX="104.0" layoutY="46.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="25.0" />
+                                <Circle fill="#e0b509" layoutX="14.0" layoutY="244.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="25.0" />
+                                <Circle fill="#ff5a52" layoutX="83.0" layoutY="180.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="25.0" />
+                                <Button layoutX="65.0" layoutY="125.0" mnemonicParsing="false" styleClass="alt_menu_btn" text="Dashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="HOME" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button layoutX="65.0" layoutY="179.0" mnemonicParsing="false" text="Rapport Financier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="BOOK" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button layoutX="65.0" layoutY="227.0" mnemonicParsing="false" text="Transaction" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="200.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="MONEY" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button layoutX="65.0" layoutY="259.0" mnemonicParsing="false" text="Obligation Fiscales" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="250.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button layoutX="65.0" layoutY="315.0" mnemonicParsing="false" text="Clients" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="USERS" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button layoutX="57.0" layoutY="363.0" mnemonicParsing="false" text="Factures" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="350.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="CLIPBOARD" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button layoutX="57.0" layoutY="409.0" mnemonicParsing="false" text="Paramètres" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="400.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="COGS" size="20" />
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </AnchorPane>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="fr.koumare.comptease.controllers.DashboardController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
-
+                    </left>
+                    <center>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <AnchorPane layoutX="400.0" layoutY="193.0" prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <AnchorPane layoutX="11.0" layoutY="18.0" prefHeight="714.6666666666666" prefWidth="1000.0" styleClass="body1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                  <AnchorPane layoutX="33.0" layoutY="29.0" prefHeight="165.0" prefWidth="200.0" styleClass="card" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="100.0">
+                                                      <children>
+                                                          <FontAwesomeIconView fill="#0c78d0" glyphName="DOLLAR" layoutX="8.0" layoutY="97.0" size="5em" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="8.0" />
+                                                          <Label layoutX="86.0" layoutY="117.0" text="Articles en stocks" textFill="WHITE" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="50.0">
+                                                              <font>
+                                                                  <Font name="Tahoma" size="18.0" />
+                                                              </font>
+                                                          </Label>
+                                                          <Label alignment="CENTER_RIGHT" layoutX="113.0" layoutY="34.0" prefHeight="29.0" prefWidth="194.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="20.0">
+                                                              <font>
+                                                                  <Font name="Berlin Sans FB" size="25.0" />
+                                                              </font>
+                                                          </Label>
+                                                      </children>
+                                                  </AnchorPane>
+                                                  <AnchorPane layoutX="365.0" layoutY="102.0" prefHeight="165.0" prefWidth="200.0" styleClass="card" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="100.0">
+                                                      <children>
+                                                          <Label layoutX="104.0" layoutY="125.0" text="Articles entrants" textFill="WHITE" AnchorPane.bottomAnchor="15.0">
+                                                              <font>
+                                                                  <Font name="Tahoma" size="18.0" />
+                                                              </font>
+                                                          </Label>
+                                                          <Label alignment="CENTER_RIGHT" layoutX="6.0" layoutY="34.0" prefHeight="29.0" prefWidth="194.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="32.66666666666666">
+                                                              <font>
+                                                                  <Font name="Berlin Sans FB" size="25.0" />
+                                                              </font>
+                                                          </Label>
+                                          <FontAwesomeIconView glyphName="CHECK_CIRCLE" layoutX="20.0" layoutY="100.0" size="5em" />
+                                                      </children>
+                                                  </AnchorPane>
+                                    <AnchorPane layoutX="503.0" layoutY="96.0" prefHeight="165.0" prefWidth="200.0" styleClass="card" AnchorPane.leftAnchor="510.0" AnchorPane.topAnchor="100.0">
+                                       <children>
+                                          <Label layoutX="104.0" layoutY="125.0" text="Articles entrants" textFill="WHITE" AnchorPane.bottomAnchor="15.0">
+                                             <font>
+                                                <Font name="Tahoma" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" layoutX="85.0" layoutY="32.0" prefHeight="29.0" prefWidth="194.0" text="0" textFill="WHITE" AnchorPane.leftAnchor="18.666666666666657">
+                                             <font>
+                                                <Font name="Berlin Sans FB" size="25.0" />
+                                             </font>
+                                          </Label>
+                                          <FontAwesomeIconView glyphName="RECEIPT" layoutX="58.0" layoutY="87.0" size="5em" />
+                                       </children>
+                                    </AnchorPane>
+                                                  <AnchorPane layoutX="758.0" layoutY="48.0" prefHeight="165.0" prefWidth="200.0" styleClass="card" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="100.0">
+                                                      <children>
+                                                          <Label layoutX="103.0" layoutY="131.0" text="Articles sorties" textFill="WHITE" AnchorPane.bottomAnchor="15.0">
+                                                              <font>
+                                                                  <Font name="Tahoma" size="18.0" />
+                                                              </font>
+                                                          </Label>
+                                                          <Label alignment="CENTER_RIGHT" layoutX="65.0" layoutY="38.0" prefHeight="29.0" prefWidth="194.0" text="0" textFill="WHITE" AnchorPane.rightAnchor="20.0">
+                                                              <font>
+                                                                  <Font name="Berlin Sans FB" size="25.0" />
+                                                              </font>
+                                                          </Label>
+                                          <FontAwesomeIconView glyphName="ARROW_ALT_CIRCLE_DOWN" layoutX="64.0" layoutY="87.0" size="5em" />
+                                                      </children>
+                                                  </AnchorPane>
+                                    <BorderPane layoutX="26.0" layoutY="293.0" prefHeight="251.0" prefWidth="953.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="285.0">
+                                       <top>
+                                          <AnchorPane prefHeight="50.0" prefWidth="954.0" styleClass="card_title" BorderPane.alignment="CENTER" />
+                                       </top>
+                                       <center>
+                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="card_corps" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <BarChart layoutX="116.0" layoutY="-157.0" prefHeight="243.33333333333334" prefWidth="954.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <xAxis>
+                                                    <CategoryAxis side="BOTTOM" />
+                                                  </xAxis>
+                                                  <yAxis>
+                                                    <NumberAxis side="LEFT" />
+                                                  </yAxis>
+                                                </BarChart>
+                                             </children>
+                                          </AnchorPane>
+                                       </center>
+                                    </BorderPane>
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </AnchorPane>
+                    </center>
+                </BorderPane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>
