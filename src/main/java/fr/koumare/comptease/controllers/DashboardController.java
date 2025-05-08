@@ -9,12 +9,19 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
 public class DashboardController extends BaseController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 
     @FXML
     private BorderPane chartContainer;
+
+    @FXML
+    private void helloButton(javafx.event.ActionEvent event) {
+        logger.info("Le bouton Hello a été cliqué !");
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
