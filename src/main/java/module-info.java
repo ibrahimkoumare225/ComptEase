@@ -10,6 +10,8 @@ module fr.koumare.comptease {
     requires static lombok;
     requires java.management;
     requires jbcrypt;
+    requires com.sun.istack.runtime;
+    requires org.slf4j;
 
     // Ouvrir les packages pour JavaFX et Hibernate
     opens fr.koumare.comptease to javafx.graphics, javafx.fxml;
