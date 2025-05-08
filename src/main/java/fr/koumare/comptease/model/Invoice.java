@@ -1,4 +1,4 @@
-package fr.koumare.comptease.model;
+/*package fr.koumare.comptease.model;
 
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import lombok.Getter;
@@ -54,5 +54,52 @@ public class Invoice {
         this.date = date;
         this.status = status;
         this.client = client;
+    }
+}*/
+package fr.koumare.comptease.model;
+
+import fr.koumare.comptease.model.enumarated.StatusInvoice;
+import lombok.Getter;
+import lombok.Setter;
+import javax.persistence.*;
+import java.time.Instant;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+public class Invoice extends Document {
+
+    @Enumerated(EnumType.STRING)
+    private StatusInvoice status;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    @ManyToMany
+    @JoinTable(
+            name = "invoice_articles",
+            joinColumns = @JoinColumn(name = "invoice_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id")
+    )
+    private List<Article> articles;
+
+    @OneToOne
+    @JoinColumn(name = "devis_id")
+    private Devis devis;
+
+    @OneToMany(mappedBy = "invoice")
+    private List<Transaction> transactions;
+
+    public Invoice() {
+        super();
+    }
+
+    public Invoice(double price, String description, Instant date, StatusInvoice status, Client client, Devis devis) {
+        super(price, description, date);
+        this.status = status;
+        this.client = client;
+        this.devis = devis;
     }
 }
