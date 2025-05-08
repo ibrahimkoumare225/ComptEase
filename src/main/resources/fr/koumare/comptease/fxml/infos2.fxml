@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.Infos2Controller">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="auth" stylesheets="@../css/infos.css">
          <children>
@@ -18,26 +18,26 @@
                   <Font name="Tahoma Bold" size="25.0" />
                </font>
             </Label>
-            <Label layoutX="41.0" layoutY="104.0" text="Quelle est la nature de vos ventes  ?" textFill="WHITE" AnchorPane.bottomAnchor="265.0">
+            <Label layoutX="41.0" layoutY="104.0" text="Quelle est la nature de vos ventes ?" textFill="WHITE" AnchorPane.bottomAnchor="265.0">
                <font>
                   <Font name="Tahoma" size="18.0" />
                </font>
             </Label>
-            <Button layoutX="460.0" layoutY="344.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0" styleClass="btn_c" text="Continuer" textFill="WHITE" />
+            <Button fx:id="continueButton" layoutX="460.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleContinue" prefHeight="30.0" prefWidth="125.0" styleClass="btn_c" text="Continuer" textFill="WHITE" />
             <FontAwesomeIconView fill="WHITE" glyphName="ARROW_RIGHT" layoutX="566.0" layoutY="363.0" />
-            <ChoiceBox layoutX="-111.0" layoutY="141.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.leftAnchor="40.0" />
+            <ChoiceBox fx:id="salesNatureChoice" layoutX="40.0" layoutY="141.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="141.0" />
             <Label layoutX="41.0" layoutY="176.0" text="Quelle est la date création de votre société ?" textFill="WHITE" AnchorPane.leftAnchor="40.0">
                <font>
                   <Font name="Tahoma" size="18.0" />
                </font>
             </Label>
-            <DatePicker layoutX="34.0" layoutY="203.0" prefHeight="25.0" prefWidth="423.0" AnchorPane.leftAnchor="40.0" />
-            <Label layoutX="40.0" layoutY="237.0" text="Quelle est la date de clôture de votre exercice ? " textFill="WHITE" AnchorPane.leftAnchor="40.0">
+            <DatePicker fx:id="creationDatePicker" layoutX="34.0" layoutY="203.0" prefHeight="25.0" prefWidth="423.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="203.0" />
+            <Label layoutX="40.0" layoutY="237.0" text="Quelle est la date de clôture de votre exercice ?" textFill="WHITE" AnchorPane.leftAnchor="40.0">
                <font>
                   <Font name="Tahoma" size="18.0" />
                </font>
             </Label>
-            <DatePicker layoutX="40.0" layoutY="260.0" prefHeight="25.0" prefWidth="423.0" AnchorPane.leftAnchor="40.0" />
+            <DatePicker fx:id="closingDatePicker" layoutX="40.0" layoutY="260.0" prefHeight="25.0" prefWidth="423.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="260.0" />
          </children>
       </AnchorPane>
    </children>

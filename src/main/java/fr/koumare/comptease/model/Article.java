@@ -13,9 +13,6 @@ import java.util.List;
 @Setter
 public class Article {
 
-
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +20,7 @@ public class Article {
     @Column(name = "description", nullable = false, length = 100)
     private String description;
 
+    @ElementCollection
     private List<String> category;
 
     private Long quantite;
@@ -30,17 +28,19 @@ public class Article {
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    // Constructeurs
+    @ManyToMany(mappedBy = "articles")
+    private List<Devis> devis;
+
+    @ManyToMany(mappedBy = "articles")
+    private List<Invoice> invoices;
+
     public Article() {
     }
 
-    public Article(Long id, String description, List<String> category, Long quantite, BigDecimal price) {
-        this.id = id;
+    public Article(String description, List<String> category, Long quantite, BigDecimal price) {
         this.description = description;
         this.category = category;
         this.quantite = quantite;
         this.price = price;
     }
 }
-
-
