@@ -1,4 +1,11 @@
 package fr.koumare.comptease.service;
 
-public interface FactureService {
+import fr.koumare.comptease.model.Document;
+import fr.koumare.comptease.model.Invoice;
+
+public interface FactureService extends DocumentService {
+    void updateInvoiceStatus(Long invoiceId, String status);
+
+
+
 }

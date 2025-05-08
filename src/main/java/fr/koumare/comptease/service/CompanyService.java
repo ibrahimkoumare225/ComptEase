@@ -6,4 +6,5 @@ import fr.koumare.comptease.model.User;
 public interface CompanyService {
     boolean saveCompany(Company company);
     Company findCompanyByUser(User user);
+
 }
