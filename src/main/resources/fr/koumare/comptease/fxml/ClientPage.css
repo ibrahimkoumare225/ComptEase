@@ -1,0 +1,16 @@
+.ftab{
+    -fx-background-color: #fff;
+    -fx-background-radius:8px;
+}
+.barregauche{
+    -fx-background-color: #37383C;
+}
+
+.label-info{
+    -fx-background-color: transparent;
+    -fx-border-color: linear-gradient(to bottom right,#272b3f,#256b51);
+    -fx-border-radius: 4px;
+}
+.table{
+    -fx-border-radius: 4px;
+}

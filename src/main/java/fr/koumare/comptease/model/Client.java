@@ -10,7 +10,13 @@ import javax.persistence.*;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int idc;
+
+    @Column(name= "id_user", nullable= false)
+    private int idUser;
+
+    @Column(unique = true, length = 20)
+    private String contact;
 
     @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
@@ -18,15 +24,23 @@ public class Client {
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
-    @Column(unique = true, length = 20)
-    private String contact;
+    @Column(name = "adresse", nullable = false, length = 300)
+    private String adresse;
+
+    @Column(name = "solde", nullable = false)
+    private Long solde;
 
     public Client() {
     }
 
-    public Client(String lastName, String firstName, String contact) {
+    public Client(int idc, int idUser ,String contact, String firstName, String lastName, String adresse, Long solde ) {
+        this.idc=idc;
+        this.idUser= idUser;
+        this.contact = contact;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.contact = contact;
+        this.adresse = adresse;
+        this.solde = solde;
+
     }
 }
