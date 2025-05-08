@@ -2,12 +2,15 @@ package fr.koumare.comptease.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import javax.persistence.*;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 @Getter
 @Setter
-@Entity
 public class Client {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idc;
@@ -29,6 +32,19 @@ public class Client {
 
     @Column(name = "solde", nullable = false)
     private Long solde;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "client")
+    private List<Devis> devis;
+
+    @OneToMany(mappedBy = "client")
+    private List<Invoice> invoices;
+
+    @OneToMany(mappedBy = "client")
+    private List<Notification> notifications;
 
     public Client() {
     }

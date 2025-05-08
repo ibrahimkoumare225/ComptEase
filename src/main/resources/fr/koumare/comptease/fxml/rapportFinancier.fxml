@@ -9,11 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.DashboardController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.RapportFinancierController">
     <children>
         <AnchorPane prefHeight="720.0" prefWidth="1300.0" styleClass="body">
             <children>
@@ -34,12 +30,12 @@
                                 <Circle fill="#53c22b" layoutX="104.0" layoutY="46.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="25.0" />
                                 <Circle fill="#e0b509" layoutX="14.0" layoutY="244.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="25.0" />
                                 <Circle fill="#ff5a52" layoutX="83.0" layoutY="180.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="25.0" />
-                                <Button fx:id="dashboardButton" layoutX="65.0" layoutY="125.0" mnemonicParsing="false" styleClass="alt_menu_btn" text="Dashboard" onAction="#handleNavigateToDashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
+                                <Button fx:id="dashboardButton" layoutX="65.0" layoutY="125.0" mnemonicParsing="false" text="Dashboard" onAction="#handleNavigateToDashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="HOME" size="20" />
                                     </graphic>
                                 </Button>
-                                <Button fx:id="rapportFinancierButton" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" text="Rapport Financier" onAction="#handleNavigateToRapportFinancier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
+                                <Button fx:id="rapportFinancierButton" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" styleClass="alt_menu_btn" text="Rapport Financier" onAction="#handleNavigateToRapportFinancier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="BOOK" size="20" />
                                     </graphic>
@@ -97,11 +93,3 @@
         </AnchorPane>
     </children>
 </StackPane>
-        <AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="fr.koumare.comptease.controllers.DashboardController"
-            prefHeight="400.0" prefWidth="600.0">
-    <Label fx:id="welcomeText" />
-    <Button text ="hello" onAction="#helloButton" />
-
-</AnchorPane>
