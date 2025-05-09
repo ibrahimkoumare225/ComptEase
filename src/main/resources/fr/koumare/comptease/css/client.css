@@ -1,0 +1,83 @@
+.ftab{
+    -fx-background-color: #fff;
+    -fx-background-radius:8px;
+}
+.barregauche{
+    -fx-background-color: #37383C;
+}
+
+.label-info{
+    -fx-background-color: transparent;
+    -fx-border-color: linear-gradient(to bottom right,#272b3f,#256b51);
+    -fx-border-radius: 4px;
+}
+.table{
+    -fx-border-radius: 4px;
+}
+.body {
+    -fx-background-color: #A4C2E0;
+}
+
+/* Navigation Section */
+.menu_container {
+    -fx-padding: 10 10 10 20;
+    -fx-spacing: 20;
+    -fx-background-color: #37383C;
+}
+
+.menu_container Button {
+    -fx-pref-width: 241;
+    -fx-pref-height: 40;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #37383C;
+    -fx-font-size: 1.1em;
+    -fx-alignment: center_left;
+}
+
+.body1 {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 0);
+    -fx-background-color: #FFFFFF;
+}
+
+.menu_container Button:hover {
+    -fx-cursor: hand;
+}
+
+.menu_container Button FontAwesomeIconView {
+    -fx-fill: #FFFFFF;
+}
+
+.alt_menu_btn {
+    -fx-pref-width: 241; /* Ajusté pour correspondre à .menu_container Button */
+    -fx-pref-height: 40;
+    -fx-background-color: #1A1F37;
+    -fx-font-size: 1.1em;
+    -fx-alignment: center_left;
+}
+
+.alt_menu_btn FontAwesomeIconView {
+    -fx-fill: #FFFFFF;
+}
+
+.card {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 0);
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+}
+
+.card_title {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 0);
+    -fx-background-color: #EBF2FA;
+    -fx-background-radius: 10px 10px 0px 0px;
+}
+
+.card_corps {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 0);
+    -fx-background-radius: 0px 0px 10px 10px;
+    -fx-background-color: #FFFFFF;
+}
+
+
+
+
+

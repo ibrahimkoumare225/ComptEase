@@ -154,14 +154,14 @@ public class ClientPageController {
             form_add.setVisible(false);
         }
         else if(event.getSource()==modifExecuter){
-            formInitial_h.setVisible(true);
-            form_modif.setVisible(false);
+            formInitial_h.setVisible(false);
+            form_modif.setVisible(true);
             form_add.setVisible(false);
         }
         else if(event.getSource()==addExecuter){
-            formInitial_h.setVisible(true);
+            formInitial_h.setVisible(false);
             form_modif.setVisible(false);
-            form_add.setVisible(false);
+            form_add.setVisible(true);
         }
     }
 

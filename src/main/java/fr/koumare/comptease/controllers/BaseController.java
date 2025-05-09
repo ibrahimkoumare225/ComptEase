@@ -86,7 +86,7 @@ public abstract class BaseController {
     protected void handleNavigateToClient() {
         logger.debug("Clients button clicked");
         logger.info("Navigating to Clients");
-        navigateTo("/fr/koumare/comptease/fxml/client.fxml", "Clients");
+        navigateTo("/fr/koumare/comptease/fxml/clientPage.fxml", "Clients");
     }
 
     @FXML

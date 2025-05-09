@@ -17,10 +17,6 @@ public class DashboardController extends BaseController implements Initializable
     @FXML
     private BorderPane chartContainer;
 
-    @FXML
-    private void helloButton(javafx.event.ActionEvent event) {
-        logger.info("Le bouton Hello a été cliqué !");
-    }
 
 
     @Override
