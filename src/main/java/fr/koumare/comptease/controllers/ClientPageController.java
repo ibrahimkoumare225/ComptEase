@@ -128,7 +128,7 @@ public class ClientPageController {
     //private PreparedStatement ps;
     //private ResultSet rs;
 
-
+    /* 
     @FXML
     public void initialize(){
         affiche();
@@ -222,5 +222,5 @@ public class ClientPageController {
         } catch (Exception e) {
             e.printStackTrace();  // Affiche l'exception dans la console
         }
-    }
+    }*/
 }

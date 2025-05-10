@@ -20,15 +20,12 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 
-import static fr.koumare.comptease.utilis.DB.conDB;
 
 
-public class ClientController implements Initializable {
+public class ClientController extends BaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -198,7 +195,8 @@ public class ClientController implements Initializable {
 
     // Ajoute un client
     @FXML
-    private void AjoutClient(Client client) {
+    private void AjoutClient(ActionEvent event, Client client) {
+        System.out.println("Ajout d'un client");
         if(clientService.addClient(client)){
             logger.info("Client ajouté : {}", client.getFirstName());
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
@@ -210,7 +208,7 @@ public class ClientController implements Initializable {
 
     // Modifie un client
     @FXML
-    private void ModifClient(Client client) {
+    private void ModifClient(ActionEvent event,Client client) {
         if(clientService.updateClient(client)){
             logger.info("Client modifié : {}", client.getFirstName());
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
@@ -222,7 +220,7 @@ public class ClientController implements Initializable {
 
     // Supprime un client
     @FXML
-    private void SupprClient(Client client) {
+    private void SupprClient(ActionEvent event,Client client) {
         if(clientService.deleteClient(client.getIdc())){
             logger.info("Client supprimé : {}", client.getFirstName());
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès.");
