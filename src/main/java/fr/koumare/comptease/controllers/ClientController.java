@@ -3,6 +3,8 @@ package fr.koumare.comptease.controllers;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Company;
+import fr.koumare.comptease.service.ClientService;
+import fr.koumare.comptease.service.impl.ClientServiceImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,7 +28,12 @@ import java.util.ResourceBundle;
 import static fr.koumare.comptease.utilis.DB.conDB;
 
 
-public class ClientController extends BaseController implements Initializable {
+public class ClientController implements Initializable {
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        logger.info("Initialisation de  ClientController");
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
@@ -142,15 +149,9 @@ public class ClientController extends BaseController implements Initializable {
     private TableView<Client> tableClient;
     private ClientDao cl=new ClientDao();
     private Connection connect;
-
-
+    private ClientService clientService = new ClientServiceImpl();
 
     @FXML
-    public void initialize(){
-        affiche();
-        addClientShow();
-
-    }
     public void close(){
         System.exit(0);
     }
@@ -169,7 +170,7 @@ public class ClientController extends BaseController implements Initializable {
             form_modif.setVisible(true);
             form_add.setVisible(false);
         }
-        else if(event.getSource()==modifExecuter){
+        /*else if(event.getSource()==modifExecuter){
             formInitial_h.setVisible(true);
             form_modif.setVisible(false);
             form_add.setVisible(false);
@@ -178,134 +179,70 @@ public class ClientController extends BaseController implements Initializable {
             formInitial_h.setVisible(true);
             form_modif.setVisible(false);
             form_add.setVisible(false);
-        }
+        }*/
     }
 
-    public ObservableList<Client> addClient(){
-        ObservableList<Client> list = FXCollections.observableArrayList();
-        String sql="select * from Client";
-        connect = conDB();
-        try{
-            PreparedStatement ps = connect.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()){
-                Client c =new Client(rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(7),
-                        rs.getLong(6)
-                );
-                list.add(c);
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-    private ObservableList<Client> addClientList;
-    public void addClientShow(){
-        addClientList=addClient();
+    // Affiche la liste des clients dans le tableau
+    @FXML
+    private void affiche() {
+        logger.info("Affichage de la liste des clients");
+        ObservableList<Client> list = FXCollections.observableArrayList(clientService.getAllClients());
         idc.setCellValueFactory(new PropertyValueFactory<>("idc"));
-        nomc.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        prenomc.setCellValueFactory(new PropertyValueFactory<>("LastName"));
-        contactc.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        nomc.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        prenomc.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         adressec.setCellValueFactory(new PropertyValueFactory<>("adresse"));
         soldec.setCellValueFactory(new PropertyValueFactory<>("solde"));
-
-        tableClient.setItems(addClientList);
+        contactc.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        tableClient.setItems(list);
     }
 
-    public void addClientSelect(){
-        Company company = new Company();
-        Client client = tableClient.getSelectionModel().getSelectedItem();
-        if(client != null){
-            addId.setText(String.valueOf(client.getIdc()));
-            addNom.setText(client.getFirstName());
-            addPrenom.setText(client.getLastName());
-            addContact.setText(client.getContact());
-            addAdresse.setText(client.getAdresse());
-            addSolde.setText(String.valueOf(client.getSolde()));
-        }
-        String sql="INSERT INTO Client (idc, id_user, firstName, lastName, contact, adresse, solde,user_id) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
-        connect = conDB();
-        try{
-            if(addId.getText().isEmpty() || addNom.getText().isEmpty() || addPrenom.getText().isEmpty() || addAdresse.getText().isEmpty() || addSolde.getText().isEmpty()){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText("Champs vides");
-                alert.setContentText("Veuillez remplir tous les champs");
-                alert.showAndWait();
-            }
-            else{
-                PreparedStatement ps = connect.prepareStatement(sql);
-                ps.setInt(1, Integer.parseInt(addId.getText()));
-                ps.setInt(2, company.getId().intValue());
-                ps.setString(3, addNom.getText());
-                ps.setString(4, addPrenom.getText());
-                ps.setString(5, addContact.getText());
-                ps.setString(6, addAdresse.getText());
-                ps.setLong(7, Long.parseLong(addSolde.getText()));
-                ps.setInt(8, Integer.parseInt(addId.getText()));
-
-                ps.executeUpdate();
-            }
-            PreparedStatement ps = connect.prepareStatement(sql);
-            ps.setInt(1, Integer.parseInt(addId.getText()));
-            ps.setInt(2, company.getId().intValue());
-            ps.setString(3, addNom.getText());
-            ps.setString(4, addPrenom.getText());
-            ps.setString(5, addContact.getText());
-            ps.setString(6, addAdresse.getText());
-            ps.setLong(7, Long.parseLong(addSolde.getText()));
-            ps.setInt(8,company.getId().intValue());
-
-
-            ps.executeUpdate();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Erreur d'insertion dans la base de données");
+    // Ajoute un client
+    @FXML
+    private void AjoutClient(Client client) {
+        if(clientService.addClient(client)){
+            logger.info("Client ajouté : {}", client.getFirstName());
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
+        } else {
+            logger.error("Erreur lors de l'ajout du client : {}", client.getFirstName());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ajout du client.");
         }
     }
 
-    public void addClientEffacer(){
-        addId.setText("");
-        addNom.setText("");
-        addPrenom.setText("");    
-        addContact.setText("");
-        addAdresse.setText("");
-        addSolde.setText("");
-    }
-
-    protected void affiche(){
-        try {
-            StringBuilder clientInfo = new StringBuilder();
-
-            cl.getAllClients().forEach(client -> {
-                clientInfo.append("IDC: ").append(client.getIdc())
-                        .append("IDUser: ").append(client.getIdUser())
-                        .append(", Nom: ").append(client.getLastName())
-                        .append(", Prénom: ").append(client.getFirstName())
-                        .append(", Contact: ").append(client.getContact())
-                        .append("\n");
-            });
-
-            clientLabel.setText(clientInfo.toString());
-            System.out.println(clientLabel.getText());
-        } catch (Exception e) {
-            e.printStackTrace();  // Affiche l'exception dans la console
+    // Modifie un client
+    @FXML
+    private void ModifClient(Client client) {
+        if(clientService.updateClient(client)){
+            logger.info("Client modifié : {}", client.getFirstName());
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
+        } else {
+            logger.error("Erreur lors de la modification du client : {}", client.getFirstName());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du client.");
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        logger.info("Initialisation de ClientController");
-        // Add client-specific initialization here
+    // Supprime un client
+    @FXML
+    private void SupprClient(Client client) {
+        if(clientService.deleteClient(client.getIdc())){
+            logger.info("Client supprimé : {}", client.getFirstName());
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès.");
+        } else {
+            logger.error("Erreur lors de la suppression du client : {}", client.getFirstName());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression du client.");
+        }
     }
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        logger.info("Affichage d'une alerte : {} - {}", title, message);
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+
+    
 
 
 }

@@ -13,10 +13,10 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idc;
+    private Long idc;
 
     @Column(name= "id_user", nullable= false)
-    private int idUser;
+    private Long idUser;
 
     @Column(unique = true,name="contact", length = 20)
     private String contact;
@@ -49,7 +49,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(int idc, int idUser ,String contact, String firstName, String lastName, String adresse, Long solde ) {
+    public Client(Long idc, Long idUser ,String contact, String firstName, String lastName, String adresse, Long solde ) {
         this.idc=idc;
         this.idUser= idUser;
         this.contact = contact;
@@ -61,16 +61,16 @@ public class Client {
     }
 
     //getters et setters
-    public int getIdc() {
+    public Long getIdc() {
         return idc;
     }
-    public void setIdc(int idc) {
+    public void setIdc(Long idc) {
         this.idc = idc;
     }
-    public int getIdUser() {
+    public Long getIdUser() {
         return idUser;
     }
-    public void setIdUser(int idUser) {
+    public void setIdUser(Long idUser) {
         this.idUser = idUser;
     }
     public String getContact() {

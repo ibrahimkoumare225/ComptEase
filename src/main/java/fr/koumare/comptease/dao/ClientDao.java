@@ -60,4 +60,22 @@ public class ClientDao {
             e.printStackTrace();
         }
     }
+
+    //verification de l'existence du client
+    public boolean clientExists(Client client) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            List<Client> clients = session.createQuery("from Client where firstName = :firstName and lastName = :lastName", Client.class)
+                    .setParameter("firstName", client.getFirstName())
+                    .setParameter("lastName", client.getLastName())
+                    .list();
+            return !clients.isEmpty();
+        }
+    }
+
+    //recuperation du client par son id
+    public Client getClientById(Long clientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Client.class, clientId);
+        }
+    }
 }
