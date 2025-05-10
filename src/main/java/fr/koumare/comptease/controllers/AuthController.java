@@ -190,4 +190,6 @@ public class AuthController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de AuthController");
     }
+
+
 }

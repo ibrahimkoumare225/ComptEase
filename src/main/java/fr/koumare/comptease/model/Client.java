@@ -15,8 +15,10 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idc;
 
+    /*@ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)*/
     @Column(name= "id_user", nullable= false)
-    private Long idUser;
+    private Long id_user;
 
     @Column(unique = true,name="contact", length = 20)
     private String contact;
@@ -33,9 +35,9 @@ public class Client {
     @Column(name = "solde", nullable = false)
     private Long solde;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user;*/
 
     @OneToMany(mappedBy = "client")
     private List<Devis> devis;
@@ -49,9 +51,9 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, Long idUser ,String contact, String firstName, String lastName, String adresse, Long solde ) {
+    public Client(Long idc, Long id_User ,String contact, String firstName, String lastName, String adresse, Long solde ) {
         this.idc=idc;
-        this.idUser= idUser;
+        this.id_user = id_User;
         this.contact = contact;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -67,12 +69,7 @@ public class Client {
     public void setIdc(Long idc) {
         this.idc = idc;
     }
-    public Long getIdUser() {
-        return idUser;
-    }
-    public void setIdUser(Long idUser) {
-        this.idUser = idUser;
-    }
+    
     public String getContact() {
         return contact;
     }
@@ -103,7 +100,12 @@ public class Client {
     public void setSolde(Long solde) {
         this.solde = solde;
     }
-    
+    public Long getId_user() {
+        return id_user;
+    }
+    public void setId_user(Long id_user) {
+        this.id_user = id_user;
+    }
     public List<Devis> getDevis() {
         return devis;
     }
@@ -126,7 +128,7 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "idc=" + idc +
-                ", idUser=" + idUser +
+                ", id_user=" + id_user +
                 ", contact='" + contact + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +

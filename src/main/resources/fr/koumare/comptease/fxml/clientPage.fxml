@@ -174,7 +174,7 @@
                                           <TextField fx:id="addSolde" layoutX="447.0" layoutY="66.0" />
                                           <Label layoutX="384.0" layoutY="40.0" text="Adresse :" />
                                           <TextField fx:id="addAdresse" layoutX="447.0" layoutY="36.0" prefHeight="25.0" prefWidth="286.0" />
-                                          <Button fx:id="addEffacer" layoutX="698.0" layoutY="91.0" mnemonicParsing="false" onAction="#addClientEffacer" prefHeight="36.0" prefWidth="101.0" text="Effacer" />
+                                          <!--<Button fx:id="addEffacer" layoutX="698.0" layoutY="91.0" mnemonicParsing="false" onAction="#addClientEffacer" prefHeight="36.0" prefWidth="101.0" text="Effacer" />-->
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane fx:id="form_modif" layoutX="7.0" layoutY="-2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="135.0" prefWidth="945.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css" visible="false">

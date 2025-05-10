@@ -5,6 +5,11 @@ import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 public class ClientServiceImpl implements ClientService {
 
@@ -23,14 +28,28 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean updateClient(Client client) {
-        if(client.getFirstName()== null || client.getLastName() == null || client.getAdresse() == null) {
+    public boolean updateClient(String nom, String prenom, String adresse, String contact,Long solde) {
+        if(nom == null || prenom == null || adresse == null ) {
             logger.warn("Informations client incomplete");
             return false;
         }
-        clientDao.updateClient(client);
-        logger.info("Client modifié");
-        return true;
+        //modifier le client dans la base de données
+        //chercher le client dans la base de données
+        Optional<Client> clientOptional = clientDao.findByNames(nom, prenom);
+        if(clientOptional.isPresent()) {
+            Client client = clientOptional.get();
+            client.setFirstName(nom);
+            client.setLastName(prenom);
+            client.setContact(contact);
+            client.setAdresse(adresse);
+            client.setSolde(solde);
+            clientDao.updateClient(client);
+            logger.info("Client modifié : {} {}", nom, prenom);
+            return true;
+        } else {
+            logger.warn("Client non trouvé");
+            return false;
+        }
     }
 
     @Override
@@ -41,21 +60,43 @@ public class ClientServiceImpl implements ClientService {
     }
     
     @Override
-    public boolean addClient(Client client) {
-        boolean clientExists = clientDao.clientExists(client);
-        if(clientExists) {
-            logger.warn("Le client existe déjà : {}", client);
+    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Long solde) {
+        logger.info("fonction addClient :{}", nom+" "+ prenom+" "+ adresse+" "+ contact+" "+ idUser+" "+ solde);
+        //verification si ce client existe deja
+        if(clientDao.clientExists(nom,prenom)) {
+            logger.warn("Client déjà existant");
             return false;
         }
-        if(client.getFirstName()== null || client.getLastName() == null || client.getAdresse() == null || client.getSolde() == null) {
+        //verification des champs
+        if(nom == null || prenom == null || adresse == null ) {
             logger.warn("Informations client incomplete");
-            return false;            
+            return false;
         }
+        logger.info("Ajout d'un client addC");
         //Enregistrement du client dans la base de données
+        Client client = new Client();
+        client.setFirstName(nom);
+        client.setLastName(prenom);
+        client.setAdresse(adresse);
+        client.setContact(contact);
+        client.setId_user(idUser);
+        client.setSolde(solde);
         clientDao.saveClient(client);
-        logger.info("Client enregistré : {}", client);
+        logger.info("Client ajouté : {} {}", nom, prenom);
         return true;
         
+    }
+
+    @Override
+    public Optional<Client> findById(Long id) {
+        logger.info("Recherche du client via service par l'ID : {}", id);
+        return clientDao.findById(id);
+    }
+
+    @Override
+    public Optional<Client> findByNames(String nom, String prenom) {
+        logger.info("Recherche du client via service par le nom+prenom : {} {}", nom, prenom);
+        return clientDao.findByNames(nom, prenom);
     }
 
 }

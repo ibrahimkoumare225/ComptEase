@@ -2,7 +2,7 @@ package fr.koumare.comptease.controllers;
 
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.Company;
+import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
 import javafx.collections.FXCollections;
@@ -18,9 +18,11 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 
 
@@ -30,10 +32,11 @@ public class ClientController extends BaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("Initialisation de  ClientController");
+        affiche();
     }
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
-
+    User user = new User();
     @FXML
     private BorderPane chartContainer;
     @FXML
@@ -144,8 +147,6 @@ public class ClientController extends BaseController implements Initializable {
 
     @FXML
     private TableView<Client> tableClient;
-    private ClientDao cl=new ClientDao();
-    private Connection connect;
     private ClientService clientService = new ClientServiceImpl();
 
     @FXML
@@ -184,43 +185,81 @@ public class ClientController extends BaseController implements Initializable {
     private void affiche() {
         logger.info("Affichage de la liste des clients");
         ObservableList<Client> list = FXCollections.observableArrayList(clientService.getAllClients());
-        idc.setCellValueFactory(new PropertyValueFactory<>("idc"));
-        nomc.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        prenomc.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        adressec.setCellValueFactory(new PropertyValueFactory<>("adresse"));
-        soldec.setCellValueFactory(new PropertyValueFactory<>("solde"));
-        contactc.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        idc.setCellValueFactory(new PropertyValueFactory<>("Idc"));
+        nomc.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+        prenomc.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
+        adressec.setCellValueFactory(new PropertyValueFactory<>("Adresse"));
+        soldec.setCellValueFactory(new PropertyValueFactory<>("Solde"));
+        contactc.setCellValueFactory(new PropertyValueFactory<>("Contact"));
         tableClient.setItems(list);
     }
 
     // Ajoute un client
     @FXML
-    private void AjoutClient(ActionEvent event, Client client) {
-        System.out.println("Ajout d'un client");
-        if(clientService.addClient(client)){
-            logger.info("Client ajouté : {}", client.getFirstName());
+    private void AjoutClient(ActionEvent event) {
+        String contact=addContact.getText();
+        String prenom=addPrenom.getText();
+        String nom=addNom.getText();
+        String adresse=addAdresse.getText();
+        Long solde=Long.parseLong(addSolde.getText());
+        logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
+        if(clientService.addClient(nom, prenom, adresse, contact,3L,solde)){
+            logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
+
+            //recuperer le client ajouté
+            Optional<Client> addedClient = clientService.findByNames(prenom, nom);
+            if(addedClient.isPresent()) {
+                Client newClient = addedClient.get();
+                logger.info("Client ajouté : {}", newClient.getFirstName());
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
+            } else {
+                logger.error("Erreur lors de la récupération du client ajouté : {}", nom+" " + prenom);
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client ajouté.");
+            }
         } else {
-            logger.error("Erreur lors de l'ajout du client : {}", client.getFirstName());
+            logger.error("Erreur lors de l'ajout du client : {}", nom+" " + prenom);
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ajout du client.");
         }
     }
 
     // Modifie un client
     @FXML
-    private void ModifClient(ActionEvent event,Client client) {
-        if(clientService.updateClient(client)){
-            logger.info("Client modifié : {}", client.getFirstName());
+    private void ModifClient(ActionEvent event) {
+        String nom=modifNom.getText();
+        String prenom=modifPrenom.getText();
+        String adresse=modifAdresse.getText();
+        String contact=modifContact.getText();
+        Long solde= Long.parseLong(modifSolde.getText());
+    
+        logger.info("Modification d'un client : {}", nom +" "+ prenom);
+
+        if(clientService.updateClient(nom, prenom, adresse, contact, solde)){
+            logger.info("Client modifié : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
+            //recuperer le client modifié
+            Optional<Client> updatedClient = clientService.findByNames(nom, prenom);
+            if(updatedClient.isPresent()) {
+                Client newClient = updatedClient.get();
+                logger.info("Client modifié : {}", newClient.getFirstName());
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
+            } else {
+                logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client modifié.");
+            }
         } else {
-            logger.error("Erreur lors de la modification du client : {}", client.getFirstName());
+            logger.error("Erreur lors de la modification du client : {}", nom+" " + prenom);
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du client.");
         }
     }
 
     // Supprime un client
-    @FXML
-    private void SupprClient(ActionEvent event,Client client) {
+    /*@FXML
+        private void SupprClient(ActionEvent event) {
+        
+        logger.info("Suppression d'un client : {}", client.getFirstName());
+
+        // Vérification de l'existence du client avant la suppression
         if(clientService.deleteClient(client.getIdc())){
             logger.info("Client supprimé : {}", client.getFirstName());
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès.");
@@ -228,7 +267,7 @@ public class ClientController extends BaseController implements Initializable {
             logger.error("Erreur lors de la suppression du client : {}", client.getFirstName());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression du client.");
         }
-    }
+    }*/
     private void showAlert(Alert.AlertType type, String title, String message) {
         logger.info("Affichage d'une alerte : {} - {}", title, message);
         Alert alert = new Alert(type);
