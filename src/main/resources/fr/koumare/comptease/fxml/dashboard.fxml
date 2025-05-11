@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -30,37 +34,37 @@
                                 <Circle fill="#53c22b" layoutX="104.0" layoutY="46.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="25.0" />
                                 <Circle fill="#e0b509" layoutX="14.0" layoutY="244.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="25.0" />
                                 <Circle fill="#ff5a52" layoutX="83.0" layoutY="180.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="25.0" />
-                                <Button fx:id="dashboardButton" layoutX="65.0" layoutY="125.0" mnemonicParsing="false" styleClass="alt_menu_btn" text="Dashboard" onAction="#handleNavigateToDashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
+                                <Button fx:id="dashboardButton" layoutX="65.0" layoutY="125.0" mnemonicParsing="false" onAction="#handleNavigateToDashboard" styleClass="alt_menu_btn" text="Dashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="HOME" size="20" />
                                     </graphic>
                                 </Button>
-                                <Button fx:id="rapportFinancierButton" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" text="Rapport Financier" onAction="#handleNavigateToRapportFinancier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
+                                <Button fx:id="rapportFinancierButton" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleNavigateToRapportFinancier" text="Rapport Financier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="BOOK" size="20" />
                                     </graphic>
                                 </Button>
-                                <Button fx:id="transactionButton" layoutX="65.0" layoutY="227.0" mnemonicParsing="false" text="Transaction" onAction="#handleNavigateToTransaction" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="200.0">
+                                <Button fx:id="transactionButton" layoutX="65.0" layoutY="227.0" mnemonicParsing="false" onAction="#handleNavigateToTransaction" text="Transaction" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="200.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="MONEY" size="20" />
                                     </graphic>
                                 </Button>
-                                <Button fx:id="obligationFiscaleButton" layoutX="65.0" layoutY="259.0" mnemonicParsing="false" text="Obligation Fiscales" onAction="#handleNavigateToObligationFiscale" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="250.0">
+                                <Button fx:id="obligationFiscaleButton" layoutX="65.0" layoutY="259.0" mnemonicParsing="false" onAction="#handleNavigateToObligationFiscale" text="Obligation Fiscales" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="250.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />
                                     </graphic>
                                 </Button>
-                                <Button fx:id="clientButton" layoutX="65.0" layoutY="315.0" mnemonicParsing="false" text="Clients" onAction="#handleNavigateToClient" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
+                                <Button fx:id="clientButton" layoutX="65.0" layoutY="315.0" mnemonicParsing="false" onAction="#handleNavigateToClient" text="Clients" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="USERS" size="20" />
                                     </graphic>
                                 </Button>
-                                <Button fx:id="facturesButton" layoutX="57.0" layoutY="363.0" mnemonicParsing="false" text="Factures" onAction="#handleNavigateToFactures" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="350.0">
+                                <Button fx:id="facturesButton" layoutX="57.0" layoutY="363.0" mnemonicParsing="false" onAction="#handleNavigateToFactures" text="Factures" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="350.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="CLIPBOARD" size="20" />
                                     </graphic>
                                 </Button>
-                                <Button fx:id="parametreButton" layoutX="57.0" layoutY="409.0" mnemonicParsing="false" text="Paramètres" onAction="#handleNavigateToParametre" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="400.0">
+                                <Button fx:id="parametreButton" layoutX="57.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleNavigateToParametre" text="Paramètres" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="400.0">
                                     <graphic>
                                         <FontAwesomeIconView glyphName="COGS" size="20" />
                                     </graphic>
@@ -76,17 +80,99 @@
                     <center>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane prefHeight="720.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <AnchorPane layoutX="400.0" layoutY="193.0" prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <AnchorPane prefHeight="714.6666666666666" prefWidth="1000.0" styleClass="body1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <AnchorPane layoutX="11.0" layoutY="18.0" prefHeight="619.0" prefWidth="976.0" styleClass="body1" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                             <children>
-                                                <BorderPane fx:id="chartContainer" prefHeight="251.0" prefWidth="953.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="285.0" />
+                                                <AnchorPane layoutX="-14.0" layoutY="25.0" prefHeight="189.0" prefWidth="976.0" styleClass="body1" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                                    <children>
+                                                        <AnchorPane layoutX="10.0" layoutY="12.0" prefHeight="165.0" prefWidth="207.0" styleClass="card" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="12.0">
+                                             <children>
+                                                <FontAwesomeIconView fill="#0771db" glyphName="USD" layoutX="147.0" layoutY="52.0" selectionFill="#073870" size="30" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0" />
+                                                <Label layoutX="90.0" layoutY="74.0" text="Chiffre d'affaires" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0">
+                                                   <font>
+                                                      <Font name="Tahoma" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="76.0" layoutY="126.0" prefHeight="38.0" prefWidth="15.0" text="£" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                   <font>
+                                                      <Font name="Tahoma Bold" size="30.0" />
+                                                   </font>
+                                                </Label>
+                                             </children></AnchorPane>
+                                          <AnchorPane layoutX="238.0" layoutY="11.0" prefHeight="165.0" prefWidth="207.0" styleClass="card" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="237.0" AnchorPane.topAnchor="12.0">
+                                             <children>
+                                                <FontAwesomeIconView fill="#00ff1a" glyphName="CHECK_CIRCLE" layoutX="151.0" layoutY="56.0" size="30" AnchorPane.topAnchor="20.0" />
+                                                <Label layoutX="20.0" layoutY="84.0" text="Factures payées" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0">
+                                                   <font>
+                                                      <Font name="Tahoma" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="103.0" layoutY="123.0" prefHeight="38.0" prefWidth="15.0" text="£" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                   <font>
+                                                      <Font name="Tahoma Bold" size="30.0" />
+                                                   </font>
+                                                </Label>
+                                             </children></AnchorPane>
+                                          <AnchorPane layoutX="713.0" layoutY="19.0" prefHeight="165.0" prefWidth="207.0" styleClass="card" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="12.0">
+                                             <children>
+                                                <FontAwesomeIconView fill="#ff0404" glyphName="MINUS_CIRCLE" layoutX="149.0" layoutY="47.0" selectionFill="#e00808" size="30" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0" />
+                                                <Label layoutX="54.0" layoutY="91.0" text="Dépenses" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0">
+                                                   <font>
+                                                      <Font name="Tahoma" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="136.0" layoutY="100.0" prefHeight="38.0" prefWidth="15.0" text="£" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                   <font>
+                                                      <Font name="Tahoma Bold" size="30.0" />
+                                                   </font>
+                                                </Label>
+                                             </children></AnchorPane>
+                                          <AnchorPane layoutX="486.0" layoutY="13.0" prefHeight="165.0" prefWidth="207.0" styleClass="card" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="237.0" AnchorPane.topAnchor="13.0">
+                                             <children>
+                                                <FontAwesomeIconView fill="#ebc405" glyphName="EXCLAMATION_CIRCLE" layoutX="145.0" layoutY="50.0" size="30" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0" />
+                                                <Label layoutX="2.0" layoutY="89.0" text="Factures en attente" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0">
+                                                   <font>
+                                                      <Font name="Tahoma" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="99.0" layoutY="104.0" prefHeight="38.0" prefWidth="15.0" text="£" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                   <font>
+                                                      <Font name="Tahoma Bold" size="30.0" />
+                                                   </font>
+                                                </Label>
+                                             </children></AnchorPane>
+                                                    </children>
+                                                </AnchorPane>
+                                                <AnchorPane layoutX="29.0" layoutY="226.0" prefHeight="372.0" prefWidth="913.0" stylesheets="@../../css/stock.css" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="210.0">
+                                       <children>
+                                          <AnchorPane layoutX="10.0" layoutY="15.0" prefHeight="190.0" prefWidth="890.0" styleClass="card" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                                             <children>
+                                                <BarChart layoutX="155.0" layoutY="-145.0" prefHeight="240.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <xAxis>
+                                                    <CategoryAxis side="BOTTOM" />
+                                                  </xAxis>
+                                                  <yAxis>
+                                                    <NumberAxis side="LEFT" />
+                                                  </yAxis>
+                                                </BarChart>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane layoutX="21.0" layoutY="259.0" prefHeight="140.0" prefWidth="240.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" />
+                                          <AnchorPane layoutX="565.0" layoutY="293.0" prefHeight="140.0" prefWidth="330.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="20.0" />
+                                          <AnchorPane layoutX="214.0" layoutY="277.0" prefHeight="140.0" prefWidth="240.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="305.0" />
+                                          <AnchorPane layoutX="15.0" layoutY="256.0" prefHeight="40.0" prefWidth="240.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="20.0" />
+                                          <AnchorPane layoutX="209.0" layoutY="267.0" prefHeight="40.0" prefWidth="240.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="305.0" />
+                                          <AnchorPane layoutX="295.0" layoutY="260.0" prefHeight="40.0" prefWidth="330.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.rightAnchor="20.0" />
+                                       </children>
+                                                </AnchorPane>
                                             </children>
                                         </AnchorPane>
                                     </children>
                                 </AnchorPane>
                             </children>
                         </AnchorPane>
+
                     </center>
                 </BorderPane>
             </children>
