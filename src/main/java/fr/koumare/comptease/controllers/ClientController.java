@@ -1,8 +1,11 @@
 package fr.koumare.comptease.controllers;
 
 import fr.koumare.comptease.dao.ClientDao;
+import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.DetailClient;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -19,8 +22,10 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -153,6 +158,76 @@ public class ClientController extends BaseController implements Initializable {
 
     @FXML
     private TableView<Client> tableClient;
+
+    @FXML
+    private AnchorPane form_detailClient;
+
+    @FXML
+    private TableView<Client> tableClientDetail;
+
+    @FXML
+    private TableColumn<Article, Long> idp;
+
+    @FXML
+    private TableColumn<Invoice, String> desp;
+
+    @FXML
+    private TableColumn<Invoice, LocalDate> datep;
+
+    @FXML
+    private TableColumn<Article, Long> quantitep;
+
+    @FXML
+    private TableColumn<Invoice, Long> prixU;
+
+    @FXML
+    private TableColumn<Invoice, Long> prixT;
+
+    @FXML
+    private Button ajouterDetail;
+
+    @FXML
+    private Button chercherDetail;
+
+    @FXML
+    private Button annulerRecercheDetail;
+    
+    @FXML
+    private TextField searchBarreDetail;
+
+    @FXML
+    private AnchorPane form_modifDetail;
+
+    @FXML
+    private Button modifExecuterDetail;
+
+    @FXML
+    private Button modifRetourDetail;
+
+    @FXML
+    private Button suprExecuterDetail;
+
+    @FXML
+    private TextField modifDescription;
+
+    @FXML
+    private TextField modifQuantite;
+
+    @FXML
+    private TextField modifPrixU;
+
+    @FXML
+    private TextField modifPrixT;
+
+    @FXML
+    private Label modifIdDetail;
+
+    @FXML
+    private TextField modifDate;
+
+    
+    
+
     private ClientService clientService = new ClientServiceImpl();
 
     ObservableList<Client> listAllClients= FXCollections.observableArrayList(clientService.getAllClients());
@@ -165,6 +240,13 @@ public class ClientController extends BaseController implements Initializable {
             {btn.setOnAction(event->{
                 Client client = getTableView().getItems().get(getIndex());
                 logger.info("Affichage des détails du client : {}", client.getFirstName());
+                try {
+
+                    showClientDetails(client);
+
+                } catch (IOException e) {
+                    logger.error("Erreur lors de l'affichage des détails du client : {}", e.getMessage());
+                }
             });}
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -235,6 +317,7 @@ public class ClientController extends BaseController implements Initializable {
         });
 
     }
+    
     private void remplirFormulaireModif(Client client) {
         modifId.setText(String.valueOf(client.getIdc())); 
         modifNom.setText(client.getLastName());
@@ -254,7 +337,8 @@ public class ClientController extends BaseController implements Initializable {
         String adresse=addAdresse.getText();
         Long solde=Long.parseLong(addSolde.getText());
         logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
-        if(clientService.addClient(nom, prenom, adresse, contact,1L,solde)){
+        Long idu=1L;
+        if(clientService.addClient(nom, prenom, adresse, contact,idu,solde)){
             logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
 
@@ -426,38 +510,34 @@ public class ClientController extends BaseController implements Initializable {
         affiche(sortedList);
     }
 
-    //trier par nom
-    private void trierParNom() {
-        logger.info("Tri par Nom");
-        ObservableList<Client> sortedList ;
-        if(isSortedByName){
-            logger.info("Tri des clients par nom decroissant");
-            sortedList = FXCollections.observableArrayList(clientService.sortByNameDesc());
-            isSortedByName = false;
-        }
-        else{
-            logger.info("Tri des clients par nom croissant");
-            sortedList = FXCollections.observableArrayList(clientService.sortByName());
-            isSortedByName = true;
-        }
-        affiche(sortedList);
+    
+
+    //afficher les details d'un client
+    private void showClientDetails(Client client) throws IOException {
+        logger.info("Affichage des détails du client : {}", client.getFirstName());
+
+        form_initial.setVisible(false);
+        form_detailClient.setVisible(true);
     }
 
-    //trier par prenom
-    private void trierParPrenom() {
-        logger.info("Tri par Prenom");
-        ObservableList<Client> sortedList ;
-        if(isSortedByFirstName){
-            logger.info("Tri des clients par prenom decroissant");
-            sortedList = FXCollections.observableArrayList(clientService.sortByFirstNameDesc());
-            isSortedByFirstName = false;
+    private void rechercheDetail(ActionEvent event) {
+        logger.info("Recherche d'un detail du client : {}", searchBarreDetail.getText());
+        String keyword = searchBarreDetail.getText();
+        if (keyword.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer un mot clé pour la recherche.");
+            return;
         }
-        else{
-            logger.info("Tri des clients par prenom croissant");
-            sortedList = FXCollections.observableArrayList(clientService.sortByFirstName());
-            isSortedByFirstName = true;
-        }
-        affiche(sortedList);
     }
 
+    private void annulerRechercheDetail(ActionEvent event) {
+        logger.info("Annulation de la recherche de detail");
+        
+    }
+
+    private void  ModifDetail(ActionEvent event) {
+        logger.info("Modification d'un detail du client : {}", modifIdDetail.getText());
+    }
+    private void SupprDetail(ActionEvent event) {
+        logger.info("Suppression d'un detail du client : {}", modifIdDetail.getText());
+    }
 }

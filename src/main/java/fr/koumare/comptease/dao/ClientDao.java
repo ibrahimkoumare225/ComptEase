@@ -33,7 +33,7 @@ public class ClientDao {
 
     public List<Client> getAllClients() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Client", Client.class).list();
+            return session.createQuery("from Client where id_user=3", Client.class).list();
         }
     }
 

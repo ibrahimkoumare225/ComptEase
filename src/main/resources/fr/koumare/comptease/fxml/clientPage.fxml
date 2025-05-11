@@ -101,29 +101,6 @@
       <AnchorPane fx:id="main_form" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
             <BorderPane layoutX="85.0" layoutY="168.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <!--<top>
-                  <AnchorPane BorderPane.alignment="CENTER">
-                     <children>
-                        <AnchorPane layoutX="129.0" layoutY="-86.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Button fx:id="close" layoutX="948.0" layoutY="1.0" mnemonicParsing="false" onAction="#close" text="Exit" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
-                              <Button fx:id="minimize" layoutX="856.0" layoutY="2.0" mnemonicParsing="false" onAction="#minimize"  AnchorPane.rightAnchor="36.66666666666663" />
-                           </children>
-                        </AnchorPane>
-                     </children>
-                  </AnchorPane>
-               </top>
-               <left>
-                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
-                     <children>
-                        <AnchorPane layoutY="2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="571.0" prefWidth="119.0" styleClass="barregauche" stylesheets="@client.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="2.0">
-                           <children>
-                              <Label layoutY="14.0" style="-fx-font-weight: bold;" text="ComptEase" textFill="WHITE" AnchorPane.leftAnchor="52.0" />
-                           </children>
-                        </AnchorPane>
-                     </children>
-                  </AnchorPane>
-               </left>-->
                <center>
                   <AnchorPane BorderPane.alignment="CENTER">
                      <children>
@@ -206,6 +183,59 @@
                                     </AnchorPane>
                                  </children>
                               </AnchorPane>
+                              <AnchorPane fx:id="form_detailClient" layoutX="297.3333333333333" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="581.0" prefWidth="959.0" styleClass="ftab" stylesheets="@../css/client.css" AnchorPane.leftAnchor="297.0" visible="false">
+                                 <children>
+                                    <AnchorPane layoutX="2.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="482.0" prefWidth="965.0" style="-fx-background-color: blue;" styleClass="ftab" stylesheets="@../css/client.css">
+                                       <children>
+                                          <TableView fx:id="tableDetail" layoutX="4.0" layoutY="6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="475.0" prefWidth="959.0" styleClass="table" stylesheets="@../css/client.css">
+                                            <columns>
+                                                <TableColumn fx:id="idp" maxWidth="1.7976931348623157E308" prefWidth="76.66668462753296" text="Identifiant " />
+                                                <TableColumn fx:id="desp" maxWidth="1.7976931348623157E308" prefWidth="113.3333511352539" text="Description" />
+                                                <TableColumn fx:id="datep" maxWidth="1.7976931348623157E308" prefWidth="156.0001220703125" text="Date" />
+                                                <TableColumn fx:id="quantitep" maxWidth="1.7976931348623157E308" prefWidth="121.99998474121094" text="Quantité" />
+                                                <TableColumn fx:id="prixUp" maxWidth="1.7976931348623157E308" prefWidth="96.6666259765625" text="Prix unitaire" />
+                                                <TableColumn fx:id="prixTp" maxWidth="1.7976931348623157E308" prefWidth="286.6666564941406" text="Prix total" />
+                                                
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane fx:id="formInitial_hDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css">
+                                       <children>
+                                          <Button fx:id="ajouterDetail" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="101.0" text="Nouvelle vente" AnchorPane.rightAnchor="53.00000000000004" />
+                                          <Button fx:id="chercherDetail" layoutX="270.0" layoutY="40.0" mnemonicParsing="false"  text="Chercher" />
+                                          <Button fx:id="annulerRechercheDetail" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" text="Annuler" visible="false" />
+                                          <TextField fx:id="searchBarreDetail" layoutX="19.0" layoutY="40.0" prefHeight="25.0" prefWidth="225.0" promptText="Rechercher" />
+                                          
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane fx:id="form_modifDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css" visible="false"> 
+                                       <children>
+                                          <Button fx:id="modifExecuterDetail" layoutX="791.0" layoutY="50.0" mnemonicParsing="false"  prefHeight="36.0" prefWidth="122.0" text="Modifier" AnchorPane.rightAnchor="33.0" />
+                                          <Button fx:id="suprExecuterDetail" layoutX="791.0" layoutY="91.0" mnemonicParsing="false"  prefHeight="36.0" prefWidth="122.0" text="Supprimer" AnchorPane.rightAnchor="33.0" />
+                                          <Label layoutX="463.0" layoutY="73.0" text="Prix total : " />
+                                          <Label layoutX="407.0" layoutY="5.0" text="Vos Clients">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="108.0" layoutY="73.0" text="Description :" />
+                                          <Label layoutX="100.0" layoutY="108.0" text="date :" />
+                                          <Label layoutX="465.0" layoutY="40.0" text="Quantité :" />
+                                          <Label layoutX="469.0" layoutY="108.0" text="Prix unitaire : " />
+                                          <TextField fx:id="modifDescription" layoutX="173.0" layoutY="69.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <TextField fx:id="modifDate" layoutX="172.0" layoutY="104.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <Label fx:id="modifIdDetail" layoutX="173.0" layoutY="36.0" prefHeight="25.0" prefWidth="145.0" styleClass="label-info" stylesheets="@../css/client.css" />
+                                          <TextField fx:id="modifQauntite" layoutX="527.0" layoutY="36.0" prefHeight="25.0" prefWidth="200.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <TextField fx:id="modifPrixT" layoutX="527.0" layoutY="69.0" prefHeight="25.0" prefWidth="200.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <TextField fx:id="modifPrixU" layoutX="527.0" layoutY="104.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <Label layoutX="94.0" layoutY="40.0" text="Identifiant :" />
+                                          <Button fx:id="modifRetourDetail" layoutX="894.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="65.0" text="Retour" />
+
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                      </children>
@@ -215,4 +245,5 @@
          </children>
       </AnchorPane>
    </children>
+   
 </StackPane>
