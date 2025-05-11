@@ -1,6 +1,7 @@
 package fr.koumare.comptease.service;
 
 import fr.koumare.comptease.model.Client;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.User;
 
 import java.util.List;
@@ -34,4 +35,6 @@ public interface ClientService {
     List<Client> sortById();
 
     List<Client> sortByIdDesc();
+
+    List<Invoice>  getClientDetails(Long idClient);
 }

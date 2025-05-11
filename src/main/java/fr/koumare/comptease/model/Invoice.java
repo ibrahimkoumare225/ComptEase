@@ -55,4 +55,11 @@ public class Invoice {
         this.status = status;
         this.client = client;
     }
+
+    public double getPrice() {
+        return price;
+    }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

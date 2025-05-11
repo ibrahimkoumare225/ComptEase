@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Client {
-
+    //Modifier setId_user pour qu'il prenne l'utilisateur connecté
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idc;
@@ -103,6 +103,8 @@ public class Client {
         return user.getId();
     }
     public void setId_user(Long id_user) {
+        //this.user.setId(id_user);
+        this.user = new User();
         this.user.setId(id_user);
     }
     

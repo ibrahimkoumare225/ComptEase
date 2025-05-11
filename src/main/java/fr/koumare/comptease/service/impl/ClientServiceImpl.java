@@ -1,6 +1,7 @@
 package fr.koumare.comptease.service.impl;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public class ClientServiceImpl implements ClientService {
         client.setFirstName(prenom);
         client.setAdresse(adresse);
         client.setContact(contact);
-        client.setId_user(idUser);
+        client.setId_user(3L);
         client.setSolde(solde);
         clientDao.saveClient(client);
         logger.info("Client ajouté : {} {}", nom, prenom);
@@ -146,5 +147,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
         
-
+    @Override
+    public List<Invoice> getClientDetails(Long idClient) {
+        logger.info("Recherche des details du client : {}", idClient);
+        return clientDao.getClientDetails(idClient);
+    }
 }

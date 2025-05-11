@@ -2,6 +2,8 @@ package fr.koumare.comptease.dao;
 
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.DetailClient;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -187,6 +189,18 @@ public class ClientDao {
             return session.createQuery("FROM Client ORDER BY idc DESC", Client.class).list();
         } catch (Exception e) {
             logger.error("Erreur lors du tri des clients par id", e);
+            return null;
+        }
+    }
+
+    //recuperer les details d'un client
+    public List<Invoice> getClientDetails(Long clientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Invoice WHERE client.idc = :clientId", Invoice.class)
+                    .setParameter("clientId", clientId)
+                    .list();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des détails du client avec l'Id : {}", clientId, e);
             return null;
         }
     }

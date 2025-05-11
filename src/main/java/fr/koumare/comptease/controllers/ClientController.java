@@ -4,6 +4,7 @@ import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.model.DetailClient;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.ClientService;
@@ -19,6 +20,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
+import org.hibernate.mapping.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -163,10 +166,10 @@ public class ClientController extends BaseController implements Initializable {
     private AnchorPane form_detailClient;
 
     @FXML
-    private TableView<Client> tableClientDetail;
+    private TableView<Invoice> tableClientDetail;
 
     @FXML
-    private TableColumn<Article, Long> idp;
+    private TableColumn<Invoice, Long> idp;
 
     @FXML
     private TableColumn<Invoice, String> desp;
@@ -178,10 +181,13 @@ public class ClientController extends BaseController implements Initializable {
     private TableColumn<Article, Long> quantitep;
 
     @FXML
-    private TableColumn<Invoice, Long> prixU;
+    private TableColumn<Invoice, Double> prixUp;
 
     @FXML
-    private TableColumn<Invoice, Long> prixT;
+    private TableColumn<Invoice, Double> prixTp;
+
+    @FXML
+    private TableColumn<Invoice, StatusInvoice> Statutp;
 
     @FXML
     private Button ajouterDetail;
@@ -281,6 +287,20 @@ public class ClientController extends BaseController implements Initializable {
             formInitial_h.setVisible(true);
             form_modif.setVisible(false);
             form_add.setVisible(false);
+        }
+        else if(event.getSource()==modifRetourDetail){
+            formInitial_h.setVisible(true);
+            form_modifDetail.setVisible(false);
+            form_detailClient.setVisible(false);
+        }
+        else if(event.getSource()==addEffacer){
+            EffacerChamps(event);
+        }
+        else if(event.getSource()==annulerRecherche){
+            annulerRecherche(event);
+        }
+        else if(event.getSource()==annulerRecercheDetail){
+            annulerRechercheDetail(event);
         }
         
         /*else if(event.getSource()==modifExecuter){
@@ -450,7 +470,8 @@ public class ClientController extends BaseController implements Initializable {
         prenomc.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
         soldec.setCellValueFactory(new PropertyValueFactory<>("Solde"));
         noteUserc.setCellValueFactory(new PropertyValueFactory<>("Adresse"));
-        detailc.setCellValueFactory(new PropertyValueFactory<>("Contact"));
+        contactc.setCellValueFactory(new PropertyValueFactory<>("Contact"));
+
         tableClient.setItems(list);
         if (list.isEmpty()) {
             showAlert(Alert.AlertType.INFORMATION, "Avertissement", "Aucun client trouvé avec ce mot clé.");
@@ -490,34 +511,37 @@ public class ClientController extends BaseController implements Initializable {
 
     }
 
-    boolean isSortedById = true;
-    boolean isSortedByName = false;
-    boolean isSortedByFirstName = false;
-    //trier par id
-    private void trierParId() {
-        logger.info("Tri par ID");
-        ObservableList<Client> sortedList ;//= FXCollections.observableArrayList(clientService.sortById());
-        if(isSortedById){
-            logger.info("Tri des clients par ID decroissant");
-            sortedList = FXCollections.observableArrayList(clientService.sortByIdDesc());
-            isSortedById = false;
-        }
-        else{
-            logger.info("Tri des clients par ID croissant");
-            sortedList = FXCollections.observableArrayList(clientService.sortById());
-            isSortedById = true;
-        }
-        affiche(sortedList);
-    }
+   
 
     
 
     //afficher les details d'un client
     private void showClientDetails(Client client) throws IOException {
-        logger.info("Affichage des détails du client : {}", client.getFirstName());
+        logger.info("Affichage des détails du client : {}");
 
         form_initial.setVisible(false);
         form_detailClient.setVisible(true);
+        form_modifDetail.setVisible(false);
+
+        ObservableList<Invoice> list = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
+        idp.setCellValueFactory(new PropertyValueFactory<>("id"));
+        desp.setCellValueFactory(new PropertyValueFactory<>("description"));
+        datep.setCellValueFactory(new PropertyValueFactory<>("date"));
+        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
+        prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
+        prixTp.setCellValueFactory(cellData -> {
+            Invoice invoice = cellData.getValue();
+            double total = invoice.getPrice() * 4; // quantité fixe = 4
+            return new ReadOnlyObjectWrapper<>((Double) total);
+        });
+        Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
+        if (list.isEmpty()) {
+            showAlert(Alert.AlertType.INFORMATION, "Avertissement", "Aucun détail trouvé pour ce client.");
+        } else {
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Détails trouvés : " + list.size());
+            tableClientDetail.setItems(list);
+            annulerRecercheDetail.setVisible(true);
+        }
     }
 
     private void rechercheDetail(ActionEvent event) {
