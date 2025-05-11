@@ -28,14 +28,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean updateClient(String nom, String prenom, String adresse, String contact,Long solde) {
+    public boolean updateClient(Long id, String nom, String prenom, String adresse, String contact,Long solde) {
         if(nom == null || prenom == null || adresse == null ) {
             logger.warn("Informations client incomplete");
             return false;
         }
         //modifier le client dans la base de données
         //chercher le client dans la base de données
-        Optional<Client> clientOptional = clientDao.findByNames(nom, prenom);
+        Optional<Client> clientOptional = clientDao.findById(id);
         if(clientOptional.isPresent()) {
             Client client = clientOptional.get();
             client.setFirstName(nom);
@@ -75,8 +75,8 @@ public class ClientServiceImpl implements ClientService {
         logger.info("Ajout d'un client addC");
         //Enregistrement du client dans la base de données
         Client client = new Client();
-        client.setFirstName(nom);
-        client.setLastName(prenom);
+        client.setLastName(nom);
+        client.setFirstName(prenom);
         client.setAdresse(adresse);
         client.setContact(contact);
         client.setId_user(idUser);

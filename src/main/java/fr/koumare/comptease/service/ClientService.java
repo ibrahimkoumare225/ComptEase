@@ -12,7 +12,7 @@ public interface ClientService {
 
     public List<Client> getAllClients() ;
 
-    public boolean updateClient(String nom, String prenom, String adresse, String contact,Long solde) ;
+    public boolean updateClient(Long id,String nom, String prenom, String adresse, String contact,Long solde) ;
 
     public boolean deleteClient(Long id) ;
 

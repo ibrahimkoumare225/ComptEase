@@ -51,6 +51,9 @@ public class ClientController extends BaseController implements Initializable {
     private Button addEffacer;
 
     @FXML
+    private Button addRetour;
+
+    @FXML
     private TextField addNom;
 
     @FXML
@@ -106,26 +109,28 @@ public class ClientController extends BaseController implements Initializable {
     private Button minimize;
 
     @FXML
-    private Label modifContact;
+    private TextField modifContact;
 
     @FXML
     private Button modifExecuter;
 
     @FXML
-    private TextField modifId;
+    private Label modifId;
 
     @FXML
-    private Label modifNom;
+    private TextField modifNom;
 
     @FXML
-    private Label modifPrenom;
+    private TextField modifPrenom;
 
     @FXML
-    private Label modifSolde;
+    private TextField modifSolde;
 
     @FXML
-    private Label modifAdresse;
+    private TextField modifAdresse;
 
+    @FXML
+    private Button modifRetour;
 
     @FXML
     private Button modifier;
@@ -168,6 +173,17 @@ public class ClientController extends BaseController implements Initializable {
             form_modif.setVisible(true);
             form_add.setVisible(false);
         }
+        else if(event.getSource()==addRetour){
+            formInitial_h.setVisible(true);
+            form_modif.setVisible(false);
+            form_add.setVisible(false);
+        }
+        else if(event.getSource()==modifRetour){
+            formInitial_h.setVisible(true);
+            form_modif.setVisible(false);
+            form_add.setVisible(false);
+        }
+        
         /*else if(event.getSource()==modifExecuter){
             formInitial_h.setVisible(true);
             form_modif.setVisible(false);
@@ -192,7 +208,23 @@ public class ClientController extends BaseController implements Initializable {
         soldec.setCellValueFactory(new PropertyValueFactory<>("Solde"));
         contactc.setCellValueFactory(new PropertyValueFactory<>("Contact"));
         tableClient.setItems(list);
+
+        tableClient.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        if (newSelection != null) {
+            remplirFormulaireModif(newSelection);
+        }
+        });
+
     }
+    private void remplirFormulaireModif(Client client) {
+        modifId.setText(String.valueOf(client.getIdc())); 
+        modifNom.setText(client.getLastName());
+        modifPrenom.setText(client.getFirstName());
+        modifAdresse.setText(client.getAdresse());
+        modifContact.setText(client.getContact());
+        modifSolde.setText(String.valueOf(client.getSolde()));
+    }
+
 
     // Ajoute un client
     @FXML
@@ -208,11 +240,13 @@ public class ClientController extends BaseController implements Initializable {
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
 
             //recuperer le client ajouté
-            Optional<Client> addedClient = clientService.findByNames(prenom, nom);
+            Optional<Client> addedClient = clientService.findByNames(nom, prenom);
             if(addedClient.isPresent()) {
                 Client newClient = addedClient.get();
                 logger.info("Client ajouté : {}", newClient.getFirstName());
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
+                affiche();
+                EffacerChamps(event);
             } else {
                 logger.error("Erreur lors de la récupération du client ajouté : {}", nom+" " + prenom);
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client ajouté.");
@@ -231,10 +265,11 @@ public class ClientController extends BaseController implements Initializable {
         String adresse=modifAdresse.getText();
         String contact=modifContact.getText();
         Long solde= Long.parseLong(modifSolde.getText());
+        Long id=Long.parseLong(modifId.getText());
     
         logger.info("Modification d'un client : {}", nom +" "+ prenom);
 
-        if(clientService.updateClient(nom, prenom, adresse, contact, solde)){
+        if(clientService.updateClient(id,nom, prenom, adresse, contact, solde)){
             logger.info("Client modifié : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
             //recuperer le client modifié
@@ -243,6 +278,7 @@ public class ClientController extends BaseController implements Initializable {
                 Client newClient = updatedClient.get();
                 logger.info("Client modifié : {}", newClient.getFirstName());
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
+                affiche();
             } else {
                 logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client modifié.");
@@ -280,6 +316,21 @@ public class ClientController extends BaseController implements Initializable {
 
 
     
+    //vider les champs
+    @FXML
+    private void EffacerChamps(ActionEvent event) {
+        logger.info("Effacement des champs");
+        addContact.clear();
+        addNom.clear();
+        addPrenom.clear();
+        addAdresse.clear();
+        addSolde.clear();
+        modifNom.setText("");
+        modifPrenom.setText("");
+        modifAdresse.setText("");
+        modifContact.setText("");
+        modifSolde.setText("");
 
+    }
 
 }

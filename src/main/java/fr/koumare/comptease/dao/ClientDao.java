@@ -84,7 +84,7 @@ public class ClientDao {
     public Optional<Client> findById(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
           logger.info("Recherche du client avec l'Id : {}", clientId);
-            Optional<Client> cl = session.createQuery("FROM client WHERE idc = :idc", Client.class)
+            Optional<Client> cl = session.createQuery("FROM Client WHERE idc = :idc", Client.class)
                     .setParameter("idc", clientId)
                     .uniqueResultOptional();
             if (cl.isPresent()) {
@@ -102,8 +102,8 @@ public class ClientDao {
     //recuperation du client par son nom
     public Optional<Client> findByNames(String nom, String prenom) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            logger.info("Recherche du client avec le nom : {}", nom);
-            Optional<Client> cl = session.createQuery("FROM client WHERE lastName = :lastName and firstName = :firstName", Client.class)
+            logger.info("Recherche du client avec le lastname : {}", nom+"  ;firstname: "+ prenom);
+            Optional<Client> cl = session.createQuery("FROM Client WHERE lastName = :lastName and firstName = :firstName", Client.class)
                     .setParameter("lastName", nom)
                     .setParameter("firstName", prenom)
                     .uniqueResultOptional();
