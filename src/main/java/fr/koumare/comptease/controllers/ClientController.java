@@ -5,6 +5,7 @@ import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,11 +30,7 @@ import java.util.regex.Pattern;
 
 public class ClientController extends BaseController implements Initializable {
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        logger.info("Initialisation de  ClientController");
-        affiche();
-    }
+
 
     private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
     User user = new User();
@@ -78,13 +75,16 @@ public class ClientController extends BaseController implements Initializable {
     private Button chercher;
 
     @FXML
-    private ComboBox<?> choixTP;
+    private Button annulerRecherche;
+
+    @FXML
+    private ComboBox<String> choixTP;
 
     @FXML
     private Button close;
 
     @FXML
-    private TableColumn<?, ?> contactc;
+    private TableColumn<?, ?> noteUserc;
 
     @FXML
     private AnchorPane formInitial_h;
@@ -132,8 +132,6 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private Button modifRetour;
 
-    @FXML
-    private Button modifier;
 
     @FXML
     private TableColumn<Client, String> nomc;
@@ -142,17 +140,41 @@ public class ClientController extends BaseController implements Initializable {
     private TableColumn<Client, String> prenomc;
 
     @FXML
+    private TableColumn<Client, String> contactc;
+
+    @FXML
     private TextField searchBarre;
 
     @FXML
     private TableColumn<Client, Long> soldec;
 
     @FXML
-    private TableColumn<Client, String> adressec;
+    private TableColumn<Client, Void> detailc;
 
     @FXML
     private TableView<Client> tableClient;
     private ClientService clientService = new ClientServiceImpl();
+
+    ObservableList<Client> listAllClients= FXCollections.observableArrayList(clientService.getAllClients());
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        logger.info("Initialisation de  ClientController");
+        detailc.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
+        detailc.setCellFactory(param-> new TableCell<Client, Void>() {
+            final Button btn = new Button("Voir");
+            {btn.setOnAction(event->{
+                Client client = getTableView().getItems().get(getIndex());
+                logger.info("Affichage des détails du client : {}", client.getFirstName());
+            });}
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : btn);
+            }
+        });
+        affiche(listAllClients);
+
+    }
 
     @FXML
     public void close(){
@@ -167,11 +189,6 @@ public class ClientController extends BaseController implements Initializable {
             formInitial_h.setVisible(false);
             form_modif.setVisible(false);
             form_add.setVisible(true);
-        }
-        else if(event.getSource()==modifier){
-            formInitial_h.setVisible(false);
-            form_modif.setVisible(true);
-            form_add.setVisible(false);
         }
         else if(event.getSource()==addRetour){
             formInitial_h.setVisible(true);
@@ -198,19 +215,21 @@ public class ClientController extends BaseController implements Initializable {
 
     // Affiche la liste des clients dans le tableau
     @FXML
-    private void affiche() {
+    private void affiche(ObservableList<Client> list) {
         logger.info("Affichage de la liste des clients");
-        ObservableList<Client> list = FXCollections.observableArrayList(clientService.getAllClients());
         idc.setCellValueFactory(new PropertyValueFactory<>("Idc"));
         nomc.setCellValueFactory(new PropertyValueFactory<>("LastName"));
         prenomc.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
-        adressec.setCellValueFactory(new PropertyValueFactory<>("Adresse"));
         soldec.setCellValueFactory(new PropertyValueFactory<>("Solde"));
+        noteUserc.setCellValueFactory(new PropertyValueFactory<>("Adresse"));
         contactc.setCellValueFactory(new PropertyValueFactory<>("Contact"));
         tableClient.setItems(list);
-
+        //mofication de la ligne selectionnée
         tableClient.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
         if (newSelection != null) {
+            formInitial_h.setVisible(false);
+            form_modif.setVisible(true);
+            form_add.setVisible(false);
             remplirFormulaireModif(newSelection);
         }
         });
@@ -235,7 +254,7 @@ public class ClientController extends BaseController implements Initializable {
         String adresse=addAdresse.getText();
         Long solde=Long.parseLong(addSolde.getText());
         logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
-        if(clientService.addClient(nom, prenom, adresse, contact,3L,solde)){
+        if(clientService.addClient(nom, prenom, adresse, contact,1L,solde)){
             logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
 
@@ -245,7 +264,8 @@ public class ClientController extends BaseController implements Initializable {
                 Client newClient = addedClient.get();
                 logger.info("Client ajouté : {}", newClient.getFirstName());
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
-                affiche();
+                listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
+                affiche(listAllClients);
                 EffacerChamps(event);
             } else {
                 logger.error("Erreur lors de la récupération du client ajouté : {}", nom+" " + prenom);
@@ -278,7 +298,8 @@ public class ClientController extends BaseController implements Initializable {
                 Client newClient = updatedClient.get();
                 logger.info("Client modifié : {}", newClient.getFirstName());
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
-                affiche();
+                listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
+                affiche(listAllClients);
             } else {
                 logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client modifié.");
@@ -290,20 +311,36 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     // Supprime un client
-    /*@FXML
+    @FXML
         private void SupprClient(ActionEvent event) {
-        
-        logger.info("Suppression d'un client : {}", client.getFirstName());
+            Client client = tableClient.getSelectionModel().getSelectedItem();
+            if (client == null) {
+                logger.warn("Aucun client sélectionné pour la suppression");
+                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez sélectionner un client à supprimer.");
+                return;
+            }
+            logger.info("Suppression d'un client : {}", client.getFirstName());
 
-        // Vérification de l'existence du client avant la suppression
-        if(clientService.deleteClient(client.getIdc())){
-            logger.info("Client supprimé : {}", client.getFirstName());
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès.");
-        } else {
-            logger.error("Erreur lors de la suppression du client : {}", client.getFirstName());
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression du client.");
-        }
-    }*/
+            // Vérification de l'existence du client avant la suppression
+            if(clientService.deleteClient(client.getIdc())){
+                logger.info("Client supprimé : {}", client.getFirstName());
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès.");
+                //verifier si le client a été supprimé
+                Optional<Client> deletedClient = clientService.findById(client.getIdc());
+                if(deletedClient.isEmpty()) {
+                    logger.info("Client supprimé : {}", client.getFirstName());
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès : " + client.getFirstName() +" " + client.getLastName());
+                    listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
+                    affiche(listAllClients);
+                } else {
+                    logger.error("Erreur lors de la récupération du client supprimé : {}", client.getFirstName());
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client supprimé.");
+                }
+            } else {
+                logger.error("Erreur lors de la suppression du client : {}", client.getFirstName());
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression du client.");
+            }
+    }
     private void showAlert(Alert.AlertType type, String title, String message) {
         logger.info("Affichage d'une alerte : {} - {}", title, message);
         Alert alert = new Alert(type);
@@ -314,6 +351,42 @@ public class ClientController extends BaseController implements Initializable {
     }
 
 
+    //une recherche par mot clé
+    @FXML
+    private void rechercheClient(ActionEvent event) {
+        String keyword = searchBarre.getText();
+        logger.info("Recherche d'un client : {}", keyword);
+        if (keyword.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer un mot clé pour la recherche.");
+            return;
+        }
+        ObservableList<Client> list = FXCollections.observableArrayList(clientService.findByKeyword(keyword));
+        idc.setCellValueFactory(new PropertyValueFactory<>("Idc"));
+        nomc.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+        prenomc.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
+        soldec.setCellValueFactory(new PropertyValueFactory<>("Solde"));
+        noteUserc.setCellValueFactory(new PropertyValueFactory<>("Adresse"));
+        detailc.setCellValueFactory(new PropertyValueFactory<>("Contact"));
+        tableClient.setItems(list);
+        if (list.isEmpty()) {
+            showAlert(Alert.AlertType.INFORMATION, "Avertissement", "Aucun client trouvé avec ce mot clé.");
+        } else {
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Clients trouvés : " + list.size());
+            affiche(list);
+            annulerRecherche.setVisible(true);
+        }
+
+    }
+
+    //annuler la recherche
+    @FXML
+    private void annulerRecherche(ActionEvent event) {
+        logger.info("Annulation de la recherche");
+        searchBarre.clear();
+        listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
+        affiche(listAllClients);
+        annulerRecherche.setVisible(false);
+    }
 
     
     //vider les champs
@@ -331,6 +404,60 @@ public class ClientController extends BaseController implements Initializable {
         modifContact.setText("");
         modifSolde.setText("");
 
+    }
+
+    boolean isSortedById = true;
+    boolean isSortedByName = false;
+    boolean isSortedByFirstName = false;
+    //trier par id
+    private void trierParId() {
+        logger.info("Tri par ID");
+        ObservableList<Client> sortedList ;//= FXCollections.observableArrayList(clientService.sortById());
+        if(isSortedById){
+            logger.info("Tri des clients par ID decroissant");
+            sortedList = FXCollections.observableArrayList(clientService.sortByIdDesc());
+            isSortedById = false;
+        }
+        else{
+            logger.info("Tri des clients par ID croissant");
+            sortedList = FXCollections.observableArrayList(clientService.sortById());
+            isSortedById = true;
+        }
+        affiche(sortedList);
+    }
+
+    //trier par nom
+    private void trierParNom() {
+        logger.info("Tri par Nom");
+        ObservableList<Client> sortedList ;
+        if(isSortedByName){
+            logger.info("Tri des clients par nom decroissant");
+            sortedList = FXCollections.observableArrayList(clientService.sortByNameDesc());
+            isSortedByName = false;
+        }
+        else{
+            logger.info("Tri des clients par nom croissant");
+            sortedList = FXCollections.observableArrayList(clientService.sortByName());
+            isSortedByName = true;
+        }
+        affiche(sortedList);
+    }
+
+    //trier par prenom
+    private void trierParPrenom() {
+        logger.info("Tri par Prenom");
+        ObservableList<Client> sortedList ;
+        if(isSortedByFirstName){
+            logger.info("Tri des clients par prenom decroissant");
+            sortedList = FXCollections.observableArrayList(clientService.sortByFirstNameDesc());
+            isSortedByFirstName = false;
+        }
+        else{
+            logger.info("Tri des clients par prenom croissant");
+            sortedList = FXCollections.observableArrayList(clientService.sortByFirstName());
+            isSortedByFirstName = true;
+        }
+        affiche(sortedList);
     }
 
 }

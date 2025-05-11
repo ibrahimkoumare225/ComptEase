@@ -38,8 +38,8 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> clientOptional = clientDao.findById(id);
         if(clientOptional.isPresent()) {
             Client client = clientOptional.get();
-            client.setFirstName(nom);
-            client.setLastName(prenom);
+            client.setLastName(nom);
+            client.setFirstName(prenom);
             client.setContact(contact);
             client.setAdresse(adresse);
             client.setSolde(solde);
@@ -55,6 +55,10 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public boolean deleteClient(Long clientId) {
         clientDao.deleteClient(clientId);
+        if(clientDao.findById(clientId).isPresent()) {
+            logger.warn("Client non supprimé");
+            return false;
+        }
         logger.info("Client supprimé");
         return true;
     }
@@ -98,5 +102,49 @@ public class ClientServiceImpl implements ClientService {
         logger.info("Recherche du client via service par le nom+prenom : {} {}", nom, prenom);
         return clientDao.findByNames(nom, prenom);
     }
+
+    @Override
+    public List<Client> findByKeyword(String keyword) {
+        logger.info("Recherche du client via service par le mot clé : {}", keyword);
+        return clientDao.findByKeyword(keyword);
+    }
+
+    @Override
+    public List<Client> sortByName() {
+        logger.info("Tri des clients par nom");
+        return clientDao.sortByName();
+    }
+
+    @Override
+    public List<Client> sortByNameDesc() {
+        logger.info("Tri des clients par nom decroissant");
+        return clientDao.sortByNameDesc();
+    }
+
+    @Override
+    public List<Client> sortByFirstName() {
+        logger.info("Tri des clients par prenom");
+        return clientDao.sortByFirstName();
+    }
+
+    @Override
+    public List<Client> sortByFirstNameDesc() {
+        logger.info("Tri des clients par prenom decroissant");
+        return clientDao.sortByFirstNameDesc();
+    }
+
+    @Override
+    public List<Client> sortById() {
+        logger.info("Tri des clients par id");
+        return clientDao.sortById();
+    }
+
+    @Override
+    public List<Client> sortByIdDesc() {
+        logger.info("Tri des clients par id decroissant");
+        return clientDao.sortByIdDesc();
+    }
+
+        
 
 }

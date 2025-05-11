@@ -15,10 +15,9 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idc;
 
-    /*@ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)*/
-    @Column(name= "id_user", nullable= false)
-    private Long id_user;
+    @ManyToOne
+    @JoinColumn(name= "id_user", nullable= false)
+    private User user;
 
     @Column(unique = true,name="contact", length = 20)
     private String contact;
@@ -51,9 +50,9 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, Long id_User ,String contact, String firstName, String lastName, String adresse, Long solde ) {
+    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Long solde ) {
         this.idc=idc;
-        this.id_user = id_User;
+        this.user =user;
         this.contact = contact;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -101,11 +100,12 @@ public class Client {
         this.solde = solde;
     }
     public Long getId_user() {
-        return id_user;
+        return user.getId();
     }
     public void setId_user(Long id_user) {
-        this.id_user = id_user;
+        this.user.setId(id_user);
     }
+    
     public List<Devis> getDevis() {
         return devis;
     }
@@ -128,7 +128,7 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "idc=" + idc +
-                ", id_user=" + id_user +
+                ", id_user=" + user.getId() +
                 ", contact='" + contact + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
