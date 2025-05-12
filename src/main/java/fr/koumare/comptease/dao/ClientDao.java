@@ -134,61 +134,14 @@ public class ClientDao {
 
     }
 
-    //tri croissant des clients par nom
-    public List<Client> sortByName() {
+    //chercher un detail par un mot clé
+    public List<Invoice> findByKeywordDetails(String keyword) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client ORDER BY lastName", Client.class).list();
+            return session.createQuery("FROM Invoice WHERE description LIKE :keyword", Invoice.class)
+                    .setParameter("keyword", "%" + keyword + "%")
+                    .list();
         } catch (Exception e) {
-            logger.error("Erreur lors du tri des clients par nom", e);
-            return null;
-        }
-    }
-    //tri decroissant des clients par nom
-    public List<Client> sortByNameDesc() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client ORDER BY lastName DESC", Client.class).list();
-        } catch (Exception e) {
-            logger.error("Erreur lors du tri des clients par nom", e);
-            return null;
-        }
-    }
-
-    //tri croissant des client par prenom
-    public List<Client> sortByFirstName() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client ORDER BY firstName", Client.class).list();
-        } catch (Exception e) {
-            logger.error("Erreur lors du tri des clients par prenom", e);
-            return null;
-        }
-    }
-
-    //tri decroissant des client par prenom
-    public List<Client> sortByFirstNameDesc() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client ORDER BY firstName DESC", Client.class).list();
-        } catch (Exception e) {
-            logger.error("Erreur lors du tri des clients par prenom", e);
-            return null;
-        }
-    }
-
-    //tri croissant des client par id
-    public List<Client> sortById() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client ORDER BY idc", Client.class).list();
-        } catch (Exception e) {
-            logger.error("Erreur lors du tri des clients par id", e);
-            return null;
-        }
-    }
-
-    //tri decroissant des client par id
-    public List<Client> sortByIdDesc() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client ORDER BY idc DESC", Client.class).list();
-        } catch (Exception e) {
-            logger.error("Erreur lors du tri des clients par id", e);
+            logger.error("Erreur lors de la recherche du détail client avec le mot clé : {}", keyword, e);
             return null;
         }
     }
@@ -202,6 +155,18 @@ public class ClientDao {
         } catch (Exception e) {
             logger.error("Erreur lors de la récupération des détails du client avec l'Id : {}", clientId, e);
             return null;
+        }
+    }
+
+    //trouver le client par id facture
+    public Optional<Client> findUserByInvoiceId(Long invoiceId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT i.client FROM Invoice i WHERE i.id = :invoiceId", Client.class)
+                    .setParameter("invoiceId", invoiceId)
+                    .uniqueResultOptional();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la recherche de l'utilisateur par l'ID de la facture : {}", invoiceId, e);
+            return Optional.empty();
         }
     }
 }

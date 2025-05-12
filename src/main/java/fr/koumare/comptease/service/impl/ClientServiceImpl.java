@@ -1,7 +1,9 @@
 package fr.koumare.comptease.service.impl;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
+import fr.koumare.comptease.model.DetailClient;
 import fr.koumare.comptease.model.Invoice;
+import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,47 +111,22 @@ public class ClientServiceImpl implements ClientService {
         logger.info("Recherche du client via service par le mot clé : {}", keyword);
         return clientDao.findByKeyword(keyword);
     }
-
-    @Override
-    public List<Client> sortByName() {
-        logger.info("Tri des clients par nom");
-        return clientDao.sortByName();
-    }
-
-    @Override
-    public List<Client> sortByNameDesc() {
-        logger.info("Tri des clients par nom decroissant");
-        return clientDao.sortByNameDesc();
-    }
-
-    @Override
-    public List<Client> sortByFirstName() {
-        logger.info("Tri des clients par prenom");
-        return clientDao.sortByFirstName();
-    }
-
-    @Override
-    public List<Client> sortByFirstNameDesc() {
-        logger.info("Tri des clients par prenom decroissant");
-        return clientDao.sortByFirstNameDesc();
-    }
-
-    @Override
-    public List<Client> sortById() {
-        logger.info("Tri des clients par id");
-        return clientDao.sortById();
-    }
-
-    @Override
-    public List<Client> sortByIdDesc() {
-        logger.info("Tri des clients par id decroissant");
-        return clientDao.sortByIdDesc();
-    }
-
         
     @Override
     public List<Invoice> getClientDetails(Long idClient) {
         logger.info("Recherche des details du client : {}", idClient);
         return clientDao.getClientDetails(idClient);
+    }
+
+    @Override
+    public List<Invoice> findByKeywordDetails(String keyword) {
+        logger.info("Recherche des details du client via service par le mot clé : {}", keyword);
+        return clientDao.findByKeywordDetails(keyword);
+    }
+
+    @Override
+    public Optional<Client> findUserByInvoiceId(Long invoiceId) {
+        logger.info("Recherche du client par l'ID de la facture : {}", invoiceId);
+        return clientDao.findUserByInvoiceId(invoiceId);
     }
 }

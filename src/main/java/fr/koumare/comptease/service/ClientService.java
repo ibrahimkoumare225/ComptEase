@@ -1,6 +1,7 @@
 package fr.koumare.comptease.service;
 
 import fr.koumare.comptease.model.Client;
+import fr.koumare.comptease.model.DetailClient;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.User;
 
@@ -24,17 +25,9 @@ public interface ClientService {
 
     List<Client> findByKeyword(String keyword);
 
-    List<Client> sortByName();
-
-    List<Client> sortByNameDesc();
-
-    List<Client> sortByFirstName();
-
-    List<Client> sortByFirstNameDesc();
-
-    List<Client> sortById();
-
-    List<Client> sortByIdDesc();
-
     List<Invoice>  getClientDetails(Long idClient);
+
+    List<Invoice> findByKeywordDetails(String keyword);
+
+    Optional<Client> findUserByInvoiceId(Long invoiceId);
 }

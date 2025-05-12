@@ -20,6 +20,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 import org.hibernate.mapping.Table;
 import org.slf4j.Logger;
@@ -99,13 +103,16 @@ public class ClientController extends BaseController implements Initializable {
 
 
     @FXML
-    private AnchorPane form_add;
+    private AnchorPane add;
 
     @FXML
     private AnchorPane form_initial;
 
     @FXML
-    private AnchorPane form_modif;
+    private AnchorPane form_modif;  
+
+    @FXML
+    private AnchorPane form_add;
 
     @FXML
     private TableColumn<Client, Integer> idc;
@@ -166,6 +173,9 @@ public class ClientController extends BaseController implements Initializable {
     private AnchorPane form_detailClient;
 
     @FXML
+    private AnchorPane formInitial_hDetail;
+
+    @FXML
     private TableView<Invoice> tableClientDetail;
 
     @FXML
@@ -189,47 +199,43 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private TableColumn<Invoice, StatusInvoice> Statutp;
 
-    @FXML
-    private Button ajouterDetail;
 
     @FXML
     private Button chercherDetail;
 
     @FXML
-    private Button annulerRecercheDetail;
+    private Button annulerRechercheDetail;
     
     @FXML
     private TextField searchBarreDetail;
+
+    @FXML 
+    private Button RetourDetail;
 
     @FXML
     private AnchorPane form_modifDetail;
 
     @FXML
-    private Button modifExecuterDetail;
+    private Button envoyerRappel;
 
     @FXML
     private Button modifRetourDetail;
 
     @FXML
-    private Button suprExecuterDetail;
+    private Button voirDevis;
 
     @FXML
-    private TextField modifDescription;
+    private TextField modifNote;
+
 
     @FXML
-    private TextField modifQuantite;
-
-    @FXML
-    private TextField modifPrixU;
-
-    @FXML
-    private TextField modifPrixT;
+    private Label modifStatut;
 
     @FXML
     private Label modifIdDetail;
 
     @FXML
-    private TextField modifDate;
+    private Button modifNoteExecuter;
 
     
     
@@ -237,6 +243,7 @@ public class ClientController extends BaseController implements Initializable {
     private ClientService clientService = new ClientServiceImpl();
 
     ObservableList<Client> listAllClients= FXCollections.observableArrayList(clientService.getAllClients());
+    ObservableList<Invoice> listAllInvoices;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("Initialisation de  ClientController");
@@ -247,8 +254,9 @@ public class ClientController extends BaseController implements Initializable {
                 Client client = getTableView().getItems().get(getIndex());
                 logger.info("Affichage des détails du client : {}", client.getFirstName());
                 try {
+                    listAllInvoices = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
+                    showClientDetails(client,listAllInvoices);
 
-                    showClientDetails(client);
 
                 } catch (IOException e) {
                     logger.error("Erreur lors de l'affichage des détails du client : {}", e.getMessage());
@@ -288,20 +296,18 @@ public class ClientController extends BaseController implements Initializable {
             form_modif.setVisible(false);
             form_add.setVisible(false);
         }
-        else if(event.getSource()==modifRetourDetail){
-            formInitial_h.setVisible(true);
+        else if(event.getSource()==RetourDetail){
+            form_initial.setVisible(true);
             form_modifDetail.setVisible(false);
             form_detailClient.setVisible(false);
         }
-        else if(event.getSource()==addEffacer){
-            EffacerChamps(event);
+        else if (event.getSource()==modifRetourDetail){
+            form_detailClient.setVisible(true);
+            formInitial_hDetail.setVisible(true);
+            form_modifDetail.setVisible(false);
+            form_initial.setVisible(false);
         }
-        else if(event.getSource()==annulerRecherche){
-            annulerRecherche(event);
-        }
-        else if(event.getSource()==annulerRecercheDetail){
-            annulerRechercheDetail(event);
-        }
+       
         
         /*else if(event.getSource()==modifExecuter){
             formInitial_h.setVisible(true);
@@ -516,14 +522,14 @@ public class ClientController extends BaseController implements Initializable {
     
 
     //afficher les details d'un client
-    private void showClientDetails(Client client) throws IOException {
+    private void showClientDetails(Client client, ObservableList<Invoice> list) throws IOException {
         logger.info("Affichage des détails du client : {}");
 
         form_initial.setVisible(false);
         form_detailClient.setVisible(true);
+        formInitial_hDetail.setVisible(true);
         form_modifDetail.setVisible(false);
 
-        ObservableList<Invoice> list = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -536,14 +542,32 @@ public class ClientController extends BaseController implements Initializable {
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
         if (list.isEmpty()) {
+            tableClientDetail.setItems(FXCollections.observableArrayList()); // vider la table
             showAlert(Alert.AlertType.INFORMATION, "Avertissement", "Aucun détail trouvé pour ce client.");
         } else {
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Détails trouvés : " + list.size());
             tableClientDetail.setItems(list);
-            annulerRecercheDetail.setVisible(true);
+            tableClientDetail.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    formInitial_hDetail.setVisible(false);
+                    form_modifDetail.setVisible(true);
+                    remplirFormulaireModifDetail(newSelection);
+                }
+            });
         }
     }
 
+    @FXML
+    private void remplirFormulaireModifDetail(Invoice invoice) {
+        modifIdDetail.setText(String.valueOf(invoice.getId()));
+        modifNote.setText(invoice.getDescription()+" |faire une colonne pour la note");
+        modifStatut.setText(invoice.getStatus().toString());
+        /*modifPrixU.setText(String.valueOf(invoice.getPrice()));
+        modifPrixT.setText(String.valueOf(invoice.getPrice() * 4L));
+        modifDate.setText(String.valueOf(invoice.getDate()));*/
+    }
+
+    @FXML
     private void rechercheDetail(ActionEvent event) {
         logger.info("Recherche d'un detail du client : {}", searchBarreDetail.getText());
         String keyword = searchBarreDetail.getText();
@@ -551,17 +575,71 @@ public class ClientController extends BaseController implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer un mot clé pour la recherche.");
             return;
         }
+        ObservableList<Invoice> list = FXCollections.observableArrayList(clientService.findByKeywordDetails(keyword));
+        idp.setCellValueFactory(new PropertyValueFactory<>("id"));
+        desp.setCellValueFactory(new PropertyValueFactory<>("description"));
+        datep.setCellValueFactory(new PropertyValueFactory<>("date"));
+        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
+        prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
+        prixTp.setCellValueFactory(cellData -> {
+            Invoice invoice = cellData.getValue();
+            double total = invoice.getPrice() * 4; // quantité fixe = 4
+            return new ReadOnlyObjectWrapper<>((Double) total);
+        });
+        Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
+        tableClientDetail.setItems(list);
+        Client c= clientService.findById(list.get(0).getClient().getIdc()).orElse(null); 
+        try {
+            showClientDetails(c, list);
+            annulerRechercheDetail.setVisible(true);
+        } catch (IOException e) {
+            logger.error("Erreur lors de l'affichage des détails du client : {}", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'affichage des détails du client.");
+        }
+       /* if (list.isEmpty()) {
+            showAlert(Alert.AlertType.INFORMATION, "Avertissement", "Aucun détail trouvé avec ce mot clé.");
+        } else {
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Détails trouvés : " + list.size());
+            tableClientDetail.setItems(list);
+            annulerRechercheDetail.setVisible(true);
+        }*/
     }
 
-    private void annulerRechercheDetail(ActionEvent event) {
+    @FXML
+    private void fctannulerRechercheDetail(ActionEvent event) {
         logger.info("Annulation de la recherche de detail");
+        searchBarreDetail.clear();
+        Client c= clientService.findById(listAllInvoices.get(0).getClient().getIdc()).orElse(null);
+        try {
+            showClientDetails(c, listAllInvoices);
+            annulerRechercheDetail.setVisible(false);
+        } catch (IOException e) {
+            logger.error("Erreur lors de l'annulation de la recherche de détail : {}", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'annulation de la recherche de détail.");
+        }
         
     }
-
+    @FXML
     private void  ModifDetail(ActionEvent event) {
         logger.info("Modification d'un detail du client : {}", modifIdDetail.getText());
+        String note=modifNote.getText();
+        //fonction update invoice
     }
-    private void SupprDetail(ActionEvent event) {
-        logger.info("Suppression d'un detail du client : {}", modifIdDetail.getText());
+
+    @FXML
+    private void fctVoirDevis(ActionEvent event) {
+        logger.info("Affichage du devis");
+        //afficher factures.fxml        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/factures.fxml"));
+            Scene scene = new Scene(loader.load(), 1300,720);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("Factures");
+            stage.show();
+        } catch (IOException e) {
+            logger.error("Erreur lors de l'affichage du devis : {}", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'affichage du devis.");
+        }
     }
 }
