@@ -1,16 +1,12 @@
 package fr.koumare.comptease.service;
 
 import fr.koumare.comptease.model.Devis;
+import fr.koumare.comptease.model.Invoice;
+import fr.koumare.comptease.model.enumarated.StatusDevis;
 
-import java.util.List;
+public interface DevisService extends DocumentService {
+    Devis createDevis(Devis devis);
+    Invoice createInvoiceFromDevis(Devis devis);
+    void updateDevisStatus(Long invoiceId);
 
-public interface DevisService {
-
-    public void addDevis(Devis devis) ;
-
-    public List<Devis> getAllDevis() ;
-
-    public void updateDevis(Devis devis);
-
-    public void deleteDevis(Long id) ;
 }

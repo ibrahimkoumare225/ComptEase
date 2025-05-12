@@ -61,7 +61,15 @@
     -fx-background-color: #FFFFFF;
 }
 
-
-
+.cd{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 0);
+    -fx-background-radius: 0px 0px 10px 10px;
+    -fx-background-color: #FFFFFF;
+}
+.cde{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 0);
+    -fx-background-radius: 10px 10px 0px 0px;
+    -fx-background-color: #A4C2E0;
+}
 
 
