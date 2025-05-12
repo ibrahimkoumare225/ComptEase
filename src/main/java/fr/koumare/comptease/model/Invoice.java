@@ -3,7 +3,6 @@ package fr.koumare.comptease.model;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
@@ -11,17 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Invoice {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private double price;
-
-    private String description;
-
-    private Instant date;
+public class Invoice extends Document {
 
     @Enumerated(EnumType.STRING)
     private StatusInvoice status;
@@ -46,20 +35,14 @@ public class Invoice {
     private List<Transaction> transactions;
 
     public Invoice() {
+        super();
     }
 
-    public Invoice(double price, String description, Instant date, StatusInvoice status, Client client) {
-        this.price = price;
-        this.description = description;
-        this.date = date;
+    public Invoice(double price, String description, Instant date, StatusInvoice status, Client client, Devis devis) {
+        super(price, description, date);
         this.status = status;
         this.client = client;
-    }
+        this.devis = devis;
 
-    public double getPrice() {
-        return price;
-    }
-    public void setPrice(double price) {
-        this.price = price;
     }
 }
