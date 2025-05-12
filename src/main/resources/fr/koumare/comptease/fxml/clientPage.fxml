@@ -37,42 +37,42 @@
                         <Circle fill="#ff5a52" layoutX="83.0" layoutY="180.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="25.0" />
                         <Button fx:id="dashboardButton" layoutX="65.0" layoutY="125.0" mnemonicParsing="false" onAction="#handleNavigateToDashboard" text="Dashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
                            <graphic>
-                              <!--<FontAwesomeIconView glyphName="HOME" size="20" />-->
+                              <FontAwesomeIconView glyphName="HOME" size="20" />
                            </graphic>
                         </Button>
                         <Button fx:id="rapportFinancierButton" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleNavigateToRapportFinancier" text="Rapport Financier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
                            <graphic>
-                              <!--<FontAwesomeIconView glyphName="BOOK" size="20" />-->
+                              <FontAwesomeIconView glyphName="BOOK" size="20" />
                            </graphic>
                         </Button>
                         <Button fx:id="transactionButton" layoutX="65.0" layoutY="227.0" mnemonicParsing="false" onAction="#handleNavigateToTransaction" text="Transaction" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="200.0">
                            <graphic>
-                              <!--<FontAwesomeIconView glyphName="MONEY" size="20" />-->
+                              <FontAwesomeIconView glyphName="MONEY" size="20" />
                            </graphic>
                         </Button>
                         <Button fx:id="obligationFiscaleButton" layoutX="65.0" layoutY="259.0" mnemonicParsing="false" onAction="#handleNavigateToObligationFiscale" text="Obligation Fiscales" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="250.0">
                            <graphic>
-                              <!--<FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />-->
+                              <FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />
                            </graphic>
                         </Button>
                         <Button fx:id="clientButton" layoutX="65.0" layoutY="315.0" mnemonicParsing="false" onAction="#handleNavigateToClient" styleClass="alt_menu_btn" text="Clients" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
                            <graphic>
-                              <!--<FontAwesomeIconView glyphName="USERS" size="20" />-->
+                              <FontAwesomeIconView glyphName="USERS" size="20" />
                            </graphic>
                         </Button>
                         <Button fx:id="facturesButton" layoutX="57.0" layoutY="363.0" mnemonicParsing="false" onAction="#handleNavigateToFactures" text="Factures" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="350.0">
                            <graphic>
-                              <!--<FontAwesomeIconView glyphName="CLIPBOARD" size="20" />-->
+                              <FontAwesomeIconView glyphName="CLIPBOARD" size="20" />
                            </graphic>
                         </Button>
                         <Button fx:id="parametreButton" layoutX="57.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleNavigateToParametre" text="Paramètres" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="400.0">
                            <graphic>
-                              <!--<FontAwesomeIconView glyphName="COGS" size="20" />-->
+                              <FontAwesomeIconView glyphName="COGS" size="20" />
                            </graphic>
                         </Button>
                         <Button fx:id="logoutButton" layoutX="57.0" layoutY="465.0" mnemonicParsing="false" onAction="#handleLogout" text="Déconnexion" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="450.0">
                            <graphic>
-                             <!-- <FontAwesomeIconView glyphName="SIGN_OUT" size="20" />-->
+                             <FontAwesomeIconView glyphName="SIGN_OUT" size="20" />
                            </graphic>
                         </Button>
                      </children>
