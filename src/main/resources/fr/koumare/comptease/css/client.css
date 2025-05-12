@@ -1,16 +1,24 @@
 .ftab{
     -fx-background-color: #fff;
     -fx-background-radius:8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 0);
+    -fx-border-width: 1px;
 }
 .barregauche{
     -fx-background-color: #37383C;
 }
 
-.label-info{
+.label-info {
     -fx-background-color: white;
-    -fx-border-color: white;
-    -fx-border-radius: 2px;
+    -fx-border-color: #ccc; /* couleur de bordure typique d’un TextField */
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-border-width: 1px;
+    -fx-padding: 4px 6px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #333;
 }
+
 
 .body {
     -fx-background-color: #A4C2E0;
@@ -79,6 +87,18 @@
 .btn1{
     -fx-background-color: #A4C2E0;
     -fx-background-radius: 50;
+    -fx-cursor: hand;
+    cursor: pointer;
+}
+.retour{
+    -fx-background-color: #A4C2E0;
+    -fx-background-radius: 5;
+}
+.retour:hover{
+    -fx-background-color: #1A1F37;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    cursor: pointer;
 }
 
 .table {
@@ -88,6 +108,8 @@
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 0);
+    -fx-table-cell-border-color: #A4C2E0; /* ou une autre couleur subtile de ta charte */
+
 }
 
 .table .column-header {
@@ -104,7 +126,6 @@
 
 .table .table-row-cell {
     -fx-background-color: #FFFFFF;
-    -fx-border-color: transparent;
     -fx-font-size: 11px;
     -fx-text-fill: #37383C;
 }
