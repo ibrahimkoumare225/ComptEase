@@ -34,6 +34,9 @@ public class Client {
     @Column(name = "solde", nullable = false)
     private Long solde;
 
+    @Column(name = "note", nullable = true)
+    private String note;
+
     /*@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;*/
@@ -50,7 +53,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Long solde ) {
+    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Long solde , String note) {
         this.idc=idc;
         this.user =user;
         this.contact = contact;
@@ -58,6 +61,7 @@ public class Client {
         this.firstName = firstName;
         this.adresse = adresse;
         this.solde = solde;
+        this.note = note;
 
     }
 
@@ -98,6 +102,12 @@ public class Client {
     }
     public void setSolde(Long solde) {
         this.solde = solde;
+    }
+    public String getNote() {
+        return note;
+    }
+    public void setNote(String note) {
+        this.note = note;
     }
     public Long getId_user() {
         return user.getId();

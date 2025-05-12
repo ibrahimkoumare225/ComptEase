@@ -1,7 +1,6 @@
 package fr.koumare.comptease.service;
 
 import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.DetailClient;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.User;
 
@@ -11,11 +10,11 @@ import java.util.Optional;
 
 public interface ClientService {
 
-    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Long solde) ;
+    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Long solde, String note) ;
 
     public List<Client> getAllClients() ;
 
-    public boolean updateClient(Long id,String nom, String prenom, String adresse, String contact,Long solde) ;
+    public boolean updateClient(Long id,String nom, String prenom, String adresse, String contact,Long solde, String note) ;
 
     public boolean deleteClient(Long id) ;
 

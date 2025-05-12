@@ -107,29 +107,29 @@
                      <children>
                         <AnchorPane layoutX="107.0" layoutY="105.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1256.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane fx:id="form_initial" layoutX="297.3333333333333" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="581.0" prefWidth="959.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false" AnchorPane.leftAnchor="297.0">
+                              <AnchorPane fx:id="form_initial" layoutX="297.3333333333333" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="581.0" prefWidth="959.0" styleClass="ftab" stylesheets="@../css/client.css" AnchorPane.leftAnchor="297.0">
                                  <children>
                                     <AnchorPane layoutX="2.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="482.0" prefWidth="965.0" style="-fx-background-color: blue;" styleClass="ftab" stylesheets="@../css/client.css">
                                        <children>
                                           <TableView fx:id="tableClient" layoutX="4.0" layoutY="6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="475.0" prefWidth="959.0" styleClass="table" stylesheets="@../css/client.css">
                                             <columns>
-                                                <TableColumn fx:id="idc" maxWidth="1.7976931348623157E308" prefWidth="76.66668462753296" text="Identifiant " />
+                                                <TableColumn fx:id="idc" maxWidth="1.7976931348623157E308" prefWidth="76.66668462753296" text="Identifiant "  />
                                                 <TableColumn fx:id="nomc" maxWidth="1.7976931348623157E308" prefWidth="113.3333511352539" text="Nom" />
                                                 <TableColumn fx:id="prenomc" maxWidth="1.7976931348623157E308" prefWidth="121.99998474121094" text="Prénom" />
+                                                <TableColumn fx:id="contactc" maxWidth="1.7976931348623157E308" prefWidth="156.0001220703125" text="Contact" />
                                                 <TableColumn fx:id="soldec" maxWidth="1.7976931348623157E308" prefWidth="96.6666259765625" text="Solde" />
                                                 <TableColumn fx:id="noteUserc" maxWidth="1.7976931348623157E308" prefWidth="286.6666564941406" text="Note" />
-                                                <TableColumn fx:id="contactc" maxWidth="1.7976931348623157E308" prefWidth="156.0001220703125" text="Contact" />
                                                 <TableColumn fx:id="detailc" maxWidth="1.7976931348623157E308" prefWidth="105.33349609375" text="Détail" />
                                                 
                                             </columns>
                                           </TableView>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane fx:id="formInitial_h" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css">
+                                    <AnchorPane fx:id="formInitial_h" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css" >
                                        <children>
-                                          <Button fx:id="ajouter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="101.0" text="Nouveau client" AnchorPane.rightAnchor="53.00000000000004" />
-                                          <Button fx:id="chercher" layoutX="270.0" layoutY="40.0" mnemonicParsing="false" onAction="#rechercheClient" text="Chercher" />
-                                          <Button fx:id="annulerRecherche" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" onAction="#annulerRecherche" text="Annuler" visible="false" />
+                                          <Button fx:id="ajouter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="101.0" text="Nouveau client" styleClass="btn1" AnchorPane.rightAnchor="53.00000000000004" />
+                                          <Button fx:id="chercher" layoutX="270.0" layoutY="40.0" mnemonicParsing="false" onAction="#rechercheClient" text="Chercher" styleClass="btn1" />
+                                          <Button fx:id="annulerRecherche" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" onAction="#annulerRecherche" text="Annuler" styleClass="btn1" visible="false" />
                                           <TextField fx:id="searchBarre" layoutX="19.0" layoutY="40.0" prefHeight="25.0" prefWidth="225.0" promptText="Rechercher" />
                                           <ComboBox fx:id="choixTP" layoutX="95.0" layoutY="84.0" prefHeight="25.0" prefWidth="125.0" promptText="choisir" />
                                           <Label layoutX="32.0" layoutY="88.0" text="Trier par" />
@@ -137,7 +137,7 @@
                                     </AnchorPane>
                                     <AnchorPane fx:id="form_add" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                        <children>
-                                          <Button fx:id="addExecuter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#AjoutClient" prefHeight="36.0" prefWidth="101.0" text="Ajouter le client" AnchorPane.rightAnchor="53.00000000000004" />
+                                          <Button fx:id="addExecuter" layoutX="852.0" layoutY="99.0" mnemonicParsing="false" onAction="#AjoutClient" prefHeight="36.0" prefWidth="101.0" text="Ajouter le client" styleClass="btn1" AnchorPane.rightAnchor="14.666666666666629" />
                                           <Label layoutX="405.0" layoutY="-4.0" style="-fx-margin-top: 0;" text="Vos Clients">
                                              <font>
                                                 <Font size="24.0" />
@@ -149,42 +149,46 @@
                                           <TextField fx:id="addPrenom" layoutX="83.0" layoutY="66.0" />
                                           <TextField fx:id="addContact" layoutX="83.0" layoutY="96.0" prefHeight="25.0" prefWidth="266.0" />
                                           <Label layoutX="24.0" layoutY="100.0" text="Contact :" />
-                                          <Label layoutX="385.0" layoutY="70.0" text="Solde : " />
-                                          <TextField fx:id="addSolde" layoutX="447.0" layoutY="66.0" />
+                                          <Label layoutX="385.0" layoutY="70.0" text="Note : " />
+                                          <!--<TextField fx:id="addSolde" layoutX="447.0" layoutY="66.0" />-->
+                                          <TextField fx:id="addNote" layoutX="447.0" layoutY="66.0" prefHeight="25.0" prefWidth="286.0" />
                                           <Label layoutX="384.0" layoutY="40.0" text="Adresse :" />
                                           <TextField fx:id="addAdresse" layoutX="447.0" layoutY="36.0" prefHeight="25.0" prefWidth="286.0" />
-                                          <Button fx:id="addEffacer" layoutX="698.0" layoutY="91.0" mnemonicParsing="false" onAction="#EffacerChamps" prefHeight="36.0" prefWidth="101.0" text="Effacer" />
-                                          <Button fx:id="addRetour" layoutX="894.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="65.0" text="Retour" />
+                                          <Button fx:id="addEffacer" layoutX="733.0" layoutY="99.0" mnemonicParsing="false" onAction="#EffacerChamps" prefHeight="36.0" prefWidth="101.0" text="Effacer" styleClass="btn1" />
+                                          <Button fx:id="addRetour" layoutX="894.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="65.0" text="Retour" styleClass="btn1" />
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane fx:id="form_modif" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                    <AnchorPane fx:id="form_modif" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab"  visible="false" stylesheets="@../css/client.css">
                                        <children>
-                                          <Button fx:id="modifExecuter" layoutX="791.0" layoutY="50.0" mnemonicParsing="false" onAction="#ModifClient" prefHeight="36.0" prefWidth="122.0" text="Modifier" AnchorPane.rightAnchor="33.0" />
-                                          <Button fx:id="suprExecuter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#SupprClient" prefHeight="36.0" prefWidth="122.0" text="Supprimer" AnchorPane.rightAnchor="33.0" />
-                                          <Label layoutX="463.0" layoutY="73.0" text="Adresse : " />
+                                          <Button fx:id="modifExecuter" layoutX="791.0" layoutY="50.0" mnemonicParsing="false" onAction="#ModifClient" prefHeight="36.0" prefWidth="122.0" text="Modifier" styleClass="btn1" AnchorPane.rightAnchor="33.0" />
+                                          <Button fx:id="suprExecuter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#SupprClient" prefHeight="36.0" prefWidth="122.0" text="Supprimer" styleClass="btn1" AnchorPane.rightAnchor="33.0" />
+                                          <Label layoutX="381.0" layoutY="73.0" text="Adresse : " />
                                           <Label layoutX="407.0" layoutY="5.0" text="Vos Clients">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="108.0" layoutY="73.0" text="Nom :" />
-                                          <Label layoutX="100.0" layoutY="108.0" text="Prénom :" />
-                                          <Label layoutX="465.0" layoutY="40.0" text="Contact :" />
-                                          <Label layoutX="469.0" layoutY="108.0" text="Solde : " />
-                                          <TextField fx:id="modifNom" layoutX="173.0" layoutY="69.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
-                                          <TextField fx:id="modifPrenom" layoutX="172.0" layoutY="104.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
-                                          <Label fx:id="modifId" layoutX="173.0" layoutY="36.0" prefHeight="25.0" prefWidth="145.0" styleClass="label-info" stylesheets="@../css/client.css" />
-                                          <TextField fx:id="modifContact" layoutX="527.0" layoutY="36.0" prefHeight="25.0" prefWidth="200.0" styleClass="" stylesheets="@../css/client.css" />
-                                          <TextField fx:id="modifAdresse" layoutX="527.0" layoutY="69.0" prefHeight="25.0" prefWidth="200.0" styleClass="" stylesheets="@../css/client.css" />
-                                          <TextField fx:id="modifSolde" layoutX="527.0" layoutY="104.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
-                                          <Label layoutX="94.0" layoutY="40.0" text="Identifiant :" />
-                                          <Button fx:id="modifRetour" layoutX="894.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="65.0" text="Retour" />
+                                          <Label layoutX="37.0" layoutY="73.0" text="Nom :" />
+                                          <Label layoutX="29.0" layoutY="108.0" text="Prénom :" />
+                                          <Label layoutX="383.0" layoutY="40.0" text="Contact :" />
+                                          <Label layoutX="389.0" layoutY="108.0" text="Note : " />
+
+                                          <TextField fx:id="modifNom" layoutX="99.0" layoutY="69.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <TextField fx:id="modifPrenom" layoutX="99.0" layoutY="104.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <Label fx:id="modifId" layoutX="100.0" layoutY="37.0" prefHeight="25.0" prefWidth="145.0" styleClass="label-info" stylesheets="@../css/client.css" />
+                                          <TextField fx:id="modifContact" layoutX="445.0" layoutY="37.0" prefHeight="25.0" prefWidth="200.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <TextField fx:id="modifAdresse" layoutX="445.0" layoutY="73.0" prefHeight="25.0" prefWidth="200.0" styleClass="" stylesheets="@../css/client.css" />
+                                          <TextField fx:id="modifSolde" layoutX="300.0" layoutY="104.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" visible="false" />
+                                          <TextField fx:id="modifNoteClient" layoutX="445.0" layoutY="104.0" prefHeight="25.0" prefWidth="289.0" styleClass="" stylesheets="@../css/client.css" />
+
+                                          <Label layoutX="23.0" layoutY="40.0" text="Identifiant :" />
+                                          <Button fx:id="modifRetour" layoutX="894.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="65.0" text="Retour" styleClass="btn1" />
 
                                        </children>
                                     </AnchorPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="form_detailClient" layoutX="297.3333333333333" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="581.0" prefWidth="959.0" styleClass="ftab" stylesheets="@../css/client.css" AnchorPane.leftAnchor="297.0">
+                              <AnchorPane fx:id="form_detailClient" layoutX="297.3333333333333" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="581.0" prefWidth="959.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false" AnchorPane.leftAnchor="297.0">
                                  <children>
                                     <AnchorPane layoutX="2.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="482.0" prefWidth="965.0" style="-fx-background-color: blue;" styleClass="ftab" stylesheets="@../css/client.css">
                                        <children>
@@ -201,19 +205,19 @@
                                           </TableView>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane fx:id="formInitial_hDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                    <AnchorPane fx:id="formInitial_hDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css">
                                        <children>
-                                          <Button fx:id="chercherDetail" layoutX="270.0" layoutY="40.0" mnemonicParsing="false" onAction="#rechercheDetail" text="Chercher" />
-                                          <Button fx:id="annulerRechercheDetail" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" onAction="#fctannulerRechercheDetail" text="Annuler" visible="false" />
+                                          <Button fx:id="chercherDetail" layoutX="270.0" layoutY="40.0" mnemonicParsing="false" onAction="#rechercheDetail" text="Chercher" styleClass="btn1" />
+                                          <Button fx:id="annulerRechercheDetail" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" onAction="#fctannulerRechercheDetail" text="Annuler" styleClass="btn1" visible="false" />
                                           <TextField fx:id="searchBarreDetail" layoutX="19.0" layoutY="40.0" prefHeight="25.0" prefWidth="225.0" promptText="Rechercher" />
-                                          <Button fx:id="RetourDetail" layoutX="892.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="67.0" text="Retour" />
+                                          <Button fx:id="RetourDetail" layoutX="892.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="67.0" text="Retour" styleClass="btn1" />
                                           
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane fx:id="form_modifDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css"> 
+                                    <AnchorPane fx:id="form_modifDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: gray;" styleClass="ftab" stylesheets="@../css/client.css" visible="false"> 
                                        <children>
-                                          <Button fx:id="voirDevis" layoutX="566.0" layoutY="73.0" mnemonicParsing="false" onAction="#fctVoirDevis" prefHeight="36.0" prefWidth="122.0" text="Voir devis" AnchorPane.rightAnchor="280.0" />
-                                          <Button fx:id="envoyerRappel" layoutX="819.0" layoutY="91.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="122.0" text="Notifier" AnchorPane.rightAnchor="27.0" />
+                                          <Button fx:id="voirDevis" layoutX="566.0" layoutY="73.0" mnemonicParsing="false" onAction="#fctVoirDevis" prefHeight="36.0" prefWidth="122.0" text="Voir devis" styleClass="btn1" AnchorPane.rightAnchor="280.0" />
+                                          <Button fx:id="envoyerRappel" layoutX="819.0" layoutY="91.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="122.0" text="Notifier" styleClass="btn1" AnchorPane.rightAnchor="27.0" />
                                           <!--<Label layoutX="463.0" layoutY="73.0" text="Prix total : " />-->
                                           <Label layoutX="394.0" layoutY="-4.0" text="Details de la vente">
                                              <font>
@@ -235,12 +239,12 @@
                                           <Label fx:id="modifIdDetail" layoutX="173.0" layoutY="36.0" prefHeight="25.0" prefWidth="145.0" styleClass="label-info" stylesheets="@../css/client.css" />
                                           <Label layoutX="108.0" layoutY="73.0" text="Note :" />
                                           <TextField fx:id="modifNote" layoutX="173.0" layoutY="69.0" prefHeight="40.0" prefWidth="250.0" styleClass="" stylesheets="@../css/client.css" />
-                                          <Button fx:id="modifNoteExecuter" layoutX="236.0" layoutY="112.0" mnemonicParsing="false" onAction="#ModifDetail" prefHeight="29.0" prefWidth="123.0" text="Modifier la note" AnchorPane.rightAnchor="608.6666666666667" />
+                                          <Button fx:id="modifNoteExecuter" layoutX="236.0" layoutY="112.0" mnemonicParsing="false" onAction="#ModifDetail" prefHeight="29.0" prefWidth="123.0" text="Modifier la note" styleClass="btn1" AnchorPane.rightAnchor="608.6666666666667" />
                                           <Label layoutX="465.0" layoutY="40.0" text="Satut :" />
                                           <Label fx:id="modifStatut" layoutX="527.0" layoutY="36.0" prefHeight="25.0" prefWidth="200.0" styleClass="label-info" stylesheets="@../css/client.css" />
 
 
-                                          <Button fx:id="modifRetourDetail" layoutX="894.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="65.0" text="Retour" />
+                                          <Button fx:id="modifRetourDetail" layoutX="894.0" layoutY="4.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="65.0" text="Retour" styleClass="btn1" />
 
                                        </children>
                                     </AnchorPane>

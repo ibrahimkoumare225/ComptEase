@@ -2,7 +2,6 @@ package fr.koumare.comptease.dao;
 
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
-import fr.koumare.comptease.model.DetailClient;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
@@ -124,7 +123,7 @@ public class ClientDao {
     //chercher un client par un mot clé
     public List<Client> findByKeyword(String keyword) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client WHERE lastName LIKE :keyword OR firstName LIKE :keyword OR contact LIKE :keyword OR adresse LIKE :keyword", Client.class)
+            return session.createQuery("FROM Client WHERE lastName LIKE :keyword OR firstName LIKE :keyword OR contact LIKE :keyword OR adresse LIKE :keyword OR note LIKE :keyword", Client.class)
                     .setParameter("keyword", "%" + keyword + "%")
                     .list();
         } catch (Exception e) {

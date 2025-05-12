@@ -5,7 +5,6 @@ import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
-import fr.koumare.comptease.model.DetailClient;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
@@ -19,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -78,7 +78,7 @@ public class ClientController extends BaseController implements Initializable {
     private TextField addId;
 
     @FXML
-    private ComboBox<?> addStatut;
+    private TextField addNote;
 
     @FXML
     private Button ajouter;
@@ -227,6 +227,9 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private TextField modifNote;
 
+    @FXML
+    private TextField modifNoteClient;
+
 
     @FXML
     private Label modifStatut;
@@ -329,7 +332,7 @@ public class ClientController extends BaseController implements Initializable {
         nomc.setCellValueFactory(new PropertyValueFactory<>("LastName"));
         prenomc.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
         soldec.setCellValueFactory(new PropertyValueFactory<>("Solde"));
-        noteUserc.setCellValueFactory(new PropertyValueFactory<>("Adresse"));
+        noteUserc.setCellValueFactory(new PropertyValueFactory<>("Note"));
         contactc.setCellValueFactory(new PropertyValueFactory<>("Contact"));
         tableClient.setItems(list);
         //mofication de la ligne selectionnée
@@ -351,6 +354,7 @@ public class ClientController extends BaseController implements Initializable {
         modifAdresse.setText(client.getAdresse());
         modifContact.setText(client.getContact());
         modifSolde.setText(String.valueOf(client.getSolde()));
+        modifNoteClient.setText(client.getNote());
     }
 
 
@@ -361,10 +365,12 @@ public class ClientController extends BaseController implements Initializable {
         String prenom=addPrenom.getText();
         String nom=addNom.getText();
         String adresse=addAdresse.getText();
-        Long solde=Long.parseLong(addSolde.getText());
+        Long solde=0L;
+        String note=addNote.getText();
+
         logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
         Long idu=1L;
-        if(clientService.addClient(nom, prenom, adresse, contact,idu,solde)){
+        if(clientService.addClient(nom, prenom, adresse, contact,idu,solde, note)){
             logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
 
@@ -396,10 +402,11 @@ public class ClientController extends BaseController implements Initializable {
         String contact=modifContact.getText();
         Long solde= Long.parseLong(modifSolde.getText());
         Long id=Long.parseLong(modifId.getText());
-    
+        String note=modifNoteClient.getText();
+        logger.info("Note : {}", note);
         logger.info("Modification d'un client : {}", nom +" "+ prenom);
 
-        if(clientService.updateClient(id,nom, prenom, adresse, contact, solde)){
+        if(clientService.updateClient(id,nom, prenom, adresse, contact, solde,note)){
             logger.info("Client modifié : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
             //recuperer le client modifié
@@ -475,7 +482,7 @@ public class ClientController extends BaseController implements Initializable {
         nomc.setCellValueFactory(new PropertyValueFactory<>("LastName"));
         prenomc.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
         soldec.setCellValueFactory(new PropertyValueFactory<>("Solde"));
-        noteUserc.setCellValueFactory(new PropertyValueFactory<>("Adresse"));
+        noteUserc.setCellValueFactory(new PropertyValueFactory<>("Note"));
         contactc.setCellValueFactory(new PropertyValueFactory<>("Contact"));
 
         tableClient.setItems(list);
@@ -509,12 +516,13 @@ public class ClientController extends BaseController implements Initializable {
         addPrenom.clear();
         addAdresse.clear();
         addSolde.clear();
+        addNote.clear();
         modifNom.setText("");
         modifPrenom.setText("");
         modifAdresse.setText("");
         modifContact.setText("");
         modifSolde.setText("");
-
+        modifNoteClient.setText("");
     }
 
    

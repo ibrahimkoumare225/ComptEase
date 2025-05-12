@@ -1,7 +1,6 @@
 package fr.koumare.comptease.service.impl;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.DetailClient;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.service.ClientService;
@@ -31,7 +30,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean updateClient(Long id, String nom, String prenom, String adresse, String contact,Long solde) {
+    public boolean updateClient(Long id, String nom, String prenom, String adresse, String contact,Long solde, String note) {
         if(nom == null || prenom == null || adresse == null ) {
             logger.warn("Informations client incomplete");
             return false;
@@ -46,8 +45,9 @@ public class ClientServiceImpl implements ClientService {
             client.setContact(contact);
             client.setAdresse(adresse);
             client.setSolde(solde);
+            client.setNote(note);
             clientDao.updateClient(client);
-            logger.info("Client modifié : {} {}", nom, prenom);
+            logger.info("Client modifié : {} {}", nom, prenom, note);
             return true;
         } else {
             logger.warn("Client non trouvé");
@@ -67,7 +67,7 @@ public class ClientServiceImpl implements ClientService {
     }
     
     @Override
-    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Long solde) {
+    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Long solde, String note) {
         logger.info("fonction addClient :{}", nom+" "+ prenom+" "+ adresse+" "+ contact+" "+ idUser+" "+ solde);
         //verification si ce client existe deja
         if(clientDao.clientExists(nom,prenom)) {
@@ -88,6 +88,7 @@ public class ClientServiceImpl implements ClientService {
         client.setContact(contact);
         client.setId_user(3L);
         client.setSolde(solde);
+        client.setNote(note);
         clientDao.saveClient(client);
         logger.info("Client ajouté : {} {}", nom, prenom);
         return true;
