@@ -101,6 +101,11 @@
     cursor: pointer;
 }
 
+.btnVoirDetails{
+    -fx-background-color: #A4C2E0;
+    -fx-background-radius: 5;
+}
+
 .table {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #A4C2E0;
@@ -115,7 +120,7 @@
 .table .column-header {
     -fx-background-color: #A4C2E0;
     
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-alignment: CENTER;
 }

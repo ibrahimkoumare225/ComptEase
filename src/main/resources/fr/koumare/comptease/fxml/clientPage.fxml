@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.shape.Circle?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<!--<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>-->
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/client.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.ClientController">
    <children>
@@ -37,42 +37,42 @@
                         <Circle fill="#ff5a52" layoutX="83.0" layoutY="180.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="25.0" />
                         <Button fx:id="dashboardButton" layoutX="65.0" layoutY="125.0" mnemonicParsing="false" onAction="#handleNavigateToDashboard" text="Dashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
                            <graphic>
-                              <FontAwesomeIconView glyphName="HOME" size="20" />
+                              <!--<FontAwesomeIconView glyphName="HOME" size="20" />-->
                            </graphic>
                         </Button>
                         <Button fx:id="rapportFinancierButton" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleNavigateToRapportFinancier" text="Rapport Financier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
                            <graphic>
-                              <FontAwesomeIconView glyphName="BOOK" size="20" />
+                             <!--<FontAwesomeIconView glyphName="BOOK" size="20" />--> 
                            </graphic>
                         </Button>
                         <Button fx:id="transactionButton" layoutX="65.0" layoutY="227.0" mnemonicParsing="false" onAction="#handleNavigateToTransaction" text="Transaction" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="200.0">
                            <graphic>
-                              <FontAwesomeIconView glyphName="MONEY" size="20" />
+                              <!--<FontAwesomeIconView glyphName="MONEY" size="20" />-->
                            </graphic>
                         </Button>
                         <Button fx:id="obligationFiscaleButton" layoutX="65.0" layoutY="259.0" mnemonicParsing="false" onAction="#handleNavigateToObligationFiscale" text="Obligation Fiscales" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="250.0">
                            <graphic>
-                              <FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />
+                              <!--<FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />-->
                            </graphic>
                         </Button>
                         <Button fx:id="clientButton" layoutX="65.0" layoutY="315.0" mnemonicParsing="false" onAction="#handleNavigateToClient" styleClass="alt_menu_btn" text="Clients" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
                            <graphic>
-                              <FontAwesomeIconView glyphName="USERS" size="20" />
+                              <!--<FontAwesomeIconView glyphName="USERS" size="20" />-->
                            </graphic>
                         </Button>
                         <Button fx:id="facturesButton" layoutX="57.0" layoutY="363.0" mnemonicParsing="false" onAction="#handleNavigateToFactures" text="Factures" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="350.0">
                            <graphic>
-                              <FontAwesomeIconView glyphName="CLIPBOARD" size="20" />
+                              <!--<FontAwesomeIconView glyphName="CLIPBOARD" size="20" />-->
                            </graphic>
                         </Button>
                         <Button fx:id="parametreButton" layoutX="57.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleNavigateToParametre" text="Paramètres" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="400.0">
                            <graphic>
-                              <FontAwesomeIconView glyphName="COGS" size="20" />
+                             <!-- <FontAwesomeIconView glyphName="COGS" size="20" />-->
                            </graphic>
                         </Button>
                         <Button fx:id="logoutButton" layoutX="57.0" layoutY="465.0" mnemonicParsing="false" onAction="#handleLogout" text="Déconnexion" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="450.0">
                            <graphic>
-                             <FontAwesomeIconView glyphName="SIGN_OUT" size="20" />
+                             <!--<FontAwesomeIconView glyphName="SIGN_OUT" size="20" />-->
                            </graphic>
                         </Button>
                      </children>
@@ -98,7 +98,7 @@
       </AnchorPane>
    </children>
    <children>
-      <AnchorPane fx:id="main_form" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <AnchorPane fx:id="main_form" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="container" stylesheets="@../css/client.css">
          <children>
             <BorderPane layoutX="85.0" layoutY="168.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <center>
@@ -126,13 +126,13 @@
                                     </AnchorPane>
                                     <AnchorPane fx:id="formInitial_h" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css">
                                        <children>
-                                          <Label layoutX="405.0" layoutY="2.0" style="-fx-margin-top: 0;" text="Vos Clients">
+                                          <Label layoutX="405.0" layoutY="2.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Vos Clients">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
                                           </Label>
                                           <Button fx:id="ajouter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Nouveau client" AnchorPane.rightAnchor="53.00000000000004" />
-                                          <Button fx:id="chercher" layoutX="540.0" layoutY="59.0" mnemonicParsing="false" onAction="#rechercheClient" styleClass="btn1" text="Chercher" />
+                                          <Button fx:id="chercher" layoutX="500.0" layoutY="59.0" mnemonicParsing="false" onAction="#rechercheClient" styleClass="btn1" text="Chercher" />
                                           <Button fx:id="annulerRecherche" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" onAction="#annulerRecherche" styleClass="btn1" text="Annuler" visible="false" />
                                           <TextField fx:id="searchBarre" layoutX="300.0" layoutY="59.0" prefHeight="30.0" prefWidth="190.0" promptText="Rechercher" />
                                        </children>
@@ -140,7 +140,7 @@
                                     <AnchorPane fx:id="form_add" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0"  styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                        <children>
                                           <Button fx:id="addExecuter" layoutX="852.0" layoutY="99.0" mnemonicParsing="false" onAction="#AjoutClient" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Ajouter le client" AnchorPane.rightAnchor="14.666666666666629" />
-                                          <Label layoutX="405.0" layoutY="-4.0" style="-fx-margin-top: 0;" text="Nouveau Client">
+                                          <Label layoutX="405.0" layoutY="-4.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Nouveau Client">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -159,17 +159,17 @@
                                           <Button fx:id="addEffacer" layoutX="733.0" layoutY="99.0" mnemonicParsing="false" onAction="#EffacerChamps" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Effacer" />
                                           <Button fx:id="addRetour" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour">
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="ARROW_LEFT" size="10" fill="white" />
+                                               <!-- <FontAwesomeIconView glyphName="ARROW_LEFT" size="10" fill="white" />-->
                                              </graphic>
                                           </Button>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane fx:id="form_modif" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" style="-fx-background-color: ;" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                    <AnchorPane fx:id="form_modif" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0"  styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                        <children>
                                           <Button fx:id="modifExecuter" layoutX="791.0" layoutY="50.0" mnemonicParsing="false" onAction="#ModifClient" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Modifier" AnchorPane.rightAnchor="33.0" />
                                           <Button fx:id="suprExecuter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#SupprClient" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Supprimer" AnchorPane.rightAnchor="33.0" />
                                           <Label layoutX="381.0" layoutY="73.0" text="Adresse : " />
-                                          <Label layoutX="407.0" layoutY="5.0" text="Informations du client">
+                                          <Label layoutX="407.0" layoutY="5.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Informations du client">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -190,7 +190,7 @@
                                           <Label layoutX="23.0" layoutY="40.0" text="Identifiant :" />
                                           <Button fx:id="modifRetour" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour">
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="ARROW_LEFT" size="10" fill="white" />
+                                               <!-- <FontAwesomeIconView glyphName="ARROW_LEFT" size="10" fill="white" />-->
                                              </graphic>
                                           </Button>
 
@@ -217,17 +217,17 @@
                                     </AnchorPane>
                                     <AnchorPane fx:id="formInitial_hDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0"  styleClass="ftab" stylesheets="@../css/client.css">
                                        <children>
-                                          <Label layoutX="405.0" layoutY="2.0" style="-fx-margin-top: 0;" text="Détails du client">
+                                          <Label layoutX="405.0" layoutY="2.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Détails du client">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
                                           </Label>
-                                          <Button fx:id="chercherDetail" layoutX="540.0" layoutY="59.0" mnemonicParsing="false" onAction="#rechercheDetail" styleClass="btn1" text="Chercher" />
+                                          <Button fx:id="chercherDetail" layoutX="500.0" layoutY="59.0" mnemonicParsing="false" onAction="#rechercheDetail" styleClass="btn1" text="Chercher" />
                                           <Button fx:id="annulerRechercheDetail" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" onAction="#fctannulerRechercheDetail" styleClass="btn1" text="Annuler" visible="false" />
                                           <TextField fx:id="searchBarreDetail"  layoutX="300.0" layoutY="59.0" prefHeight="30.0" prefWidth="190.0" promptText="Chercher" />
                                           <Button fx:id="RetourDetail" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour" >
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="ARROW_LEFT" size="10" fill="white" />
+                                                <!--<FontAwesomeIconView glyphName="ARROW_LEFT" size="10" fill="white" />-->
                                              </graphic>
                                           </Button>
                                        </children>
@@ -237,7 +237,7 @@
                                           <Button fx:id="voirDevis" layoutX="566.0" layoutY="73.0" mnemonicParsing="false" onAction="#fctVoirDevis" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Voir devis" AnchorPane.rightAnchor="280.0" />
                                           <Button fx:id="envoyerRappel" layoutX="819.0" layoutY="91.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Notifier" AnchorPane.rightAnchor="27.0" />
                                           <!--<Label layoutX="463.0" layoutY="73.0" text="Prix total : " />-->
-                                          <Label layoutX="394.0" layoutY="-4.0" text="Details de la vente">
+                                          <Label layoutX="394.0" layoutY="-4.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Details de la vente">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -253,7 +253,7 @@
 
                                           <Button fx:id="modifRetourDetail" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour" >
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="ARROW_LEFT" size="10" fill="white" />
+                                                <!--<FontAwesomeIconView glyphName="ARROW_LEFT" size="10" fill="white" />-->
                                              </graphic>
                                           </Button>
 
