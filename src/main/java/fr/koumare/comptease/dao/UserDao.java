@@ -37,7 +37,7 @@ public class UserDao {
                     .setParameter("pseudo", pseudo)
                     .uniqueResultOptional();
             if (user.isPresent()) {
-                logger.info("Utilisateur trouvé : {}", user.get().getPseudo());
+                logger.info("Utilisateur trouvé : {}", user.get().getPseudo()+" "+user.get().getId());
             } else {
                 logger.warn("Aucun utilisateur trouvé pour le pseudo : {}", pseudo);
             }

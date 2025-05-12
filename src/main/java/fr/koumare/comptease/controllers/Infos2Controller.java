@@ -72,7 +72,7 @@ public class Infos2Controller implements Initializable {
 
         // Redirection vers Dashboard.fxml
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/dashboard.fxml"));
             Scene scene = new Scene(loader.load(), 1300, 720);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -80,6 +80,7 @@ public class Infos2Controller implements Initializable {
             stage.show();
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger Dashboard.fxml : " + e.getMessage());
+            System.out.println("Impossible de charger Dashboard.fxml : " + e.getMessage());
             e.printStackTrace();
         }
     }

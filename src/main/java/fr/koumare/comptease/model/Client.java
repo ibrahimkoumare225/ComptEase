@@ -10,10 +10,17 @@ import java.util.List;
 @Getter
 @Setter
 public class Client {
-
+    //Modifier setId_user pour qu'il prenne l'utilisateur connecté
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idc;
+
+    @ManyToOne
+    @JoinColumn(name= "id_user", nullable= false)
+    private User user;
+
+    @Column(unique = true,name="contact", length = 20)
+    private String contact;
 
     @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
@@ -21,12 +28,18 @@ public class Client {
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
-    @Column(unique = true, length = 20)
-    private String contact;
+    @Column(name = "adresse", nullable = false, length = 300)
+    private String adresse;
 
-    @ManyToOne
+    @Column(name = "solde", nullable = false)
+    private Long solde;
+
+    @Column(name = "note", nullable = true)
+    private String note;
+
+    /*@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user;*/
 
     @OneToMany(mappedBy = "client")
     private List<Devis> devis;
@@ -40,10 +53,99 @@ public class Client {
     public Client() {
     }
 
-    public Client(String lastName, String firstName, String contact, User user) {
+    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Long solde , String note) {
+        this.idc=idc;
+        this.user =user;
+        this.contact = contact;
         this.lastName = lastName;
         this.firstName = firstName;
+        this.adresse = adresse;
+        this.solde = solde;
+        this.note = note;
+
+    }
+
+    //getters et setters
+    public Long getIdc() {
+        return idc;
+    }
+    public void setIdc(Long idc) {
+        this.idc = idc;
+    }
+    
+    public String getContact() {
+        return contact;
+    }
+    public void setContact(String contact) {
         this.contact = contact;
-        this.user = user;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getAdresse() {
+        return adresse;
+    }
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+    public Long getSolde() {
+        return solde;
+    }
+    public void setSolde(Long solde) {
+        this.solde = solde;
+    }
+    public String getNote() {
+        return note;
+    }
+    public void setNote(String note) {
+        this.note = note;
+    }
+    public Long getId_user() {
+        return user.getId();
+    }
+    public void setId_user(Long id_user) {
+        //this.user.setId(id_user);
+        this.user = new User();
+        this.user.setId(id_user);
+    }
+    
+    public List<Devis> getDevis() {
+        return devis;
+    }
+    public void setDevis(List<Devis> devis) {
+        this.devis = devis;
+    }
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
+    }
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+    @Override
+    public String toString() {
+        return "Client{" +
+                "idc=" + idc +
+                ", id_user=" + user.getId() +
+                ", contact='" + contact + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", adresse='" + adresse + '\'' +
+                ", solde=" + solde +
+                '}';
     }
 }

@@ -83,7 +83,7 @@ public class AuthController implements Initializable {
             logger.info("Connexion réussie pour : {}", pseudo);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Authentification réussie !");
             // Redirection vers Dashboard.fxml (1300x720)
-            loadFXML(event, "/fr/koumare/comptease/fxml/Dashboard.fxml", "Tableau de bord", 1300, 720);
+            loadFXML(event, "/fr/koumare/comptease/fxml/dashboard.fxml", "Tableau de bord", 1300, 720);
         } else {
             logger.warn("Échec de la connexion pour : {}", pseudo);
             showAlert(Alert.AlertType.ERROR, "Erreur", "Identifiants incorrects.");
@@ -190,4 +190,6 @@ public class AuthController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de AuthController");
     }
+
+
 }

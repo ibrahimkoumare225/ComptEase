@@ -43,4 +43,7 @@ public class Article {
         this.quantite = quantite;
         this.price = price;
     }
+    public Long getQuantite() {
+        return quantite;
+    }
 }
