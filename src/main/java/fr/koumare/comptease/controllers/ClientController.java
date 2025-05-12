@@ -515,7 +515,6 @@ public class ClientController extends BaseController implements Initializable {
         addNom.clear();
         addPrenom.clear();
         addAdresse.clear();
-        addSolde.clear();
         addNote.clear();
         modifNom.setText("");
         modifPrenom.setText("");
