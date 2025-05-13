@@ -58,7 +58,7 @@ public class DevisController extends BaseController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de DevisController");
 
-        // Configurer la table des devis
+        // la table des devis
         devisIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         devisDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         devisDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -76,7 +76,7 @@ public class DevisController extends BaseController implements Initializable {
         });
         devisStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        // Colonne des actions (boutons pour modifier le statut et générer une facture)
+        //  actions (boutons pour modifier le statut et générer une facture)
         devisActionsColumn.setCellFactory(param -> new TableCell<Devis, Void>() {
             private final Button toggleStatusButton = new Button("Modifier Statut");
             private final Button generateInvoiceButton = new Button("Créer Facture");
@@ -103,7 +103,7 @@ public class DevisController extends BaseController implements Initializable {
                     setGraphic(null);
                 } else {
                     Devis devis = getTableRow().getItem();
-                    // Afficher le bouton "Créer Facture" uniquement si le devis est accepté et n'a pas de facture associée
+                    // affiche le bouton "Créer Facture" uniquement si le devis est accepté et n'a pas de facture associée
                     if (devis.getStatus() == StatusDevis.ACCEPTED && devis.getFacture() == null) {
                         setGraphic(new javafx.scene.layout.HBox(10, toggleStatusButton, generateInvoiceButton));
                     } else {
@@ -140,6 +140,7 @@ public class DevisController extends BaseController implements Initializable {
         }
     }
 
+
     private void generateInvoiceFromDevis(Devis devis) {
         try {
             Facture facture = devisService.createFactureFromDevis(devis);
@@ -154,6 +155,17 @@ public class DevisController extends BaseController implements Initializable {
         } catch (IllegalStateException e) {
             logger.error("Erreur lors de la création de la facture pour le devis ID : {} - {}", devis.getId(), e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la création de la facture : " + e.getMessage());
+        }
+    }
+
+    private void deleteDevis(Devis devis) {
+        try {
+            devisService.deleteDevis(devis.getId()); // Utilisation de la méthode de DocumentServiceImpl
+            loadDevis();
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Devis supprimé avec succès !");
+        } catch (Exception e) {
+            logger.error("Erreur lors de la suppression du devis ID {} : {}", devis.getId(), e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression du devis : " + e.getMessage());
         }
     }
 

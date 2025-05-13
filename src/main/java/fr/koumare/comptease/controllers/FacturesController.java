@@ -86,18 +86,40 @@ public class FacturesController extends BaseController implements Initializable 
     @FXML
     private Button createInvoiceButton;
 
+
+    @FXML
+    private TableView<Facture> invoicesTable;
+
+    @FXML
+    private TableColumn<Facture, Long> invoiceIdColumn;
+
+    @FXML
+    private TableColumn<Facture, Client> invoiceClientColumn;
+
+    @FXML
+    private TableColumn<Facture, Instant> invoiceDateColumn;
+
+    @FXML
+    private TableColumn<Facture, StatusInvoice> invoiceStatusColumn;
+
+    @FXML
+    private TableColumn<Facture, Double> invoiceTotalColumn;
+
+    @FXML
+    private TableColumn<Facture, Void> invoiceActionsColumn;
+
     private final ClientService clientService = new ClientServiceImpl();
     private final DevisServiceImpl devisService = new DevisServiceImpl();
     private final FactureServiceImpl factureService = new FactureServiceImpl();
 
     private ObservableList<Article> articlesList = FXCollections.observableArrayList();
     private ObservableList<Client> clientsList;
-
+    private ObservableList<Facture> invoicesList = FXCollections.observableArrayList();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de FacturesController");
 
-        // Charger la liste des clients
+        // la liste des clients
         clientsList = FXCollections.observableArrayList(clientService.getAllClients());
         clientComboBox.setItems(clientsList);
         clientComboBox.setCellFactory(param -> new ListCell<Client>() {
@@ -123,7 +145,7 @@ public class FacturesController extends BaseController implements Initializable 
             }
         });
 
-        // Configurer la table des articles
+        // on configure la table des articles
         articleDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         articlePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         articleQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantite"));
@@ -151,8 +173,45 @@ public class FacturesController extends BaseController implements Initializable 
         });
         articlesTable.setItems(articlesList);
 
-        // Mettre à jour le prix total lorsque la liste des articles change
+        // si la liste des artcicles changent on remet le prix ajour
         articlesList.addListener((javafx.beans.Observable observable) -> updateTotalPrice());
+
+        loadFactures();
+        invoiceIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        invoiceClientColumn.setCellValueFactory(new PropertyValueFactory<>("client"));
+        invoiceClientColumn.setCellFactory(column -> new TableCell<Facture, Client>() {
+            @Override
+            protected void updateItem(Client client, boolean empty) {
+                super.updateItem(client, empty);
+                if (empty || client == null) {
+                    setText(null);
+                } else {
+                    setText(client.getFirstName() + " " + client.getLastName());
+                }
+            }
+        });
+        invoiceDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        invoiceStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        invoiceTotalColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        invoiceActionsColumn.setCellFactory(param -> new TableCell<Facture, Void>() {
+            private final Button deleteButton = new Button("Supprimer");
+
+            {
+                deleteButton.setOnAction(event -> {
+                    Facture facture = getTableRow().getItem();
+                    if (facture != null) {
+                        deleteInvoice(facture);
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty || getTableRow().getItem() == null ? null : deleteButton);
+            }
+        });
+        invoicesTable.setItems(invoicesList);
     }
 
     @FXML
@@ -235,7 +294,7 @@ public class FacturesController extends BaseController implements Initializable 
             }
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Devis créé avec succès ! ID : " + savedDevis.getId());
 
-            // Réinitialiser le formulaire
+            // on reinitialise le formulaire
             resetForm();
         } catch (IllegalStateException e) {
             logger.error("Erreur lors de la création du devis : {}", e.getMessage());
@@ -263,11 +322,11 @@ public class FacturesController extends BaseController implements Initializable 
             }
 
             Facture facture = new Facture(
-                    0.0,                        // price
-                    description,                // description
-                    Instant.now(),              // date
-                    StatusInvoice.UNPAID,       // status
-                    client,                     // client
+                    0.0,
+                    description,
+                    Instant.now(),
+                    StatusInvoice.UNPAID,
+                    client,
                     new ArrayList<>(articlesList) // articles (conversion ObservableList -> List)
             );
 
@@ -284,6 +343,28 @@ public class FacturesController extends BaseController implements Initializable 
         } catch (IllegalStateException e) {
             logger.error("Erreur lors de la création de la facture : {}", e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la création de la facture : " + e.getMessage());
+        }
+    }
+
+    private void loadFactures() {
+        try {
+            List<Facture> factures = factureService.getAllFactures();
+            invoicesList.setAll(factures);
+            logger.info("Chargement de {} factures", factures.size());
+        } catch (Exception e) {
+            logger.error("Erreur lors du chargement des factures : {}", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement des factures : " + e.getMessage());
+        }
+    }
+
+    private void deleteInvoice(Facture facture) {
+        try {
+            factureService.deleteDocumentById(facture.getId());
+            invoicesList.remove(facture);
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture supprimée avec succès !");
+        } catch (Exception e) {
+            logger.error("Erreur lors de la suppression de la facture ID {} : {}", facture.getId(), e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression de la facture : " + e.getMessage());
         }
     }
 

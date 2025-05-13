@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DevisServiceImpl extends DocumentServiceImpl implements DevisService {
@@ -84,7 +85,27 @@ public class DevisServiceImpl extends DocumentServiceImpl implements DevisServic
         logger.debug("Statut du devis ID : {} mis à jour à : {}", devisId, devis.getStatus());
     }
     public List<Devis> getAllDevis() {
-        return devisDao.getAllDevis();
+        try {
+            List<Devis> devis = findAllDocumentsByType(Devis.class);
+            logger.info("Récupération de {} factures", devis.size());
+            return devis;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des factures : {}", e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
+
+    @Override
+    public void deleteDevis(Long devisId) {
+        logger.info("Suppression du devis ID : {}", devisId);
+        Devis devis = (Devis) findDocumentById(devisId);
+        if (devis != null) {
+            deleteDocument(devis);
+            logger.debug("Devis ID : {} supprimé avec succès", devisId);
+        } else {
+            logger.warn("Devis non trouvé avec l'ID : {}", devisId);
+            throw new IllegalArgumentException("Devis non trouvé avec l'ID : " + devisId);
+        }
+    }
 }

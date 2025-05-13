@@ -9,6 +9,8 @@ public interface DevisService extends DocumentService {
     Devis createDevis(Devis devis);
     Facture createFactureFromDevis(Devis devis);
     void updateDevisStatus(Long invoiceId);
-    public List<Devis> getAllDevis();
+    List<Devis> getAllDevis();
+    void deleteDevis(Long devisId);
+
 
 }

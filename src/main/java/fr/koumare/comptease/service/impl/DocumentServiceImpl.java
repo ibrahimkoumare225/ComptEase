@@ -6,8 +6,15 @@ import fr.koumare.comptease.model.Devis;
 import fr.koumare.comptease.model.Document;
 import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.service.DocumentService;
+import fr.koumare.comptease.utilis.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DocumentServiceImpl implements DocumentService {
 
@@ -84,6 +91,22 @@ public abstract class DocumentServiceImpl implements DocumentService {
             logger.debug("Devis avec ID : {} supprimé", id);
         }
     }
+
+    public void deleteDocument(Object document) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(document);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors de la suppression du document : {}", e.getMessage());
+            throw new IllegalStateException("Erreur lors de la suppression du document", e);
+        }
+    }
+
     public void updateDocument(Document document){
         if (document == null) {
             logger.warn("Tentative de mise à jour d'un document null");
@@ -98,6 +121,17 @@ public abstract class DocumentServiceImpl implements DocumentService {
             logger.debug("Devis avec ID : {} mis à jour", document.getId());
         }
     }
+
+    protected <T> List<T> findAllDocumentsByType(Class<T> type) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<T> query = session.createQuery("FROM " + type.getName(), type);
+            return query.list();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des entités de type {} : {}", type.getSimpleName(), e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
 
     @Override
     public void generatePDF(Document document) {

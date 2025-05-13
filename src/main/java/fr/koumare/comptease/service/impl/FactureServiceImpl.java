@@ -1,5 +1,6 @@
 
 package fr.koumare.comptease.service.impl;
+import fr.koumare.comptease.dao.FactureDao;
 import fr.koumare.comptease.model.Devis;
 import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
@@ -9,11 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FactureServiceImpl extends DocumentServiceImpl implements FactureService {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
-
+    private static final FactureDao factureDao = new FactureDao();
     public FactureServiceImpl() {
         super();
     }
@@ -79,4 +82,14 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
         }
     }
 
+    public List<Facture> getAllFactures() {
+        try {
+            List<Facture> factures = findAllDocumentsByType(Facture.class);
+            logger.info("Récupération de {} factures", factures.size());
+            return factures;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des factures : {}", e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 }
