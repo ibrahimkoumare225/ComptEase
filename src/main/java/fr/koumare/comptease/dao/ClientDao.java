@@ -2,6 +2,7 @@ package fr.koumare.comptease.dao;
 
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
@@ -33,8 +34,14 @@ public class ClientDao {
 
 
     public List<Client> getAllClients() {
+        User currentUser = CurrentUser.getCurrentUser();
+        if (currentUser == null) {
+            throw new IllegalStateException("Aucun utilisateur connecté. Impossible de récupérer les clients.");
+        }
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Client where id_user=3", Client.class).list();
+            return session.createQuery("FROM Client WHERE user.id = :userId", Client.class)
+                    .setParameter("userId", currentUser.getId())
+                    .list();
         }
     }
 

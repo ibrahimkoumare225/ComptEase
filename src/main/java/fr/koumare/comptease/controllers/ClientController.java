@@ -4,6 +4,7 @@ import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.ClientService;
@@ -260,6 +261,7 @@ public class ClientController extends BaseController implements Initializable {
                 logger.info("Affichage des détails du client : {}", client.getFirstName());
                 try {
                     listAllInvoices = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
+                    logger.info("Détails du client : {}", client.getIdc());
                     showClientDetails(client,listAllInvoices);
 
 
@@ -371,7 +373,7 @@ public class ClientController extends BaseController implements Initializable {
         String note=addNote.getText();
 
         logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
-        Long idu=1L;
+        Long idu=CurrentUser.getCurrentUser().getId();
         if(clientService.addClient(nom, prenom, adresse, contact,idu,solde, note)){
             logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
