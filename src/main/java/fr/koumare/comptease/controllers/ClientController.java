@@ -246,7 +246,9 @@ public class ClientController extends BaseController implements Initializable {
         detailc.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
         detailc.setCellFactory(param-> new TableCell<Client, Void>() {
             final Button btn = new Button("Voir");
-            {btn.setOnAction(event->{
+            {
+                btn.getStyleClass().add("btnVoirDetails");
+                btn.setOnAction(event->{
                 Client client = getTableView().getItems().get(getIndex());
                 logger.info("Affichage des détails du client : {}", client.getFirstName());
                 try {
@@ -508,7 +510,6 @@ public class ClientController extends BaseController implements Initializable {
         addNom.clear();
         addPrenom.clear();
         addAdresse.clear();
-        addSolde.clear();
         addNote.clear();
         modifNom.setText("");
         modifPrenom.setText("");
