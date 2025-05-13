@@ -1,17 +1,12 @@
 package fr.koumare.comptease.service.impl;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.Invoice;
-import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 
 public class ClientServiceImpl implements ClientService {
 
@@ -114,13 +109,13 @@ public class ClientServiceImpl implements ClientService {
     }
         
     @Override
-    public List<Invoice> getClientDetails(Long idClient) {
+    public List<Facture> getClientDetails(Long idClient) {
         logger.info("Recherche des details du client : {}", idClient);
         return clientDao.getClientDetails(idClient);
     }
 
     @Override
-    public List<Invoice> findByKeywordDetails(String keyword) {
+    public List<Facture> findByKeywordDetails(String keyword) {
         logger.info("Recherche des details du client via service par le mot clé : {}", keyword);
         return clientDao.findByKeywordDetails(keyword);
     }

@@ -12,7 +12,7 @@ import java.time.Instant;
 public abstract class Document {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected Long id;
 
     protected double price;

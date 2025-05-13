@@ -1,8 +1,7 @@
 package fr.koumare.comptease.service;
 
 import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.Invoice;
-import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.Facture;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +23,9 @@ public interface ClientService {
 
     List<Client> findByKeyword(String keyword);
 
-    List<Invoice>  getClientDetails(Long idClient);
+    List<Facture>  getClientDetails(Long idClient);
 
-    List<Invoice> findByKeywordDetails(String keyword);
+    List<Facture> findByKeywordDetails(String keyword);
 
     Optional<Client> findUserByInvoiceId(Long invoiceId);
 }

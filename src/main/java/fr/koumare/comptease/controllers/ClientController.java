@@ -1,11 +1,10 @@
 package fr.koumare.comptease.controllers;
 
-import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
-import fr.koumare.comptease.model.Invoice;
+import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -18,14 +17,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import org.hibernate.mapping.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +31,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
-
-
 
 
 public class ClientController extends BaseController implements Initializable {
@@ -176,28 +169,28 @@ public class ClientController extends BaseController implements Initializable {
     private AnchorPane formInitial_hDetail;
 
     @FXML
-    private TableView<Invoice> tableClientDetail;
+    private TableView<Facture> tableClientDetail;
 
     @FXML
-    private TableColumn<Invoice, Long> idp;
+    private TableColumn<Facture, Long> idp;
 
     @FXML
-    private TableColumn<Invoice, String> desp;
+    private TableColumn<Facture, String> desp;
 
     @FXML
-    private TableColumn<Invoice, LocalDate> datep;
+    private TableColumn<Facture, LocalDate> datep;
 
     @FXML
     private TableColumn<Article, Long> quantitep;
 
     @FXML
-    private TableColumn<Invoice, Double> prixUp;
+    private TableColumn<Facture, Double> prixUp;
 
     @FXML
-    private TableColumn<Invoice, Double> prixTp;
+    private TableColumn<Facture, Double> prixTp;
 
     @FXML
-    private TableColumn<Invoice, StatusInvoice> Statutp;
+    private TableColumn<Facture, StatusInvoice> Statutp;
 
 
     @FXML
@@ -246,7 +239,7 @@ public class ClientController extends BaseController implements Initializable {
     private ClientService clientService = new ClientServiceImpl();
 
     ObservableList<Client> listAllClients= FXCollections.observableArrayList(clientService.getAllClients());
-    ObservableList<Invoice> listAllInvoices;
+    ObservableList<Facture> listAllFactures;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("Initialisation de  ClientController");
@@ -257,8 +250,8 @@ public class ClientController extends BaseController implements Initializable {
                 Client client = getTableView().getItems().get(getIndex());
                 logger.info("Affichage des détails du client : {}", client.getFirstName());
                 try {
-                    listAllInvoices = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
-                    showClientDetails(client,listAllInvoices);
+                    listAllFactures = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
+                    showClientDetails(client, listAllFactures);
 
 
                 } catch (IOException e) {
@@ -530,7 +523,7 @@ public class ClientController extends BaseController implements Initializable {
     
 
     //afficher les details d'un client
-    private void showClientDetails(Client client, ObservableList<Invoice> list) throws IOException {
+    private void showClientDetails(Client client, ObservableList<Facture> list) throws IOException {
         logger.info("Affichage des détails du client : {}");
 
         form_initial.setVisible(false);
@@ -544,8 +537,8 @@ public class ClientController extends BaseController implements Initializable {
         quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
-            Invoice invoice = cellData.getValue();
-            double total = invoice.getPrice() * 4; // quantité fixe = 4
+            Facture facture = cellData.getValue();
+            double total = facture.getPrice() * 4; // quantité fixe = 4
             return new ReadOnlyObjectWrapper<>((Double) total);
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -566,10 +559,10 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     @FXML
-    private void remplirFormulaireModifDetail(Invoice invoice) {
-        modifIdDetail.setText(String.valueOf(invoice.getId()));
-        modifNote.setText(invoice.getDescription()+" |faire une colonne pour la note");
-        modifStatut.setText(invoice.getStatus().toString());
+    private void remplirFormulaireModifDetail(Facture facture) {
+        modifIdDetail.setText(String.valueOf(facture.getId()));
+        modifNote.setText(facture.getDescription()+" |faire une colonne pour la note");
+        modifStatut.setText(facture.getStatus().toString());
         /*modifPrixU.setText(String.valueOf(invoice.getPrice()));
         modifPrixT.setText(String.valueOf(invoice.getPrice() * 4L));
         modifDate.setText(String.valueOf(invoice.getDate()));*/
@@ -583,15 +576,15 @@ public class ClientController extends BaseController implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer un mot clé pour la recherche.");
             return;
         }
-        ObservableList<Invoice> list = FXCollections.observableArrayList(clientService.findByKeywordDetails(keyword));
+        ObservableList<Facture> list = FXCollections.observableArrayList(clientService.findByKeywordDetails(keyword));
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
         quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
-            Invoice invoice = cellData.getValue();
-            double total = invoice.getPrice() * 4; // quantité fixe = 4
+            Facture facture = cellData.getValue();
+            double total = facture.getPrice() * 4; // quantité fixe = 4
             return new ReadOnlyObjectWrapper<>((Double) total);
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -617,9 +610,9 @@ public class ClientController extends BaseController implements Initializable {
     private void fctannulerRechercheDetail(ActionEvent event) {
         logger.info("Annulation de la recherche de detail");
         searchBarreDetail.clear();
-        Client c= clientService.findById(listAllInvoices.get(0).getClient().getIdc()).orElse(null);
+        Client c= clientService.findById(listAllFactures.get(0).getClient().getIdc()).orElse(null);
         try {
-            showClientDetails(c, listAllInvoices);
+            showClientDetails(c, listAllFactures);
             annulerRechercheDetail.setVisible(false);
         } catch (IOException e) {
             logger.error("Erreur lors de l'annulation de la recherche de détail : {}", e.getMessage());

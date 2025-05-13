@@ -1,4 +1,4 @@
-package fr.koumare.comptease.model;
+/*package fr.koumare.comptease.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import java.time.Instant;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private double amount;
@@ -23,7 +23,8 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "invoice_id")
-    private Invoice invoice;
+    private Facture facture;
+
 
     @ManyToOne
     @JoinColumn(name = "rapport_financier_id")
@@ -42,3 +43,5 @@ public class Transaction {
         this.date = date;
     }
 }
+
+ */

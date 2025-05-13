@@ -45,7 +45,7 @@ public class Client {
     private List<Devis> devis;
 
     @OneToMany(mappedBy = "client")
-    private List<Invoice> invoices;
+    private List<Facture> factures;
 
     @OneToMany(mappedBy = "client")
     private List<Notification> notifications;
@@ -124,11 +124,11 @@ public class Client {
     public void setDevis(List<Devis> devis) {
         this.devis = devis;
     }
-    public List<Invoice> getInvoices() {
-        return invoices;
+    public List<Facture> getFactures() {
+        return factures;
     }
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
+    public void setFactures(List<Facture> factures) {
+        this.factures = factures;
     }
     public List<Notification> getNotifications() {
         return notifications;

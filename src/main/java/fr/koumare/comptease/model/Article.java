@@ -32,7 +32,7 @@ public class Article {
     private List<Devis> devis;
 
     @ManyToMany(mappedBy = "articles")
-    private List<Invoice> invoices;
+    private List<Facture> factures;
 
     public Article() {
     }

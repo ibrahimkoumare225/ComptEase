@@ -1,10 +1,9 @@
 package fr.koumare.comptease.service;
 
-import fr.koumare.comptease.model.Document;
-import fr.koumare.comptease.model.Invoice;
+import fr.koumare.comptease.model.Facture;
 
 public interface FactureService extends DocumentService {
-    Invoice createInvoice(Invoice invoice);
+    Facture createInvoice(Facture facture);
     void updateInvoiceStatus(Long invoiceId, String status);
 
 
