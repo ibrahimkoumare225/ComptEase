@@ -58,9 +58,7 @@
                                         <FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />
                                     </graphic>
                                 </Button>
-
                                 <Button fx:id="clientButton" layoutX="65.0" layoutY="315.0" mnemonicParsing="false" onAction="#handleNavigateToClient" text="Clients" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
-
                                     <graphic>
                                         <FontAwesomeIconView glyphName="USERS" size="20" />
                                     </graphic>
@@ -150,7 +148,7 @@
                                              </children></AnchorPane>
                                                     </children>
                                                 </AnchorPane>
-                                                <AnchorPane layoutX="29.0" layoutY="226.0" prefHeight="372.0" prefWidth="913.0" stylesheets="@../../css/stock.css" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="210.0">
+                                                <AnchorPane layoutX="29.0" layoutY="226.0" prefHeight="372.0" prefWidth="913.0" stylesheets="@../css/stock.css" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="210.0">
                                        <children>
                                           <AnchorPane layoutX="10.0" layoutY="15.0" prefHeight="190.0" prefWidth="890.0" styleClass="card" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                                              <children>
@@ -187,4 +185,5 @@
 
 
 </StackPane>
+
 

@@ -61,6 +61,7 @@ public class Devis {
 package fr.koumare.comptease.model;
 
 import com.sun.istack.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -105,4 +106,5 @@ public class Devis extends Document {
         this.articles = articles;
         this.user = user;
     }
+    
 }

@@ -148,6 +148,7 @@ public class ClientDao {
     //recuperer les details d'un client
     public List<Invoice> getClientDetails(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            logger.info("Essaie recup c");
             return session.createQuery("FROM Invoice WHERE client.idc = :clientId", Invoice.class)
                     .setParameter("clientId", clientId)
                     .list();

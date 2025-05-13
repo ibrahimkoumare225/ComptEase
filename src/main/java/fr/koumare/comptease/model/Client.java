@@ -118,7 +118,7 @@ public class Client {
         this.user.setId(id_user);
     }
     
-    public List<Devis> getDevis() {
+    /*public List<Devis> getDevis() {
         return devis;
     }
     public void setDevis(List<Devis> devis) {
@@ -129,7 +129,7 @@ public class Client {
     }
     public void setInvoices(List<Invoice> invoices) {
         this.invoices = invoices;
-    }
+    }*/
     public List<Notification> getNotifications() {
         return notifications;
     }
