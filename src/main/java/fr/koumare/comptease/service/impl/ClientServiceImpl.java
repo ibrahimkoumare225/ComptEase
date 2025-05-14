@@ -3,6 +3,7 @@ import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +87,7 @@ public class ClientServiceImpl implements ClientService {
         client.setFirstName(prenom);
         client.setAdresse(adresse);
         client.setContact(contact);
-        client.setId_user(3L);
+        client.setId_user(CurrentUser.getCurrentUser().getId());
         client.setSolde(solde);
         client.setNote(note);
         clientDao.saveClient(client);
