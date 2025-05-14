@@ -3,6 +3,7 @@ package fr.koumare.comptease.controllers;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
+import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
@@ -421,6 +422,7 @@ public class ClientController extends BaseController implements Initializable {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
                 listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
                 affiche(listAllClients);
+                EffacerChamps(event);
             } else {
                 logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client modifié.");
@@ -520,6 +522,7 @@ public class ClientController extends BaseController implements Initializable {
         addPrenom.clear();
         addAdresse.clear();
         addNote.clear();
+        modifId.setText("");
         modifNom.setText("");
         modifPrenom.setText("");
         modifAdresse.setText("");

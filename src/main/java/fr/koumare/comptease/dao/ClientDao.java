@@ -34,6 +34,7 @@ public class ClientDao {
 
 
     public List<Client> getAllClients() {
+        //recuperer l'utilisateur connecté
         User currentUser = CurrentUser.getCurrentUser();
         if (currentUser == null) {
             throw new IllegalStateException("Aucun utilisateur connecté. Impossible de récupérer les clients.");

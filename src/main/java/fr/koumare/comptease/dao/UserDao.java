@@ -1,5 +1,6 @@
 package fr.koumare.comptease.dao;
 
+import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.utilis.HibernateUtil;
