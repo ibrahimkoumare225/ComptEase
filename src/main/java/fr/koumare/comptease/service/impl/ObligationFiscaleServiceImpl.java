@@ -16,5 +16,5 @@ public class ObligationFiscaleServiceImpl {
         dao.saveObligationFiscale(obligation);
     }
 
-    // Tu peux ajouter d’autres méthodes : liste, supprimer, etc.
+
 }
