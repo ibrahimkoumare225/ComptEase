@@ -28,8 +28,8 @@ public class RapportFinancier {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "rapportFinancier")
-    private List<Transaction> transactions;
+    //@OneToMany(mappedBy = "rapportFinancier")
+    //private List<Transaction> transactions;
 
     public RapportFinancier() {
     }

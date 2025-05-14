@@ -2,17 +2,12 @@ package fr.koumare.comptease.service.impl;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Invoice;
-import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 
 public class ClientServiceImpl implements ClientService {
 
