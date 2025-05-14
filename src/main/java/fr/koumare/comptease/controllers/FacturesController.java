@@ -1,4 +1,4 @@
-package fr.koumare.comptease.controllers;
+/*package fr.koumare.comptease.controllers;
 
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
@@ -390,4 +390,4 @@ public class FacturesController extends BaseController implements Initializable 
         alert.setContentText(message);
         alert.showAndWait();
     }
-}
+}*/

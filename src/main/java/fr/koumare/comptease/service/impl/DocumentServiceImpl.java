@@ -1,10 +1,10 @@
 package fr.koumare.comptease.service.impl;
 
 import fr.koumare.comptease.dao.DevisDao;
-import fr.koumare.comptease.dao.FactureDao;
+import fr.koumare.comptease.dao.InvoiceDao;
 import fr.koumare.comptease.model.Devis;
 import fr.koumare.comptease.model.Document;
-import fr.koumare.comptease.model.Facture;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.DocumentService;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
@@ -20,7 +20,7 @@ public abstract class DocumentServiceImpl implements DocumentService {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
     private final DevisDao devisDao = new DevisDao();
-    private final FactureDao factureDao = new FactureDao();
+    private final InvoiceDao invoiceDao = new InvoiceDao();
 
     @Override
     public Document createDocument(Document document) {
@@ -29,11 +29,11 @@ public abstract class DocumentServiceImpl implements DocumentService {
             throw new IllegalArgumentException("Le document ne peut pas être null");
         }
         logger.info("Création d'un document avec ID : {}", document.getId());
-        if (document instanceof Facture) {
+        if (document instanceof Invoice) {
             logger.debug("Le document est une facture");
-            Facture facture = (Facture) document;
-            factureDao.saveFacture(facture);
-            if (facture.getId() == null) {
+            Invoice invoice = (Invoice) document;
+            invoiceDao.saveFacture(invoice);
+            if (invoice.getId() == null) {
                 logger.error("Échec de la sauvegarde de la facture");
                 return null;
             }
@@ -56,10 +56,10 @@ public abstract class DocumentServiceImpl implements DocumentService {
             throw new IllegalArgumentException("L'ID ne peut pas être null");
         }
         logger.info("Recherche du document avec ID : {}", id);
-        Facture facture = factureDao.findFactureById(id);
-        if (facture != null) {
+        Invoice invoice = invoiceDao.findFactureById(id);
+        if (invoice != null) {
             logger.debug("Facture trouvée avec ID : {}", id);
-            return facture;
+            return invoice;
         }
 
         Devis devis = devisDao.findDevisById(id);
@@ -83,8 +83,8 @@ public abstract class DocumentServiceImpl implements DocumentService {
             logger.warn("Document avec ID : {} non trouvé pour suppression", id);
             return;
         }
-        if (document instanceof Facture) {
-            factureDao.deleteFacture(id);
+        if (document instanceof Invoice) {
+            invoiceDao.deleteFacture(id);
             logger.debug("Facture avec ID : {} supprimée", id);
         } else if (document instanceof Devis) {
             devisDao.deleteDevis(id);
@@ -113,8 +113,8 @@ public abstract class DocumentServiceImpl implements DocumentService {
             throw new IllegalArgumentException("Le document ne peut pas être null");
         }
         logger.info("Mise à jour du document avec ID : {}", document.getId());
-        if (document instanceof Facture) {
-            factureDao.updateFacture((Facture) document);
+        if (document instanceof Invoice) {
+            invoiceDao.updateFacture((Invoice) document);
             logger.debug("Facture avec ID : {} mise à jour", document.getId());
         } else if (document instanceof Devis) {
             devisDao.updateDevis((Devis) document);

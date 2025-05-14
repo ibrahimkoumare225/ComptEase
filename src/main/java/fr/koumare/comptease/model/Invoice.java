@@ -1,6 +1,7 @@
-/*package fr.koumare.comptease.model;
+package fr.koumare.comptease.model;
 
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
+import fr.koumare.comptease.model.enumarated.TypeInvoice;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -11,10 +12,15 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Facture extends Document {
+public class Invoice extends Document {
 
     @Enumerated(EnumType.STRING)
     private StatusInvoice status;
+
+    @Enumerated(EnumType.STRING)
+    private TypeInvoice type;
+
+    private int quantity;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -26,18 +32,17 @@ public class Facture extends Document {
             joinColumns = @JoinColumn(name = "invoice_id"),
             inverseJoinColumns = @JoinColumn(name = "article_id")
     )
-    private List<Article> articles = new ArrayList<>();
+    private List<Article> articles;
 
     @OneToOne
-    @JoinColumn(name = "devis_id")
+    @JoinColumn(unique = true,name = "devis_id")
     private Devis devis;
 
-    public Facture() {
-        super();
-    }
+    @OneToMany(mappedBy = "invoice")
+    private List<Transaction> transactions;
 
-    //creation d'une facture sans passer par un devis
-    public Facture(Double price, String description, Instant date, StatusInvoice status, Client client, List<Article> articles) {
+    //invoice sans devis
+    public Invoice(Double price, String description, Instant date, StatusInvoice status, Client client, List<Article> articles) {
         super(price, description, date);
         this.status = status;
         this.client = client;
@@ -46,13 +51,17 @@ public class Facture extends Document {
     }
 
     //cretatio de facture en passant par un devis
-    public Facture(double price, String description, Instant date, StatusInvoice status,Client client, Devis devis, List<Article> articles) {
+    public Invoice(double price, String description, Instant date, StatusInvoice status,Client client, Devis devis, List<Article> articles) {
         super(price, description, date);
         this.status = status;
         this.client = client;
         this.devis = devis;
         this.articles = articles != null ? articles : new ArrayList<>();
         calculatePrice();
+
+    }
+
+    public Invoice() {
 
     }
 
@@ -65,6 +74,6 @@ public class Facture extends Document {
                 .mapToDouble(article -> article.getPrice().doubleValue() * article.getQuantite())
                 .sum();
     }
-
-
-}*/
+    
+    
+}

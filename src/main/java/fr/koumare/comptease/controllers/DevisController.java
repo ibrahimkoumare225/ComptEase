@@ -2,7 +2,7 @@ package fr.koumare.comptease.controllers;
 
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Devis;
-import fr.koumare.comptease.model.Facture;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.service.impl.DevisServiceImpl;
 import javafx.collections.FXCollections;
@@ -104,7 +104,7 @@ public class DevisController extends BaseController implements Initializable {
                 } else {
                     Devis devis = getTableRow().getItem();
                     // affiche le bouton "Créer Facture" uniquement si le devis est accepté et n'a pas de facture associée
-                    if (devis.getStatus() == StatusDevis.ACCEPTED && devis.getFacture() == null) {
+                    if (devis.getStatus() == StatusDevis.ACCEPTED && devis.getInvoice() == null) {
                         setGraphic(new javafx.scene.layout.HBox(10, toggleStatusButton, generateInvoiceButton));
                     } else {
                         setGraphic(toggleStatusButton);
@@ -143,14 +143,14 @@ public class DevisController extends BaseController implements Initializable {
 
     private void generateInvoiceFromDevis(Devis devis) {
         try {
-            Facture facture = devisService.createFactureFromDevis(devis);
-            if (facture == null) {
+            Invoice invoice = devisService.createInvoiceFromDevis(devis);
+            if (invoice == null) {
                 logger.error("Échec de la création de la facture pour le devis ID : {}", devis.getId());
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la création de la facture. Veuillez vérifier les logs pour plus de détails.");
                 return;
             }
             logger.info("Facture créée avec succès pour le devis ID : {}", devis.getId());
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture créée avec succès ! ID : " + facture.getId());
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture créée avec succès ! ID : " + invoice.getId());
             loadDevis(); // rafraîchi la liste
         } catch (IllegalStateException e) {
             logger.error("Erreur lors de la création de la facture pour le devis ID : {} - {}", devis.getId(), e.getMessage());

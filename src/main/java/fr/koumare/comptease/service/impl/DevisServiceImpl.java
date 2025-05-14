@@ -1,8 +1,7 @@
 package fr.koumare.comptease.service.impl;
-import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.dao.DevisDao;
 import fr.koumare.comptease.model.Devis;
-import fr.koumare.comptease.model.Facture;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.service.DevisService;
@@ -39,18 +38,18 @@ public class DevisServiceImpl extends DocumentServiceImpl implements DevisServic
         return savedDevis;
     }
 
-    public Facture createFactureFromDevis(Devis devis) {
+    public Invoice createInvoiceFromDevis(Devis devis) {
         logger.info("Création d'une facture à partir du devis ID : {}", devis.getId());
         if (devis.getStatus() != StatusDevis.ACCEPTED) {
             logger.warn("Le devis ID : {} n'est pas accepté, impossible de créer une facture", devis.getId());
             throw new IllegalStateException("Le devis doit être accepté pour créer une facture");
         }
-        if (devis.getFacture() != null) {
+        if (devis.getInvoice() != null) {
             logger.warn("Le devis ID : {} a déjà une facture associée", devis.getId());
             throw new IllegalStateException("Une facture existe déjà pour ce devis");
         }
 
-        Facture facture = new Facture(
+        Invoice facture = new Invoice(
                 devis.getPrice(),
                 devis.getDescription(),
                 Instant.now(),
@@ -60,15 +59,15 @@ public class DevisServiceImpl extends DocumentServiceImpl implements DevisServic
                 devis.getArticles()
         );
 
-        Facture savedFacture = (Facture) createDocument(facture);
-        if (savedFacture == null) {
+        Invoice savedInvoice = (Invoice) createDocument(facture);
+        if (savedInvoice == null) {
             logger.error("Échec de la création de la facture à partir du devis ID : {}", devis.getId());
             return null; //
         }
-        devis.setFacture(savedFacture);
+        devis.setInvoice(savedInvoice);
         updateDocument(devis);
         logger.debug("Facture créée avec succès à partir du devis ID : {}", devis.getId());
-        return savedFacture;
+        return savedInvoice;
 
     }
 

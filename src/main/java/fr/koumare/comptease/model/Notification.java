@@ -31,7 +31,7 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn(name = "invoice_id")
-    private Facture facture;
+    private Invoice invoice;
 
     @ManyToOne
     @JoinColumn(name = "devis_id")

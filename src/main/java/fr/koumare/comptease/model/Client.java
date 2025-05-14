@@ -65,7 +65,7 @@ public class Client {
     private List<Devis> devis;
 
     @OneToMany(mappedBy = "client")
-    private List<Facture> invoices;
+    private List<Invoice> invoices;
 
     @OneToMany(mappedBy = "client")
     private List<Notification> notifications;

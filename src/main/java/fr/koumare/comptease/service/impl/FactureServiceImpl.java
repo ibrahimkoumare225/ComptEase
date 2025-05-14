@@ -1,11 +1,11 @@
 
 package fr.koumare.comptease.service.impl;
-import fr.koumare.comptease.dao.FactureDao;
+import fr.koumare.comptease.dao.InvoiceDao;
 import fr.koumare.comptease.model.Devis;
 import fr.koumare.comptease.model.Document;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
-import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.service.FactureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +17,18 @@ import java.util.List;
 public class FactureServiceImpl extends DocumentServiceImpl implements FactureService {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
-    private static final FactureDao factureDao = new FactureDao();
+    private static final InvoiceDao factureDao = new InvoiceDao();
     public FactureServiceImpl() {
         super();
     }
 
     @Override
-    public Facture createInvoice(Facture facture) {
-        logger.info("Création d'une facture avec ID : {}", facture.getId());
-        if (facture.getArticles() != null) {
-            facture.calculatePrice();
+    public Invoice createInvoice(Invoice invoice) {
+        logger.info("Création d'une facture avec ID : {}", invoice.getId());
+        if (invoice.getArticles() != null) {
+            invoice.calculatePrice();
         }
-        Facture savedFacture = (Facture) createDocument(facture);
+        Invoice savedFacture = (Invoice) createDocument(invoice);
         if (savedFacture == null) {
             logger.error("Échec de la création de la facture");
             return null; // Retourner null si la sauvegarde a échoué
@@ -36,18 +36,18 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
         return savedFacture;
     }
 
-    public Facture createInvoiceFromDevis(Devis devis) {
+    public Invoice createInvoiceFromDevis(Devis devis) {
         logger.info("Création d'une facture à partir du devis ID : {}", devis.getId());
         if (devis.getStatus() != StatusDevis.ACCEPTED) {
             logger.warn("Le devis ID : {} n'est pas accepté, impossible de créer une facture", devis.getId());
             throw new IllegalStateException("Le devis doit être accepté pour créer une facture");
         }
-        if (devis.getFacture() != null) {
+        if (devis.getInvoice() != null) {
             logger.warn("Le devis ID : {} a déjà une facture associée", devis.getId());
             throw new IllegalStateException("Une facture existe déjà pour ce devis");
         }
 
-        Facture facture = new Facture(
+        Invoice invoice = new Invoice(
                 devis.getPrice(),
                 devis.getDescription(),
                 Instant.now(),
@@ -57,25 +57,25 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
                 devis.getArticles()
         );
 
-        Facture savedFacture = (Facture) createDocument(facture);
-        if (savedFacture == null) {
+        Invoice savedInvoice = (Invoice) createDocument(invoice);
+        if (savedInvoice == null) {
             logger.error("Échec de la création de la facture à partir du devis ID : {}", devis.getId());
             return null; //
         }
-        devis.setFacture(savedFacture);
+        devis.setInvoice(savedInvoice);
         updateDocument(devis);
         logger.debug("Facture créée avec succès à partir du devis ID : {}", devis.getId());
-        return savedFacture;
+        return savedInvoice;
 
     }
 
     @Override
     public void updateInvoiceStatus(Long invoiceId, String status) {
         logger.info("Mise à jour du statut de la facture ID : {} avec statut : {}", invoiceId, status);
-        Facture facture = (Facture) findDocumentById(invoiceId);
-        if (facture != null) {
-            facture.setStatus(StatusInvoice.valueOf(status.toUpperCase()));
-            updateDocument(facture);
+        Invoice invoice = (Invoice) findDocumentById(invoiceId);
+        if (invoice != null) {
+            invoice.setStatus(StatusInvoice.valueOf(status.toUpperCase()));
+            updateDocument(invoice);
             logger.debug("Statut de la facture ID : {} mis à jour à : {}", invoiceId, status);
         } else {
             logger.warn("Facture non trouvée avec l'ID : {}", invoiceId);
@@ -83,9 +83,9 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
         }
     }
 
-    public List<Facture> getAllFactures() {
+    public List<Invoice> getAllFactures() {
         try {
-            List<Facture> factures = findAllDocumentsByType(Facture.class);
+            List<Invoice> factures = findAllDocumentsByType(Invoice.class);
             logger.info("Récupération de {} factures", factures.size());
             return factures;
         } catch (Exception e) {

@@ -29,7 +29,7 @@ public class Devis extends Document {
     private List<Article> articles = new ArrayList<>();
 
     @OneToOne(mappedBy = "devis")
-    private Facture facture;
+    private Invoice invoice;
 
     public Devis() {
         super();

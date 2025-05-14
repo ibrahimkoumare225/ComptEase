@@ -6,12 +6,12 @@ public class DetailClient {
     //il faut modifier une table (devis ou invoice) pour avoir la quantité vendue
     //utiliser la table modifiée ppur avoir la quantité vendue
     private Client client;
-    private Facture invoice;
+    private Invoice invoice;
 
     public DetailClient() {
     }
 
-    public DetailClient(Client client,Facture invoice) {
+    public DetailClient(Client client,Invoice invoice) {
         this.client = client;
         this.invoice = invoice;
     }

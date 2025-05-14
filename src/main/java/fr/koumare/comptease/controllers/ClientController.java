@@ -1,10 +1,7 @@
 package fr.koumare.comptease.controllers;
 
-import fr.koumare.comptease.model.Article;
-import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.*;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
-import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -169,28 +166,28 @@ public class ClientController extends BaseController implements Initializable {
     private AnchorPane formInitial_hDetail;
 
     @FXML
-    private TableView<Facture> tableClientDetail;
+    private TableView<Invoice> tableClientDetail;
 
     @FXML
-    private TableColumn<Facture, Long> idp;
+    private TableColumn<Invoice, Long> idp;
 
     @FXML
-    private TableColumn<Facture, String> desp;
+    private TableColumn<Invoice, String> desp;
 
     @FXML
-    private TableColumn<Facture, LocalDate> datep;
+    private TableColumn<Invoice, LocalDate> datep;
 
     @FXML
     private TableColumn<Article, Long> quantitep;
 
     @FXML
-    private TableColumn<Facture, Double> prixUp;
+    private TableColumn<Invoice, Double> prixUp;
 
     @FXML
-    private TableColumn<Facture, Double> prixTp;
+    private TableColumn<Invoice, Double> prixTp;
 
     @FXML
-    private TableColumn<Facture, StatusInvoice> Statutp;
+    private TableColumn<Invoice, StatusInvoice> Statutp;
 
 
     @FXML
@@ -239,7 +236,7 @@ public class ClientController extends BaseController implements Initializable {
     private ClientService clientService = new ClientServiceImpl();
 
     ObservableList<Client> listAllClients= FXCollections.observableArrayList(clientService.getAllClients());
-    ObservableList<Facture> listAllFactures;
+    ObservableList<Invoice> listAllInvoice;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("Initialisation de  ClientController");
@@ -252,8 +249,8 @@ public class ClientController extends BaseController implements Initializable {
                 Client client = getTableView().getItems().get(getIndex());
                 logger.info("Affichage des détails du client : {}", client.getFirstName());
                 try {
-                    listAllFactures = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
-                    showClientDetails(client, listAllFactures);
+                    listAllInvoice = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
+                    showClientDetails(client, listAllInvoice);
 
 
                 } catch (IOException e) {
@@ -364,7 +361,7 @@ public class ClientController extends BaseController implements Initializable {
         String note=addNote.getText();
 
         logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
-        Long idu=1L;
+        Long idu=CurrentUser.getCurrentUser().getId();
         if(clientService.addClient(nom, prenom, adresse, contact,idu,solde, note)){
             logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
@@ -412,6 +409,7 @@ public class ClientController extends BaseController implements Initializable {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
                 listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
                 affiche(listAllClients);
+                EffacerChamps(event);
             } else {
                 logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client modifié.");
@@ -511,6 +509,7 @@ public class ClientController extends BaseController implements Initializable {
         addPrenom.clear();
         addAdresse.clear();
         addNote.clear();
+        modifId.setText("");
         modifNom.setText("");
         modifPrenom.setText("");
         modifAdresse.setText("");
@@ -524,7 +523,7 @@ public class ClientController extends BaseController implements Initializable {
     
 
     //afficher les details d'un client
-    private void showClientDetails(Client client, ObservableList<Facture> list) throws IOException {
+    private void showClientDetails(Client client, ObservableList<Invoice> list) throws IOException {
         logger.info("Affichage des détails du client : {}");
 
         form_initial.setVisible(false);
@@ -538,8 +537,8 @@ public class ClientController extends BaseController implements Initializable {
         quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
-            Facture facture = cellData.getValue();
-            double total = facture.getPrice() * 4; // quantité fixe = 4
+            Invoice invoice = cellData.getValue();
+            double total = invoice.getPrice() * 4; // quantité fixe = 4
             return new ReadOnlyObjectWrapper<>((Double) total);
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -560,10 +559,10 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     @FXML
-    private void remplirFormulaireModifDetail(Facture facture) {
-        modifIdDetail.setText(String.valueOf(facture.getId()));
-        modifNote.setText(facture.getDescription()+" |faire une colonne pour la note");
-        modifStatut.setText(facture.getStatus().toString());
+    private void remplirFormulaireModifDetail(Invoice invoice) {
+        modifIdDetail.setText(String.valueOf(invoice.getId()));
+        modifNote.setText(invoice.getDescription()+" |faire une colonne pour la note");
+        modifStatut.setText(invoice.getStatus().toString());
         /*modifPrixU.setText(String.valueOf(invoice.getPrice()));
         modifPrixT.setText(String.valueOf(invoice.getPrice() * 4L));
         modifDate.setText(String.valueOf(invoice.getDate()));*/
@@ -577,15 +576,15 @@ public class ClientController extends BaseController implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer un mot clé pour la recherche.");
             return;
         }
-        ObservableList<Facture> list = FXCollections.observableArrayList(clientService.findByKeywordDetails(keyword));
+        ObservableList<Invoice> list = FXCollections.observableArrayList(clientService.findByKeywordDetails(keyword));
         idc.setCellValueFactory(new PropertyValueFactory<>("idc"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
         quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
-            Facture facture = cellData.getValue();
-            double total = facture.getPrice() * 4; // quantité fixe = 4
+            Invoice invoice = cellData.getValue();
+            double total = invoice.getPrice() * 4; // quantité fixe = 4
             return new ReadOnlyObjectWrapper<>((Double) total);
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -611,9 +610,9 @@ public class ClientController extends BaseController implements Initializable {
     private void fctannulerRechercheDetail(ActionEvent event) {
         logger.info("Annulation de la recherche de detail");
         searchBarreDetail.clear();
-        Client c= clientService.findById(listAllFactures.get(0).getClient().getIdc()).orElse(null);
+        Client c= clientService.findById(listAllInvoice.get(0).getClient().getIdc()).orElse(null);
         try {
-            showClientDetails(c, listAllFactures);
+            showClientDetails(c, listAllInvoice);
             annulerRechercheDetail.setVisible(false);
         } catch (IOException e) {
             logger.error("Erreur lors de l'annulation de la recherche de détail : {}", e.getMessage());

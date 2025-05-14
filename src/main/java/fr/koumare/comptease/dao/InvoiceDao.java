@@ -1,6 +1,6 @@
-/*package fr.koumare.comptease.dao;
+package fr.koumare.comptease.dao;
 
-import fr.koumare.comptease.model.Facture;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -11,17 +11,17 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FactureDao {
+public class InvoiceDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(FactureDao.class);
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceDao.class);
 
-    public void saveFacture(Facture facture) {
+    public void saveFacture(Invoice invoice) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.save(facture);
+            session.save(invoice);
             transaction.commit();
-            logger.info("Facture sauvegardée avec succès : ID {}", facture.getId());
+            logger.info("Facture sauvegardée avec succès : ID {}", invoice.getId());
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -31,9 +31,9 @@ public class FactureDao {
         }
     }
 
-    public List<Facture> getAllFactures() {
+    public List<Invoice> getAllFactures() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Facture> invoiceList = session.createQuery("from Facture", Facture.class).list();
+            List<Invoice> invoiceList = session.createQuery("from Invoice", Invoice.class).list();
             logger.info("Récupération de {} factures", invoiceList.size());
             return invoiceList;
         } catch (Exception e) {
@@ -43,13 +43,13 @@ public class FactureDao {
         }
     }
 
-    public void updateFacture(Facture facture) {
+    public void updateFacture(Invoice invoice) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.update(facture);
+            session.update(invoice);
             transaction.commit();
-            logger.info("Facture mise à jour avec succès : ID {}", facture.getId());
+            logger.info("Facture mise à jour avec succès : ID {}", invoice.getId());
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -63,9 +63,9 @@ public class FactureDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Facture facture = session.get(Facture.class, invoiceId);
-            if (facture != null) {
-                session.delete(facture);
+            Invoice invoice = session.get(Invoice.class, invoiceId);
+            if (invoice != null) {
+                session.delete(invoice);
                 logger.info("Facture supprimée avec succès : ID {}", invoiceId);
             } else {
                 logger.warn("Facture non trouvée pour suppression : ID {}", invoiceId);
@@ -80,22 +80,21 @@ public class FactureDao {
         }
     }
 
-    public Facture findFactureById(Long factureId) {
+    public Invoice findFactureById(Long invoiceId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Facture facture = session.get(Facture.class, factureId);
+            Invoice facture = session.get(Invoice.class, invoiceId);
 
             if (facture != null) {
-                logger.info("Facture trouvée : ID {}", factureId);
+                logger.info("Facture trouvée : ID {}", invoiceId);
             } else {
-                logger.warn("Facture non trouvée : ID {}", factureId);
+                logger.warn("Facture non trouvée : ID {}", invoiceId);
             }
             return facture;
         } catch (Exception e) {
-            logger.error("Erreur lors de la recherche de la facture ID {} : {}", factureId, e.getMessage());
+            logger.error("Erreur lors de la recherche de la facture ID {} : {}", invoiceId, e.getMessage());
             e.printStackTrace();
             return null;
         }
 
-        }
-    }*/
-
+    }
+}

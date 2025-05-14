@@ -1,4 +1,4 @@
-/*package fr.koumare.comptease.model;
+package fr.koumare.comptease.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "invoice_id")
-    private Facture facture;
+    private Invoice invoice;
 
 
     @ManyToOne
@@ -43,5 +43,3 @@ public class Transaction {
         this.date = date;
     }
 }
-on dirait que c'tait lui le mouton noir
- */
