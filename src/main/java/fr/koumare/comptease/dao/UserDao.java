@@ -1,8 +1,6 @@
 package fr.koumare.comptease.dao;
 
-import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.User;
-import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -21,7 +19,6 @@ public class UserDao {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(user);
-            CurrentUser.setCurrentUser(user);
             transaction.commit();
             logger.info("Utilisateur sauvegardé : {}", user.getPseudo());
         } catch (Exception e) {
@@ -40,8 +37,7 @@ public class UserDao {
                     .setParameter("pseudo", pseudo)
                     .uniqueResultOptional();
             if (user.isPresent()) {
-                CurrentUser.setCurrentUser(user.get());
-                logger.info("Utilisateur trouvé : {}", user.get().getPseudo()+" "+user.get().getId()+" "+CurrentUser.getCurrentUser().getId());
+                logger.info("Utilisateur trouvé : {}", user.get().getPseudo()+" "+user.get().getId());
             } else {
                 logger.warn("Aucun utilisateur trouvé pour le pseudo : {}", pseudo);
             }

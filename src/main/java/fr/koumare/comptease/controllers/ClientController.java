@@ -3,9 +3,7 @@ package fr.koumare.comptease.controllers;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.User;
-import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.ClientService;
@@ -371,10 +369,10 @@ public class ClientController extends BaseController implements Initializable {
         String nom=addNom.getText();
         String adresse=addAdresse.getText();
         Long solde=0L;
+        Long idu=1L;
         String note=addNote.getText();
 
         logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
-        Long idu=CurrentUser.getCurrentUser().getId();
         if(clientService.addClient(nom, prenom, adresse, contact,idu,solde, note)){
             logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");

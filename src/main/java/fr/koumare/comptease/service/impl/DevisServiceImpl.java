@@ -42,7 +42,7 @@ public class DevisServiceImpl extends DocumentServiceImpl implements DevisServic
                 devis
         );
         invoice.setArticles(devis.getArticles()); // les articles du devis
-        createDocument(invoice); // sauvegarde la facture
+        //createDocument(invoice); // sauvegarde la facture
         devis.setInvoice(invoice); // Associer la facture au devis
         updateDocument(devis); // mettre à jour le devis
         logger.debug("Facture créée avec succès à partir du devis ID : {}", devis.getId());

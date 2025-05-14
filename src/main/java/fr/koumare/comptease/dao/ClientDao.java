@@ -1,8 +1,6 @@
 package fr.koumare.comptease.dao;
 
 import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.User;
-import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
@@ -12,6 +10,9 @@ import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+/*import javax.mail.*;
+import javax.mail.internet.*;
+import java.util.Properties;*/
 
 public class ClientDao {
     private static final Logger logger = LoggerFactory.getLogger(ClientDao.class);
@@ -34,16 +35,13 @@ public class ClientDao {
 
 
     public List<Client> getAllClients() {
-        //recuperer l'utilisateur connecté
-        User currentUser = CurrentUser.getCurrentUser();
-        if (currentUser == null) {
-            throw new IllegalStateException("Aucun utilisateur connecté. Impossible de récupérer les clients.");
-        }
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client WHERE user.id = :userId", Client.class)
-                    .setParameter("userId", currentUser.getId())
-                    .list();
+            return session.createQuery("FROM Client", Client.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
+        
     }
 
     public void updateClient(Client client) {
@@ -176,5 +174,35 @@ public class ClientDao {
             logger.error("Erreur lors de la recherche de l'utilisateur par l'ID de la facture : {}", invoiceId, e);
             return Optional.empty();
         }
+    }
+
+    //envoyer un mail au client
+    public void sendEmailToClient(Client client, String article) {
+        // Implémentez la logique d'envoi d'email ici
+        // Vous pouvez utiliser JavaMail ou une autre bibliothèque pour envoyer des emails
+        logger.info("Envoi d'un email au client : {}", client.getFirstName());
+        String to = client.getContact();
+        // Exemple : récupération du nom de la société (à adapter selon votre logique)
+        String companyName = ""; // Valeur par défaut
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Object result = session.createQuery("SELECT company_name FROM Company")
+                    .setMaxResults(1)
+                    .uniqueResult();
+            if (result != null) {
+                companyName = result.toString();
+                String subject = "Notification de " + companyName;
+                String body = "Bonjour " + client.getFirstName() + ",\n\n" +
+                        "Ceci est une notification de "+companyName+" concernant votre facture de "+article+"."+
+                        " Nous vous rappelons que cette facture est toujours impayée.\n" +
+                        "Merci de la régler dans les plus brefs délais.\n\n" +
+                        "Cordialement,\n" +
+                        "L'équipe de Comptease";
+                
+            }
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du nom de la société", e);
+        }
+        
+        // Ici, ajoutez la logique d'envoi d'email avec 'to', 'subject' et 'body'
     }
 }
