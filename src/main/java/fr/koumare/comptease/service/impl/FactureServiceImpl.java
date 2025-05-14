@@ -1,5 +1,5 @@
-
 package fr.koumare.comptease.service.impl;
+
 import fr.koumare.comptease.dao.InvoiceDao;
 import fr.koumare.comptease.model.Devis;
 import fr.koumare.comptease.model.Document;
@@ -16,11 +16,7 @@ import java.util.List;
 
 public class FactureServiceImpl extends DocumentServiceImpl implements FactureService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
-    private static final InvoiceDao factureDao = new InvoiceDao();
-    public FactureServiceImpl() {
-        super();
-    }
+    private static final Logger logger = LoggerFactory.getLogger(FactureServiceImpl.class);
 
     @Override
     public Invoice createInvoice(Invoice invoice) {
@@ -28,12 +24,13 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
         if (invoice.getArticles() != null) {
             invoice.calculatePrice();
         }
-        Invoice savedFacture = (Invoice) createDocument(invoice);
-        if (savedFacture == null) {
+        Invoice savedInvoice = (Invoice) super.createDocument(invoice);
+        if (savedInvoice == null) {
             logger.error("Échec de la création de la facture");
-            return null; // Retourner null si la sauvegarde a échoué
+            return null;
         }
-        return savedFacture;
+        logger.info("Facture créée avec succès : ID {}", savedInvoice.getId());
+        return savedInvoice;
     }
 
     public Invoice createInvoiceFromDevis(Devis devis) {
@@ -57,16 +54,15 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
                 devis.getArticles()
         );
 
-        Invoice savedInvoice = (Invoice) createDocument(invoice);
+        Invoice savedInvoice = (Invoice) super.createDocument(invoice);
         if (savedInvoice == null) {
             logger.error("Échec de la création de la facture à partir du devis ID : {}", devis.getId());
-            return null; //
+            return null;
         }
         devis.setInvoice(savedInvoice);
-        updateDocument(devis);
+        super.updateDocument(devis);
         logger.debug("Facture créée avec succès à partir du devis ID : {}", devis.getId());
         return savedInvoice;
-
     }
 
     @Override

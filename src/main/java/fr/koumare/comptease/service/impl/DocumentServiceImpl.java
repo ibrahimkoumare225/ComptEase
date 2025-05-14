@@ -28,25 +28,47 @@ public abstract class DocumentServiceImpl implements DocumentService {
             logger.warn("Tentative de création d'un document null");
             throw new IllegalArgumentException("Le document ne peut pas être null");
         }
-        logger.info("Création d'un document avec ID : {}", document.getId());
-        if (document instanceof Invoice) {
-            logger.debug("Le document est une facture");
-            Invoice invoice = (Invoice) document;
-            invoiceDao.saveFacture(invoice);
-            if (invoice.getId() == null) {
-                logger.error("Échec de la sauvegarde de la facture");
-                return null;
+        logger.info("Création d'un document avec ID initial : {}", document.getId());
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            if (document instanceof Invoice) {
+                logger.debug("Le document est une facture");
+                Invoice invoice = (Invoice) document;
+                invoiceDao.saveFacture(invoice);
+                session.refresh(invoice); // Mettre à jour l'objet avec l'ID généré
+                if (invoice.getId() == null) {
+                    logger.error("Échec de la sauvegarde de la facture : ID non généré");
+                    throw new IllegalStateException("L'ID de la facture n'a pas été généré après sauvegarde");
+                }
+                logger.info("Facture sauvegardée avec succès : ID {}", invoice.getId());
+                transaction.commit();
+                return invoice;
+            } else if (document instanceof Devis) {
+                logger.debug("Le document est un devis");
+                Devis devis = (Devis) document;
+                devisDao.saveDevis(devis);
+                session.refresh(devis);
+                if (devis.getId() == null) {
+                    logger.error("Échec de la sauvegarde du devis : ID non généré");
+                    throw new IllegalStateException("L'ID du devis n'a pas été généré après sauvegarde");
+                }
+                logger.info("Devis sauvegardé avec succès : ID {}", devis.getId());
+                transaction.commit();
+                return devis;
+            } else {
+                logger.error("Type de document non pris en charge : {}", document.getClass().getName());
+                throw new IllegalArgumentException("Type de document non pris en charge");
             }
-        } else if (document instanceof Devis) {
-            logger.debug("Le document est un devis");
-            Devis devis = (Devis) document;
-            devisDao.saveDevis(devis);
-            if (devis.getId() == null) {
-                logger.error("Échec de la sauvegarde du devis");
-                return null;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
             }
+            logger.error("Erreur lors de la création du document : {}", e.getMessage(), e);
+            return null;
         }
-        return document;
     }
 
     @Override
@@ -71,8 +93,9 @@ public abstract class DocumentServiceImpl implements DocumentService {
         logger.warn("Aucun document trouvé avec l'ID : {}", id);
         return null;
     }
+
     @Override
-    public void deleteDocumentById(Long id){
+    public void deleteDocumentById(Long id) {
         if (id == null) {
             logger.warn("Tentative de suppression d'un document avec un ID null");
             throw new IllegalArgumentException("L'ID ne peut pas être null");
@@ -107,7 +130,7 @@ public abstract class DocumentServiceImpl implements DocumentService {
         }
     }
 
-    public void updateDocument(Document document){
+    public void updateDocument(Document document) {
         if (document == null) {
             logger.warn("Tentative de mise à jour d'un document null");
             throw new IllegalArgumentException("Le document ne peut pas être null");
@@ -132,9 +155,8 @@ public abstract class DocumentServiceImpl implements DocumentService {
         }
     }
 
-
     @Override
     public void generatePDF(Document document) {
-
+        // Implémentation non nécessaire pour l'instant
     }
 }

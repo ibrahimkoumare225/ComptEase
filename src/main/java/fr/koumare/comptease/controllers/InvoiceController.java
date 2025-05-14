@@ -338,13 +338,17 @@ public class InvoiceController extends BaseController implements Initializable {
             }
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture créée avec succès ! ID : " + savedInvoice.getId());
 
-            // Réinitialiser le formulaire
+
             resetForm();
         } catch (IllegalStateException e) {
             logger.error("Erreur lors de la création de la facture : {}", e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la création de la facture : " + e.getMessage());
         }
     }
+
+
+
+
 
     private void loadFactures() {
         try {
