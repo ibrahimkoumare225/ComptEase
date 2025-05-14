@@ -2,6 +2,7 @@ package fr.koumare.comptease.model;
 
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.model.Devis;
+import fr.koumare.comptease.model.enumarated.TypeInvoice;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -17,6 +18,11 @@ public class Invoice extends Document {
 
     @Enumerated(EnumType.STRING)
     private StatusInvoice status;
+
+    @Enumerated(EnumType.STRING)
+    private TypeInvoice type;
+
+    private int quantity;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
