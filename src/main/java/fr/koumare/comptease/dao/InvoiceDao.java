@@ -1,7 +1,11 @@
 package fr.koumare.comptease.dao;
 
+import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -96,5 +100,36 @@ public class InvoiceDao {
             return null;
         }
 
+    }
+
+    public Double calculatePrice(Article articles, int quantity) {
+    
+        logger.info("Calcul du prix de la facture");
+        if (articles == null) {
+            logger.warn("Aucun article fourni pour le calcul du prix");
+            return 0.0;
+        }
+        Double totalPrice = articles.getPrice() * quantity;
+        return totalPrice;
+        
+    }
+
+
+    //recuperer la liste des articles
+    public ObservableList<Article> getAllArticles() {
+        logger.info("Récupération de tous les articles");
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            List<Article> articles = session.createQuery("from Article", Article.class).list();
+            if(articles.isEmpty()|| articles == null){
+                logger.warn("Aucun article trouvé");
+            } else {
+                logger.info("Récupération de {} articles", articles.size());
+            }
+            return FXCollections.observableArrayList(articles);
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des articles : {}", e.getMessage());
+            e.printStackTrace();
+            return null; // retourner null en cas d'erreur
+        }
     }
 }

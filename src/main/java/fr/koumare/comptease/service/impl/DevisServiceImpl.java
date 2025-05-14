@@ -38,7 +38,7 @@ public class DevisServiceImpl extends DocumentServiceImpl implements DevisServic
         return savedDevis;
     }
 
-    public Invoice createInvoiceFromDevis(Devis devis) {
+     public Invoice createInvoiceFromDevis(Devis devis) {
         logger.info("Création d'une facture à partir du devis ID : {}", devis.getId());
         if (devis.getStatus() != StatusDevis.ACCEPTED) {
             logger.warn("Le devis ID : {} n'est pas accepté, impossible de créer une facture", devis.getId());
@@ -49,7 +49,7 @@ public class DevisServiceImpl extends DocumentServiceImpl implements DevisServic
             throw new IllegalStateException("Une facture existe déjà pour ce devis");
         }
 
-        Invoice facture = new Invoice(
+        /*Invoice facture = new Invoice(
                 devis.getPrice(),
                 devis.getDescription(),
                 Instant.now(),
@@ -57,9 +57,9 @@ public class DevisServiceImpl extends DocumentServiceImpl implements DevisServic
                 devis.getClient(),
                 devis,
                 devis.getArticles()
-        );
+        );*/
 
-        Invoice savedInvoice = (Invoice) createDocument(facture);
+        Invoice savedInvoice = (Invoice) createDocument(null);
         if (savedInvoice == null) {
             logger.error("Échec de la création de la facture à partir du devis ID : {}", devis.getId());
             return null; //

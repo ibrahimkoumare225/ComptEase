@@ -112,7 +112,9 @@ public class InvoiceController extends BaseController implements Initializable {
     private final DevisServiceImpl devisService = new DevisServiceImpl();
     private final FactureServiceImpl factureService = new FactureServiceImpl();
 
-    private ObservableList<Article> articlesList = FXCollections.observableArrayList();
+    private ObservableList<Article> articlesList = FXCollections.observableArrayList(factureService.getAllArticles());
+    private ObservableList<Article> articleSelected = FXCollections.observableArrayList();
+
     private ObservableList<Client> clientsList;
     private ObservableList<Invoice> invoicesList = FXCollections.observableArrayList();
     @Override
@@ -171,8 +173,7 @@ public class InvoiceController extends BaseController implements Initializable {
                 setGraphic(empty ? null : deleteButton);
             }
         });
-        articlesTable.setItems(articlesList);
-
+        showArticlesInTable(articlesList);
         // si la liste des artcicles changent on remet le prix ajour
         articlesList.addListener((javafx.beans.Observable observable) -> updateTotalPrice());
 
@@ -223,10 +224,10 @@ public class InvoiceController extends BaseController implements Initializable {
                 return;
             }
 
-            BigDecimal price;
+            Double price;
             try {
-                price = new BigDecimal(articlePrice.getText());
-                if (price.compareTo(BigDecimal.ZERO) <= 0) {
+                price =Double.parseDouble(articlePrice.getText());
+                if (price <= 0.0) {
                     showAlert(Alert.AlertType.WARNING, "Avertissement", "Le prix doit être supérieur à 0.");
                     return;
                 }
@@ -235,9 +236,9 @@ public class InvoiceController extends BaseController implements Initializable {
                 return;
             }
 
-            Long quantity;
+            int quantity;
             try {
-                quantity = Long.parseLong(articleQuantity.getText());
+                quantity = Integer.parseInt(articleQuantity.getText());
                 if (quantity <= 0) {
                     showAlert(Alert.AlertType.WARNING, "Avertissement", "La quantité doit être supérieure à 0.");
                     return;
@@ -311,23 +312,31 @@ public class InvoiceController extends BaseController implements Initializable {
                 return;
             }
 
-            if (articlesList.isEmpty()) {
+            /*if (articlesList.isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez ajouter au moins un article.");
                 return;
-            }
+            }*/
 
             String description = descriptionField.getText();
             if (description.isEmpty()) {
                 description = "Facture générée le " + Instant.now();
             }
+            Double prix=Double.parseDouble(articlePrice.getText());
+            Instant date = Instant.now();
+            Article article = new Article(articleDescription.getText(), Arrays.asList("Default Category"), 3, Double.parseDouble(articlePrice.getText()));
+            articleSelected.add(article);
 
-            Invoice invoice = new Invoice(
+            if(factureService.createInvoice(prix, description, date, "PAID", 4L, articlesList, "INCOMING", 2))
+            /*Invoice invoice = new Invoice(
                     0.0,
                     description,
                     Instant.now(),
                     StatusInvoice.UNPAID,
                     client,
-                    new ArrayList<>(articlesList) // articles (conversion ObservableList -> List)
+                    new ArrayList<>(articlesList) // articles (conversion ObservableList -> List),
+                    "INCOMING",
+
+
             );
 
             Invoice savedInvoice = factureService.createInvoice(invoice);
@@ -338,7 +347,7 @@ public class InvoiceController extends BaseController implements Initializable {
             }
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture créée avec succès ! ID : " + savedInvoice.getId());
 
-
+            */
             resetForm();
         } catch (IllegalStateException e) {
             logger.error("Erreur lors de la création de la facture : {}", e.getMessage());
@@ -394,4 +403,31 @@ public class InvoiceController extends BaseController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    //afficher les articles dans la table
+    private void showArticlesInTable(ObservableList<Article> articles) {
+        articleDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        articlePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        articleQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantite"));
+        articleTotalColumn.setCellValueFactory(cellData -> {
+            Article article = cellData.getValue();
+            double total = article.getPrice().doubleValue() * article.getQuantite();
+            return new ReadOnlyObjectWrapper<>(total);
+        });
+        articlesTable.setItems(articles);
+        articlesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        if (newSelection != null) {
+            articleDescription.setText(newSelection.getDescription());
+            articlePrice.setText(String.valueOf(newSelection.getPrice()));
+            articleQuantity.setText(String.valueOf(newSelection.getQuantite()));
+        } else {
+            articleDescription.clear();
+            articlePrice.clear();
+            articleQuantity.clear();
+        }
+        });
+    }
+
+   
+
 }

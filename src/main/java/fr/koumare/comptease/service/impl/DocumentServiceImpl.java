@@ -37,7 +37,7 @@ public abstract class DocumentServiceImpl implements DocumentService {
             if (document instanceof Invoice) {
                 logger.debug("Le document est une facture");
                 Invoice invoice = (Invoice) document;
-                invoiceDao.saveFacture(invoice);
+                //invoiceDao.saveFacture(invoice);
                 session.refresh(invoice); // Mettre à jour l'objet avec l'ID généré
                 if (invoice.getId() == null) {
                     logger.error("Échec de la sauvegarde de la facture : ID non généré");
