@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.FacturesController">
+    <children>
+        <AnchorPane prefHeight="720.0" prefWidth="1300.0" styleClass="body">
+            <children>
+                <BorderPane prefHeight="720.0" prefWidth="1300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <left>
+                        <AnchorPane prefHeight="650.0" prefWidth="300.0" styleClass="menu_container" BorderPane.alignment="CENTER">
+                            <children>
+                                <Text fill="WHITE" layoutX="77.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Compt" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="15.0">
+                                    <font>
+                                        <Font name="System Bold" size="28.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="#9747ff" layoutX="165.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ease" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="15.0">
+                                    <font>
+                                        <Font name="System Bold" size="28.0" />
+                                    </font>
+                                </Text>
+                                <Circle fill="#53c22b" layoutX="104.0" layoutY="46.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="25.0" />
+                                <Circle fill="#e0b509" layoutX="14.0" layoutY="244.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="25.0" />
+                                <Circle fill="#ff5a52" layoutX="83.0" layoutY="180.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="25.0" />
+                                <Button fx:id="dashboardButton" layoutX="65.0" layoutY="125.0" mnemonicParsing="false" text="Dashboard" onAction="#handleNavigateToDashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="HOME" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="rapportFinancierButton" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" text="Rapport Financier" onAction="#handleNavigateToRapportFinancier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="BOOK" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="transactionButton" layoutX="65.0" layoutY="227.0" mnemonicParsing="false" text="Transaction" onAction="#handleNavigateToTransaction" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="200.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="MONEY" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="obligationFiscaleButton" layoutX="65.0" layoutY="259.0" mnemonicParsing="false" text="Obligation Fiscales" onAction="#handleNavigateToObligationFiscale" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="250.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="clientButton" layoutX="65.0" layoutY="315.0" mnemonicParsing="false" text="Clients" onAction="#handleNavigateToClient" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="USERS" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="facturesButton" layoutX="57.0" layoutY="363.0" mnemonicParsing="false" styleClass="alt_menu_btn" text="Factures" onAction="#handleNavigateToFactures" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="350.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="CLIPBOARD" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="parametreButton" layoutX="57.0" layoutY="409.0" mnemonicParsing="false" text="Paramètres" onAction="#handleNavigateToParametre" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="400.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="COGS" size="20" />
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="logoutButton" layoutX="57.0" layoutY="465.0" mnemonicParsing="false" onAction="#handleLogout" text="Déconnexion" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="450.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="SIGN_OUT" size="20" />
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </AnchorPane>
+                    </left>
+                    <center>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <AnchorPane prefHeight="720.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <AnchorPane prefHeight="714.6666666666666" prefWidth="1000.0" styleClass="body1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <BorderPane fx:id="chartContainer" prefHeight="251.0" prefWidth="953.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="285.0" />
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </AnchorPane>
+                    </center>
+                </BorderPane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

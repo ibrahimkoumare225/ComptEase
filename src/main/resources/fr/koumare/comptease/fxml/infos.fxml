@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.InfosController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="auth" stylesheets="@../css/infos.css">
+         <children>
+            <Label layoutX="176.0" layoutY="45.0" text="Votre Entreprise" textFill="WHITE">
+               <font>
+                  <Font name="Tahoma Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="41.0" layoutY="104.0" text="Quelle forme jurique comptez-vous choisir ?" textFill="WHITE" AnchorPane.bottomAnchor="265.0">
+               <font>
+                  <Font name="Tahoma" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="40.0" layoutY="172.0" text="Quel sera votre régime fiscal ?" textFill="WHITE" AnchorPane.bottomAnchor="210.0" AnchorPane.leftAnchor="40.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="41.0" layoutY="253.0" text="Quel est le nom de votre entreprise (raison sociale) ?" textFill="WHITE" AnchorPane.bottomAnchor="155.0">
+               <font>
+                  <Font name="Tahoma" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="companyNameField" layoutX="40.0" layoutY="290.0" prefHeight="30.0" prefWidth="423.0" promptText="Nom de l'entreprise" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="40.0" />
+            <ChoiceBox fx:id="legalFormChoice" layoutX="41.0" layoutY="137.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="40.0" />
+            <ChoiceBox fx:id="taxRegimeChoice" layoutX="41.0" layoutY="218.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="185.0" AnchorPane.leftAnchor="40.0" />
+            <Button fx:id="continueButton" layoutX="460.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleContinue" prefHeight="30.0" prefWidth="125.0" styleClass="btn_c" text="Continuer" textFill="WHITE" />
+            <FontAwesomeIconView fill="WHITE" glyphName="ARROW_RIGHT" layoutX="566.0" layoutY="363.0" />
+            <Label layoutX="41.0" layoutY="275.0" text="Quelle est votre profession ?" textFill="WHITE" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="40.0">
+               <font>
+                  <Font name="Tahoma" size="18.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="professionChoice" layoutX="40.0" layoutY="300.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="40.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
