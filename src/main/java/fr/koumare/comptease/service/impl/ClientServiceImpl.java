@@ -81,7 +81,7 @@ public class ClientServiceImpl implements ClientService {
         client.setFirstName(prenom);
         client.setAdresse(adresse);
         client.setContact(contact);
-        client.setId_user(3L);
+        client.setId_user(idUser);
         client.setSolde(solde);
         client.setNote(note);
         clientDao.saveClient(client);

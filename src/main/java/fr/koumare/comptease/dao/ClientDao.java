@@ -1,8 +1,8 @@
 package fr.koumare.comptease.dao;
 
 import fr.koumare.comptease.model.Client;
+import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.model.User;
-import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -34,7 +34,7 @@ public class ClientDao {
 
     public List<Client> getAllClients() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Client where id_user=3", Client.class).list();
+            return session.createQuery("from Client", Client.class).list();
         }
     }
 
@@ -85,8 +85,8 @@ public class ClientDao {
     public Optional<Client> findById(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
           logger.info("Recherche du client avec l'Id : {}", clientId);
-            Optional<Client> cl = session.createQuery("FROM Client WHERE idc = :idc", Client.class)
-                    .setParameter("idc", clientId)
+            Optional<Client> cl = session.createQuery("FROM Client WHERE id = :id", Client.class)
+                    .setParameter("id", clientId)
                     .uniqueResultOptional();
             if (cl.isPresent()) {
                 logger.info("Client trouvé : {}", cl.get().getFirstName());
@@ -134,9 +134,9 @@ public class ClientDao {
     }
 
     //chercher un detail par un mot clé
-    public List<Invoice> findByKeywordDetails(String keyword) {
+    public List<Facture> findByKeywordDetails(String keyword) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Invoice WHERE description LIKE :keyword", Invoice.class)
+            return session.createQuery("FROM Facture WHERE description LIKE :keyword", Facture.class)
                     .setParameter("keyword", "%" + keyword + "%")
                     .list();
         } catch (Exception e) {
@@ -146,10 +146,10 @@ public class ClientDao {
     }
 
     //recuperer les details d'un client
-    public List<Invoice> getClientDetails(Long clientId) {
+    public List<Facture> getClientDetails(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             logger.info("Essaie recup c");
-            return session.createQuery("FROM Invoice WHERE client.idc = :clientId", Invoice.class)
+            return session.createQuery("FROM Facture WHERE client.id = :clientId", Facture.class)
                     .setParameter("clientId", clientId)
                     .list();
         } catch (Exception e) {
@@ -161,7 +161,7 @@ public class ClientDao {
     //trouver le client par id facture
     public Optional<Client> findUserByInvoiceId(Long invoiceId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("SELECT i.client FROM Invoice i WHERE i.id = :invoiceId", Client.class)
+            return session.createQuery("SELECT i.client FROM Facture i WHERE i.id = :invoiceId", Client.class)
                     .setParameter("invoiceId", invoiceId)
                     .uniqueResultOptional();
         } catch (Exception e) {

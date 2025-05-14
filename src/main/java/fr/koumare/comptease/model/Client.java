@@ -13,7 +13,27 @@ public class Client {
     //Modifier setId_user pour qu'il prenne l'utilisateur connecté
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idc;
+    private Long id;
+
+    // debugagge :
+    // l'erreur disait : 01:25:03.863 [JavaFX Application Thread] DEBUG org.hibernate.SQL --
+    //    insert
+    //    into
+    //        Client
+    //        (adresse, contact, first_name, last_name, note, solde, id_user)
+    //    values
+    //        (?, ?, ?, ?, ?, ?, ?)
+    //Hibernate:
+    //    insert
+    //    into
+    //        Client
+    //        (adresse, contact, first_name, last_name, note, solde, id_user)
+    //    values
+    //        (?, ?, ?, ?, ?, ?, ?)
+    //01:25:03.865 [JavaFX Application Thread] DEBUG org.hibernate.engine.jdbc.spi.SqlExceptionHelper -- could not execute statement [n/a]
+    //java.sql.SQLException: Field 'idc' doesn't have a default value
+    // idc n'etait pas le bon nom du champ de la colonne de pour l'id du client , car idc n'etait pas en AUTO INCREMENT , mais la colonne "id" oui
+    // donc le bon nom de colonne ,n'etait pas utilisé . Il y'a une colonne id de plus inutile
 
     @ManyToOne
     @JoinColumn(name= "id_user", nullable= false)
@@ -45,7 +65,7 @@ public class Client {
     private List<Devis> devis;
 
     @OneToMany(mappedBy = "client")
-    private List<Invoice> invoices;
+    private List<Facture> invoices;
 
     @OneToMany(mappedBy = "client")
     private List<Notification> notifications;
@@ -53,8 +73,8 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Long solde , String note) {
-        this.idc=idc;
+    public Client(Long id, User user , String contact, String firstName, String lastName, String adresse, Long solde , String note) {
+        this.id = id;
         this.user =user;
         this.contact = contact;
         this.lastName = lastName;
@@ -66,11 +86,11 @@ public class Client {
     }
 
     //getters et setters
-    public Long getIdc() {
-        return idc;
+    public Long getId() {
+        return id;
     }
-    public void setIdc(Long idc) {
-        this.idc = idc;
+    public void setId(Long id) {
+        this.id = id;
     }
     
     public String getContact() {
@@ -139,7 +159,7 @@ public class Client {
     @Override
     public String toString() {
         return "Client{" +
-                "idc=" + idc +
+                "idc=" + id +
                 ", id_user=" + user.getId() +
                 ", contact='" + contact + '\'' +
                 ", lastName='" + lastName + '\'' +

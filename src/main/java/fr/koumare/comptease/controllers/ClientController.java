@@ -252,7 +252,7 @@ public class ClientController extends BaseController implements Initializable {
                 Client client = getTableView().getItems().get(getIndex());
                 logger.info("Affichage des détails du client : {}", client.getFirstName());
                 try {
-                    listAllFactures = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
+                    listAllFactures = FXCollections.observableArrayList(clientService.getClientDetails(client.getId()));
                     showClientDetails(client, listAllFactures);
 
 
@@ -323,7 +323,7 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private void affiche(ObservableList<Client> list) {
         logger.info("Affichage de la liste des clients");
-        idc.setCellValueFactory(new PropertyValueFactory<>("Idc"));
+        idc.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomc.setCellValueFactory(new PropertyValueFactory<>("LastName"));
         prenomc.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
         soldec.setCellValueFactory(new PropertyValueFactory<>("Solde"));
@@ -343,7 +343,7 @@ public class ClientController extends BaseController implements Initializable {
     }
     
     private void remplirFormulaireModif(Client client) {
-        modifId.setText(String.valueOf(client.getIdc())); 
+        modifId.setText(String.valueOf(client.getId()));
         modifNom.setText(client.getLastName());
         modifPrenom.setText(client.getFirstName());
         modifAdresse.setText(client.getAdresse());
@@ -434,11 +434,11 @@ public class ClientController extends BaseController implements Initializable {
             logger.info("Suppression d'un client : {}", client.getFirstName());
 
             // Vérification de l'existence du client avant la suppression
-            if(clientService.deleteClient(client.getIdc())){
+            if(clientService.deleteClient(client.getId())){
                 logger.info("Client supprimé : {}", client.getFirstName());
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès.");
                 //verifier si le client a été supprimé
-                Optional<Client> deletedClient = clientService.findById(client.getIdc());
+                Optional<Client> deletedClient = clientService.findById(client.getId());
                 if(deletedClient.isEmpty()) {
                     logger.info("Client supprimé : {}", client.getFirstName());
                     showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès : " + client.getFirstName() +" " + client.getLastName());
@@ -578,7 +578,7 @@ public class ClientController extends BaseController implements Initializable {
             return;
         }
         ObservableList<Facture> list = FXCollections.observableArrayList(clientService.findByKeywordDetails(keyword));
-        idp.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idc.setCellValueFactory(new PropertyValueFactory<>("id"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
         quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
@@ -590,7 +590,7 @@ public class ClientController extends BaseController implements Initializable {
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
         tableClientDetail.setItems(list);
-        Client c= clientService.findById(list.get(0).getClient().getIdc()).orElse(null); 
+        Client c= clientService.findById(list.get(0).getClient().getId()).orElse(null);
         try {
             showClientDetails(c, list);
             annulerRechercheDetail.setVisible(true);
@@ -611,7 +611,7 @@ public class ClientController extends BaseController implements Initializable {
     private void fctannulerRechercheDetail(ActionEvent event) {
         logger.info("Annulation de la recherche de detail");
         searchBarreDetail.clear();
-        Client c= clientService.findById(listAllFactures.get(0).getClient().getIdc()).orElse(null);
+        Client c= clientService.findById(listAllFactures.get(0).getClient().getId()).orElse(null);
         try {
             showClientDetails(c, listAllFactures);
             annulerRechercheDetail.setVisible(false);
