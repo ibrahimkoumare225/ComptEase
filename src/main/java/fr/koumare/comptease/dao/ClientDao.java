@@ -85,8 +85,8 @@ public class ClientDao {
     public Optional<Client> findById(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
           logger.info("Recherche du client avec l'Id : {}", clientId);
-            Optional<Client> cl = session.createQuery("FROM Client WHERE id = :id", Client.class)
-                    .setParameter("id", clientId)
+            Optional<Client> cl = session.createQuery("FROM Client WHERE idc = :idc", Client.class)
+                    .setParameter("idc", clientId)
                     .uniqueResultOptional();
             if (cl.isPresent()) {
                 logger.info("Client trouvé : {}", cl.get().getFirstName());
@@ -149,7 +149,7 @@ public class ClientDao {
     public List<Facture> getClientDetails(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             logger.info("Essaie recup c");
-            return session.createQuery("FROM Facture WHERE client.id = :clientId", Facture.class)
+            return session.createQuery("FROM Facture WHERE client.idc = :clientId", Facture.class)
                     .setParameter("clientId", clientId)
                     .list();
         } catch (Exception e) {

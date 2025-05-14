@@ -13,7 +13,7 @@ public class Client {
     //Modifier setId_user pour qu'il prenne l'utilisateur connecté
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idc;
 
     // debugagge :
     // l'erreur disait : 01:25:03.863 [JavaFX Application Thread] DEBUG org.hibernate.SQL --
@@ -73,8 +73,8 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long id, User user , String contact, String firstName, String lastName, String adresse, Long solde , String note) {
-        this.id = id;
+    public Client(Long idc, User user , String contact, String firstName, String lastName, String adresse, Long solde , String note) {
+        this.idc = idc;
         this.user =user;
         this.contact = contact;
         this.lastName = lastName;
@@ -86,11 +86,11 @@ public class Client {
     }
 
     //getters et setters
-    public Long getId() {
-        return id;
+    public Long getIdc() {
+        return idc;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdc(Long id) {
+        this.idc = id;
     }
     
     public String getContact() {
@@ -159,7 +159,7 @@ public class Client {
     @Override
     public String toString() {
         return "Client{" +
-                "idc=" + id +
+                "idc=" + idc +
                 ", id_user=" + user.getId() +
                 ", contact='" + contact + '\'' +
                 ", lastName='" + lastName + '\'' +

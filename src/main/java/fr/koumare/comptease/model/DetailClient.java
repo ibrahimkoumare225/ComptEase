@@ -17,10 +17,10 @@ public class DetailClient {
     }
 
     public Long getClientId() {
-        return client.getId();
+        return client.getIdc();
     }
     public void setClienId(Long id) {
-        client.setId(id);
+        client.setIdc(id);
     }
     public Instant getDate() {
         return invoice.getDate();
