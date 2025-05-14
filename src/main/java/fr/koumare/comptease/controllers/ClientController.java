@@ -631,9 +631,9 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private void fctVoirDevis(ActionEvent event) {
         logger.info("Affichage du devis");
-        //afficher factures.fxml        
+        //afficher facture.fxml
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/factures.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/facture.fxml"));
             Scene scene = new Scene(loader.load(), 1300,720);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

@@ -2,6 +2,7 @@
 package fr.koumare.comptease.service.impl;
 import fr.koumare.comptease.dao.FactureDao;
 import fr.koumare.comptease.model.Devis;
+import fr.koumare.comptease.model.Document;
 import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.model.Facture;
@@ -91,5 +92,10 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
             logger.error("Erreur lors de la récupération des factures : {}", e.getMessage());
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public void generatePDF(Document document) {
+        super.generatePDF(document);
     }
 }
