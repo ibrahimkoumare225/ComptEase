@@ -20,6 +20,7 @@ import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder.In;
 
@@ -105,15 +106,16 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
         }
     }
     @Override
-    public List<Invoice> getAllFactures() {
-        try {
-            List<Invoice> factures = findAllDocumentsByType(Invoice.class);
-            logger.info("Récupération de {} factures", factures.size());
-            return factures;
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération des factures : {}", e.getMessage());
-            return new ArrayList<>();
+    public ObservableList<Invoice> getAllFactures() {
+        logger.info("Récupération de toutes les factures");
+        ObservableList<Invoice> invoices = invoiceDao.getAllFactures();
+        logger.info("Récupération de {} factures", invoices.size());
+        if (invoices.isEmpty()) {
+            logger.warn("Aucune facture trouvée");
+        } else {
+            logger.info("Factures récupérées avec succès");
         }
+        return invoices;
     }
 
 
@@ -121,6 +123,41 @@ public class FactureServiceImpl extends DocumentServiceImpl implements FactureSe
     public void generatePDF(Document document) {
         super.generatePDF(document);
     }
+
+    @Override
+    public boolean updateArticle(Long id, String description, List<String> category, int quantite, Double price) {
+        logger.info("Mise à jour de l'article : {}", description);
+        Optional<Article> optionalArticle = invoiceDao.getArticleById(id);
+       if(price<=0){
+            logger.warn("Le prix de l'article doit être supérieur à 0");
+            return false;
+        }
+        if (optionalArticle.isPresent()) {
+            Article article = optionalArticle.get();
+            article.setDescription(description);
+            article.setCategory(category);
+            article.setQuantite(quantite);
+            article.setPrice(price);
+            invoiceDao.updateArticle(article);
+            logger.info("Article mis à jour avec succès : {}", article);
+        } else {
+            logger.warn("Aucun article trouvé avec l'ID : {}", id);
+            return false;
+        }
+        return true;
+    }
+    @Override
+    public boolean enregistrerArticle(Article article) {
+        logger.info("Enregistrement de l'article : {}", article);
+        if (article == null) {
+            logger.warn("L'article est nul, échec de l'enregistrement");
+            return false;
+        }
+        invoiceDao.saveArticle(article);
+        logger.info("Article enregistré avec succès : {}", article);
+        return true;
+    }
+
     @Override
     public ObservableList<Article> getAllArticles(){
         logger.info("Récupération de tous les articles");

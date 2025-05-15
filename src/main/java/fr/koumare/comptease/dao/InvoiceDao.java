@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class InvoiceDao {
 
@@ -26,6 +27,7 @@ public class InvoiceDao {
             session.save(invoice);
             transaction.commit();
             logger.info("Facture sauvegardée avec succès : ID {}", invoice.getId());
+            
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -35,15 +37,19 @@ public class InvoiceDao {
         }
     }
 
-    public List<Invoice> getAllFactures() {
+    public ObservableList<Invoice> getAllFactures() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Invoice> invoiceList = session.createQuery("from Invoice", Invoice.class).list();
-            logger.info("Récupération de {} factures", invoiceList.size());
-            return invoiceList;
+            List<Invoice> factures = session.createQuery("from Invoice", Invoice.class).list();
+            if (factures.isEmpty() || factures == null) {
+                logger.warn("Aucune facture trouvée");
+            } else {
+                logger.info("Récupération de {} factures", factures.size());
+            }
+            return FXCollections.observableArrayList(factures);
         } catch (Exception e) {
             logger.error("Erreur lors de la récupération des factures : {}", e.getMessage());
             e.printStackTrace();
-            return new ArrayList<>(); // retourner une liste vide en cas d'erreur
+            return null; // retourner null en cas d'erreur
         }
     }
 
@@ -114,6 +120,53 @@ public class InvoiceDao {
         
     }
 
+    //enregistrer un article
+    public void saveArticle(Article article) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(article);
+            transaction.commit();
+            logger.info("Facture sauvegardée avec succès : ID {}", article.getId());
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors de la sauvegarde de la facture : {}", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    //modifier un article
+    public void updateArticle(Article article) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(article);
+            transaction.commit();
+            logger.info("Article mis à jour avec succès : ID {}", article.getId());
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors de la mise à jour de l'article : {}", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    //recuperer un article par son id
+    public Optional<Article> getArticleById(Long articleId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Optional<Article> article = session.createQuery("FROM Article WHERE id = :id", Article.class)
+                    .setParameter("id", articleId)
+                    .uniqueResultOptional();
+            return article;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la recherche de l'article ID {} : {}", articleId, e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     //recuperer la liste des articles
     public ObservableList<Article> getAllArticles() {

@@ -10,7 +10,10 @@ import java.time.Instant;
 public interface FactureService extends DocumentService {
     boolean createInvoice(Double prix, String description, Instant date, String status, Long clientId, List<Article> article, String type, int quantity);
     void updateInvoiceStatus(Long invoiceId, String status);
-    List<Invoice> getAllFactures();
+    ObservableList<Invoice> getAllFactures();
+
+    boolean updateArticle(Long id,String description, List<String> category, int quantite, Double price);
+    boolean enregistrerArticle(Article article);
     ObservableList<Article>getAllArticles();
 
 

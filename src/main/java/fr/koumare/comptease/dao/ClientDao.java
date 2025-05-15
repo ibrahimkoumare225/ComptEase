@@ -166,6 +166,18 @@ public class ClientDao {
         }
     }
 
+    //recuperer la somme des factures d'un client pour le mettre dans le solde
+    public Double getClientInvoiceSum(Long clientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT SUM(i.price) FROM Invoice i WHERE i.client.idc = :clientId", Double.class)
+                    .setParameter("clientId", clientId)
+                    .uniqueResult();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération de la somme des factures pour le client avec l'Id : {}", clientId, e);
+            return null;
+        }
+    }
+
     //trouver le client par id facture
     public Optional<Client> findUserByInvoiceId(Long invoiceId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

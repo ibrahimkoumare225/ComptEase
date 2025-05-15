@@ -18,7 +18,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        // 🔥 Initialisation de Hibernate avant de lancer JavaFX
+        //  Initialisation de Hibernate avant de lancer JavaFX
          HibernateUtil.getSessionFactory();
         System.out.println("✅ Hibernate est bien initialisé depuis App !");
 

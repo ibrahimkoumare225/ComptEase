@@ -1,11 +1,13 @@
 package fr.koumare.comptease.controllers;
 
+import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Devis;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
+import fr.koumare.comptease.model.enumarated.TypeInvoice;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
 import fr.koumare.comptease.service.impl.DevisServiceImpl;
@@ -17,12 +19,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.Instant;
@@ -44,6 +50,7 @@ public class InvoiceController extends BaseController implements Initializable {
     @FXML
     private ComboBox<Client> clientComboBox;
 
+
     @FXML
     private TextField descriptionField;
 
@@ -54,7 +61,7 @@ public class InvoiceController extends BaseController implements Initializable {
     private TableColumn<Article, String> articleDescriptionColumn;
 
     @FXML
-    private TableColumn<Article, BigDecimal> articlePriceColumn;
+    private TableColumn<Article, Double> articlePriceColumn;
 
     @FXML
     private TableColumn<Article, Long> articleQuantityColumn;
@@ -86,6 +93,14 @@ public class InvoiceController extends BaseController implements Initializable {
     @FXML
     private Button createInvoiceButton;
 
+    @FXML
+    private ComboBox<String> invoiceTypeComboBox;
+
+    @FXML
+    private ComboBox<String> invoiceStatusComboBox;
+
+    @FXML
+    private TextField quantityField;
 
     @FXML
     private TableView<Invoice> invoicesTable;
@@ -116,7 +131,8 @@ public class InvoiceController extends BaseController implements Initializable {
     private ObservableList<Article> articleSelected = FXCollections.observableArrayList();
 
     private ObservableList<Client> clientsList;
-    private ObservableList<Invoice> invoicesList = FXCollections.observableArrayList();
+    Client clientSelected;
+   // private ObservableList<Invoice> invoicesList = FXCollections.observableArrayList(factureService.getAllFactures());
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de FacturesController");
@@ -146,6 +162,9 @@ public class InvoiceController extends BaseController implements Initializable {
                 }
             }
         });
+
+        invoiceTypeComboBox.getItems().addAll("Entrante", "Sortante");
+        invoiceStatusComboBox.getItems().addAll("Payée", "Non payée");
 
         // on configure la table des articles
         articleDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -177,7 +196,8 @@ public class InvoiceController extends BaseController implements Initializable {
         // si la liste des artcicles changent on remet le prix ajour
         articlesList.addListener((javafx.beans.Observable observable) -> updateTotalPrice());
 
-        loadFactures();
+        //showFacturesInTable(invoicesList);
+        /*loadFactures();
         invoiceIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         invoiceClientColumn.setCellValueFactory(new PropertyValueFactory<>("client"));
         invoiceClientColumn.setCellFactory(column -> new TableCell<Invoice, Client>() {
@@ -212,9 +232,39 @@ public class InvoiceController extends BaseController implements Initializable {
                 setGraphic(empty || getTableRow().getItem() == null ? null : deleteButton);
             }
         });
-        invoicesTable.setItems(invoicesList);
+        invoicesTable.setItems(invoicesList);*/
     }
 
+    //recuperer le type de la facture
+    private String getTypeInvoice() {
+        String selectedType = invoiceTypeComboBox.getValue();
+        if (selectedType == null) {
+            return null;
+        }
+        switch (selectedType) {
+            case "Entrante":
+                return "INCOMING";
+            case "Sortante":
+                return "OUTGOING";
+            default:
+                return null;
+        }
+    }
+    //recuperer le status de la facture
+    private String getStatusInvoice() {
+        String selectedStatus = invoiceStatusComboBox.getValue();
+        if (selectedStatus == null) {
+            return null;
+        }
+        switch (selectedStatus) {
+            case "Payée":
+                return "PAID";
+            case "Non payée":
+                return "UNPAID";
+            default:
+                return null;
+        }
+    }
     @FXML
     public void addArticle(ActionEvent event) {
         try {
@@ -249,7 +299,15 @@ public class InvoiceController extends BaseController implements Initializable {
             }
 
             Article article = new Article(description, Arrays.asList("Default Category"), quantity, price);
-            articlesList.add(article);
+            if(factureService.enregistrerArticle(article)){
+                logger.info("Article enregistré avec succès : {}", article);
+                articlesList= FXCollections.observableArrayList(factureService.getAllArticles());
+                showArticlesInTable(articlesList);
+            }
+            else{
+                logger.error("Erreur lors de l'enregistrement de l'article : {}", article);
+            }
+            /*articlesList.add(article);*/
             articleDescription.clear();
             articlePrice.clear();
             articleQuantity.clear();
@@ -321,12 +379,45 @@ public class InvoiceController extends BaseController implements Initializable {
             if (description.isEmpty()) {
                 description = "Facture générée le " + Instant.now();
             }
-            Double prix=Double.parseDouble(articlePrice.getText());
+            Double prix=Double.parseDouble(articlePrice.getText()) *Integer.parseInt(quantityField.getText());
             Instant date = Instant.now();
-            Article article = new Article(articleDescription.getText(), Arrays.asList("Default Category"), 3, Double.parseDouble(articlePrice.getText()));
-            articleSelected.add(article);
-
-            if(factureService.createInvoice(prix, description, date, "PAID", 4L, articlesList, "INCOMING", 2))
+            
+            if(factureService.createInvoice(prix, description, date, getStatusInvoice(), client.getIdc(), articleSelected, getTypeInvoice(), Integer.parseInt(quantityField.getText()))){
+                Article article = articleSelected.get(0);
+                logger.info("Facture créée avec succès : {}", article.getDescription());
+                int newQuantity ;
+                
+                if( getTypeInvoice().equals("INCOMING")){
+                    newQuantity= article.getQuantite() - Integer.parseInt(quantityField.getText());
+                    if(newQuantity< 0){
+                        showAlert(Alert.AlertType.WARNING, "Avertissement", "Impossible!! Vous n'avez pas assez d'articles.");
+                        return;
+                    }
+                    else if(newQuantity == 0){
+                            showAlert(Alert.AlertType.WARNING, "Avertissement", "Vous n'avez plus de stock pour l'article "+articleDescription+" .");
+                            return;
+                    }
+                    factureService.updateArticle(article.getId(),articleDescription.getText(),Arrays.asList("Default Category"), newQuantity, article.getPrice());
+                }
+                else if( getTypeInvoice().equals("OUTGOING")){
+                    newQuantity= article.getQuantite() + Integer.parseInt(quantityField.getText());
+                    factureService.updateArticle(article.getId(),articleDescription.getText(),Arrays.asList("Default Category"), newQuantity, article.getPrice());
+                }
+                //modifier le solde du client
+                if(clientService.updateClientBalance(client.getIdc())){
+                    logger.info("Le solde du client a été mis à jour avec succès : {}", client.getIdc());
+                }
+                else{
+                    logger.error("Erreur lors de la mise à jour du solde du client : {}", client.getIdc());
+                }
+                articlesList= FXCollections.observableArrayList(factureService.getAllArticles());
+                showArticlesInTable(articlesList);
+                articleSelected.clear();
+                showAlert(AlertType.CONFIRMATION, "Succes", "facture créee avec succès");
+            }
+            else{
+                logger.error("Erreur lors de la création de la facture : {}", articleSelected.get(0).getDescription());
+            }
             /*Invoice invoice = new Invoice(
                     0.0,
                     description,
@@ -349,6 +440,7 @@ public class InvoiceController extends BaseController implements Initializable {
 
             */
             resetForm();
+            showArticlesInTable(articlesList);
         } catch (IllegalStateException e) {
             logger.error("Erreur lors de la création de la facture : {}", e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la création de la facture : " + e.getMessage());
@@ -391,8 +483,9 @@ public class InvoiceController extends BaseController implements Initializable {
     private void resetForm() {
         clientComboBox.getSelectionModel().clearSelection();
         descriptionField.clear();
-        articlesList.clear();
-        totalPriceLabel.setText("0.0");
+        invoiceTypeComboBox.getSelectionModel().clearSelection();
+        invoiceStatusComboBox.getSelectionModel().clearSelection();
+        quantityField.clear();
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
@@ -415,17 +508,41 @@ public class InvoiceController extends BaseController implements Initializable {
             return new ReadOnlyObjectWrapper<>(total);
         });
         articlesTable.setItems(articles);
+        updateTotalPrice();
         articlesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
         if (newSelection != null) {
             articleDescription.setText(newSelection.getDescription());
             articlePrice.setText(String.valueOf(newSelection.getPrice()));
             articleQuantity.setText(String.valueOf(newSelection.getQuantite()));
+            articleSelected.add(newSelection);
         } else {
             articleDescription.clear();
             articlePrice.clear();
             articleQuantity.clear();
         }
         });
+    }
+
+    //afficher les factures dans la table
+    private void showFacturesInTable(ObservableList<Invoice> invoices) {
+        invoiceIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        invoiceClientColumn.setCellValueFactory(new PropertyValueFactory<>("client"));
+        invoiceClientColumn.setCellFactory(column -> new TableCell<Invoice, Client>() {
+            @Override
+            protected void updateItem(Client client, boolean empty) {
+                super.updateItem(client, empty);
+                if (empty || client == null) {
+                    setText(null);
+                } else {
+                    setText(client.getFirstName() + " " + client.getLastName());
+                }
+            }
+        });
+        invoiceDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        invoiceStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        invoiceTotalColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        invoicesTable.setItems(invoices);
+        
     }
 
    

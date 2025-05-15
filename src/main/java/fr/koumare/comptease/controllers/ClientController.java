@@ -151,7 +151,7 @@ public class ClientController extends BaseController implements Initializable {
     private TextField searchBarre;
 
     @FXML
-    private TableColumn<Client, Long> soldec;
+    private TableColumn<Client, Double> soldec;
 
     @FXML
     private TableColumn<Client, Void> detailc;
@@ -178,7 +178,7 @@ public class ClientController extends BaseController implements Initializable {
     private TableColumn<Invoice, LocalDate> datep;
 
     @FXML
-    private TableColumn<Article, Long> quantitep;
+    private TableColumn<Invoice, Integer> quantitep;
 
     @FXML
     private TableColumn<Invoice, Double> prixUp;
@@ -357,7 +357,7 @@ public class ClientController extends BaseController implements Initializable {
         String prenom=addPrenom.getText();
         String nom=addNom.getText();
         String adresse=addAdresse.getText();
-        Long solde=0L;
+        Double solde=0.0;
         String note=addNote.getText();
 
         logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
@@ -365,7 +365,7 @@ public class ClientController extends BaseController implements Initializable {
         if(clientService.addClient(nom, prenom, adresse, contact,idu,solde, note)){
             logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
-
+            
             //recuperer le client ajouté
             Optional<Client> addedClient = clientService.findByNames(nom, prenom);
             if(addedClient.isPresent()) {
@@ -392,7 +392,7 @@ public class ClientController extends BaseController implements Initializable {
         String prenom=modifPrenom.getText();
         String adresse=modifAdresse.getText();
         String contact=modifContact.getText();
-        Long solde= Long.parseLong(modifSolde.getText());
+        Double solde= Double.parseDouble(modifSolde.getText());
         Long id=Long.parseLong(modifId.getText());
         String note=modifNoteClient.getText();
         logger.info("Note : {}", note);
@@ -401,6 +401,11 @@ public class ClientController extends BaseController implements Initializable {
         if(clientService.updateClient(id,nom, prenom, adresse, contact, solde,note)){
             logger.info("Client modifié : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
+            if(clientService.updateClientBalance(id)){
+                logger.info("Solde du client modifié : {}", nom +" "+ prenom);
+            } else {
+                logger.error("Erreur lors de la modification du solde du client : {}", nom+" " + prenom);
+            }
             //recuperer le client modifié
             Optional<Client> updatedClient = clientService.findByNames(nom, prenom);
             if(updatedClient.isPresent()) {
@@ -534,7 +539,7 @@ public class ClientController extends BaseController implements Initializable {
         idp.setCellValueFactory(new PropertyValueFactory<>("idc"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
-        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
+        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(4));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
             Invoice invoice = cellData.getValue();
@@ -580,7 +585,7 @@ public class ClientController extends BaseController implements Initializable {
         idc.setCellValueFactory(new PropertyValueFactory<>("idc"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
-        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
+        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(4));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
             Invoice invoice = cellData.getValue();
