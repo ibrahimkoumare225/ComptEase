@@ -451,7 +451,7 @@ public class InvoiceController extends BaseController implements Initializable {
 
 
 
-    private void loadFactures() {
+   /*  private void loadFactures() {
         try {
             List<Invoice> invoices = factureService.getAllFactures();
             invoicesList.setAll(invoices);
@@ -471,7 +471,7 @@ public class InvoiceController extends BaseController implements Initializable {
             logger.error("Erreur lors de la suppression de la facture ID {} : {}", facture.getId(), e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression de la facture : " + e.getMessage());
         }
-    }
+    }*/
 
     private void updateTotalPrice() {
         double total = articlesList.stream()
