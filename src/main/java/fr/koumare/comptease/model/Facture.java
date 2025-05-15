@@ -1,4 +1,4 @@
-/*package fr.koumare.comptease.model;
+package fr.koumare.comptease.model;
 
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import lombok.Getter;
@@ -67,4 +67,4 @@ public class Facture extends Document {
     }
 
 
-}*/
+}

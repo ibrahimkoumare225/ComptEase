@@ -1,5 +1,6 @@
 package fr.koumare.comptease.model;
 
+import com.itextpdf.text.pdf.PdfPTable;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Document {
+public class Document {
 
     /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)*/
@@ -32,4 +33,5 @@ public abstract class Document {
         this.description = description;
         this.date = date;
     }
+
 }

@@ -1,9 +1,6 @@
-/*package fr.koumare.comptease.controllers;
+package fr.koumare.comptease.controllers;
 
-import fr.koumare.comptease.model.Article;
-import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.Devis;
-import fr.koumare.comptease.model.Facture;
+import fr.koumare.comptease.model.*;
 import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.service.ClientService;
@@ -321,7 +318,7 @@ public class FacturesController extends BaseController implements Initializable 
                 description = "Facture générée le " + Instant.now();
             }
 
-            Facture facture = new Facture(
+            Invoice facture = new Invoice(
                     0.0,
                     description,
                     Instant.now(),
@@ -330,7 +327,7 @@ public class FacturesController extends BaseController implements Initializable 
                     new ArrayList<>(articlesList) // articles (conversion ObservableList -> List)
             );
 
-            Facture savedFacture = factureService.createInvoice(facture);
+            Invoice savedFacture = factureService.createInvoice(facture);
             if (savedFacture == null) {
                 logger.error("Échec de la création de la facture");
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la création de la facture. Veuillez vérifier les logs pour plus de détails.");
@@ -348,8 +345,8 @@ public class FacturesController extends BaseController implements Initializable 
 
     private void loadFactures() {
         try {
-            List<Facture> factures = factureService.getAllFactures();
-            invoicesList.setAll(factures);
+            List<Invoice> factures = factureService.getAllFactures();
+            invoicesList.setAll((Facture) factures);
             logger.info("Chargement de {} factures", factures.size());
         } catch (Exception e) {
             logger.error("Erreur lors du chargement des factures : {}", e.getMessage());
@@ -390,4 +387,4 @@ public class FacturesController extends BaseController implements Initializable 
         alert.setContentText(message);
         alert.showAndWait();
     }
-}*/
+}

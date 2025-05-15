@@ -59,4 +59,34 @@ public class RapportFinancierDao {
             e.printStackTrace();
         }
     }
+
+    public List<Object[]> getMontantsParMois() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "SELECT MONTH(r.date), SUM(r.incomeTotal), SUM(r.expenseTotal), SUM(r.benefice) " +
+                            "FROM RapportFinancier r " +
+                            "GROUP BY MONTH(r.date) ORDER BY MONTH(r.date)", Object[].class
+            ).list();
+        }
+    }
+
+    public RapportFinancier findByMonth(int month) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM RapportFinancier WHERE month = :month", RapportFinancier.class)
+                    .setParameter("month", month)
+                    .uniqueResult();
+        }
+    }
+
+
+    public void saveOrUpdate(RapportFinancier rapport) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.saveOrUpdate(rapport);
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
