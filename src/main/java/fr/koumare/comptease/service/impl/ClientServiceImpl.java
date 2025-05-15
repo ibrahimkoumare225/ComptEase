@@ -30,7 +30,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean updateClient(Long id, String nom, String prenom, String adresse, String contact,Long solde, String note) {
+    public boolean updateClient(Long id, String nom, String prenom, String adresse, String contact,Double solde, String note) {
         if(nom == null || prenom == null || adresse == null ) {
             logger.warn("Informations client incomplete");
             return false;
@@ -67,7 +67,7 @@ public class ClientServiceImpl implements ClientService {
     }
     
     @Override
-    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Long solde, String note) {
+    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Double solde, String note) {
         logger.info("fonction addClient :{}", nom+" "+ prenom+" "+ adresse+" "+ contact+" "+ idUser+" "+ solde);
         //verification si ce client existe deja
         if(clientDao.clientExists(nom,prenom)) {
@@ -129,5 +129,22 @@ public class ClientServiceImpl implements ClientService {
     public Optional<Client> findUserByInvoiceId(Long invoiceId) {
         logger.info("Recherche du client par l'ID de la facture : {}", invoiceId);
         return clientDao.findUserByInvoiceId(invoiceId);
+    }
+
+    @Override
+    public boolean updateClientBalance(Long clientId) {
+        logger.info("Mise à jour du solde du client : {}", clientId);
+        Optional<Client> clientOptional = clientDao.findById(clientId);
+        if (clientOptional.isPresent()) {
+            Client client = clientOptional.get();
+            double totalInvoices = clientDao.getClientInvoiceSum(clientId);
+            client.setSolde(totalInvoices);
+            clientDao.updateClient(client);
+            logger.info("Solde du client mis à jour : {}", client.getSolde());
+            return true;
+        } else {
+            logger.warn("Client non trouvé avec l'ID : {}", clientId);
+            return false;
+        }
     }
 }

@@ -32,7 +32,7 @@ public class Client {
     private String adresse;
 
     @Column(name = "solde", nullable = false)
-    private Long solde;
+    private Double solde;
 
     @Column(name = "note", nullable = true)
     private String note;
@@ -53,7 +53,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Long solde , String note) {
+    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Double solde , String note) {
         this.idc=idc;
         this.user =user;
         this.contact = contact;
@@ -97,10 +97,10 @@ public class Client {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
-    public Long getSolde() {
+    public Double getSolde() {
         return solde;
     }
-    public void setSolde(Long solde) {
+    public void setSolde(Double solde) {
         this.solde = solde;
     }
     public String getNote() {

@@ -161,7 +161,7 @@ public class ClientController extends BaseController implements Initializable {
     private TextField searchBarre;
 
     @FXML
-    private TableColumn<Client, Long> soldec;
+    private TableColumn<Client, Double> soldec;
 
     @FXML
     private TableColumn<Client, Void> detailc;
@@ -188,7 +188,7 @@ public class ClientController extends BaseController implements Initializable {
     private TableColumn<Invoice, LocalDate> datep;
 
     @FXML
-    private TableColumn<Article, Long> quantitep;
+    private TableColumn<Article, Integer> quantitep;
 
     @FXML
     private TableColumn<Invoice, Double> prixUp;
@@ -368,7 +368,7 @@ public class ClientController extends BaseController implements Initializable {
         String prenom=addPrenom.getText();
         String nom=addNom.getText();
         String adresse=addAdresse.getText();
-        Long solde=0L;
+        Double solde=0.0;
         Long idu=1L;
         String note=addNote.getText();
 
@@ -403,7 +403,7 @@ public class ClientController extends BaseController implements Initializable {
         String prenom=modifPrenom.getText();
         String adresse=modifAdresse.getText();
         String contact=modifContact.getText();
-        Long solde= Long.parseLong(modifSolde.getText());
+        Double solde= Double.parseDouble(modifSolde.getText());
         Long id=Long.parseLong(modifId.getText());
         String note=modifNoteClient.getText();
         logger.info("Note : {}", note);
@@ -412,6 +412,12 @@ public class ClientController extends BaseController implements Initializable {
         if(clientService.updateClient(id,nom, prenom, adresse, contact, solde,note)){
             logger.info("Client modifié : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
+
+            if(clientService.updateClientBalance(id)){
+                logger.info("Solde du client modifié : {}", nom +" "+ prenom);
+            } else {
+                logger.error("Erreur lors de la modification du solde du client : {}", nom+" " + prenom);
+            }
             //recuperer le client modifié
             Optional<Client> updatedClient = clientService.findByNames(nom, prenom);
             if(updatedClient.isPresent()) {
@@ -545,11 +551,11 @@ public class ClientController extends BaseController implements Initializable {
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
-        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
+        quantitep.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
             Invoice invoice = cellData.getValue();
-            double total = invoice.getPrice() * 4; // quantité fixe = 4
+            double total = invoice.getPrice() * invoice.getQuantity(); //
             return new ReadOnlyObjectWrapper<>((Double) total);
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -572,7 +578,7 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private void remplirFormulaireModifDetail(Invoice invoice) {
         modifIdDetail.setText(String.valueOf(invoice.getId()));
-        modifNote.setText(invoice.getDescription()+" |faire une colonne pour la note");
+        modifNote.setText(invoice.getDescription());
         modifStatut.setText(invoice.getStatus().toString());
         /*modifPrixU.setText(String.valueOf(invoice.getPrice()));
         modifPrixT.setText(String.valueOf(invoice.getPrice() * 4L));
@@ -591,11 +597,11 @@ public class ClientController extends BaseController implements Initializable {
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
-        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
+        quantitep.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
             Invoice invoice = cellData.getValue();
-            double total = invoice.getPrice() * 4; // quantité fixe = 4
+            double total = invoice.getPrice() * invoice.getQuantity(); //
             return new ReadOnlyObjectWrapper<>((Double) total);
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
