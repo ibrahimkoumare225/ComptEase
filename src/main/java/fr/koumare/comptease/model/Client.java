@@ -15,26 +15,6 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idc;
 
-    // debugagge :
-    // l'erreur disait : 01:25:03.863 [JavaFX Application Thread] DEBUG org.hibernate.SQL --
-    //    insert
-    //    into
-    //        Client
-    //        (adresse, contact, first_name, last_name, note, solde, id_user)
-    //    values
-    //        (?, ?, ?, ?, ?, ?, ?)
-    //Hibernate:
-    //    insert
-    //    into
-    //        Client
-    //        (adresse, contact, first_name, last_name, note, solde, id_user)
-    //    values
-    //        (?, ?, ?, ?, ?, ?, ?)
-    //01:25:03.865 [JavaFX Application Thread] DEBUG org.hibernate.engine.jdbc.spi.SqlExceptionHelper -- could not execute statement [n/a]
-    //java.sql.SQLException: Field 'idc' doesn't have a default value
-    // idc n'etait pas le bon nom du champ de la colonne de pour l'id du client , car idc n'etait pas en AUTO INCREMENT , mais la colonne "id" oui
-    // donc le bon nom de colonne ,n'etait pas utilisé . Il y'a une colonne id de plus inutile
-
     @ManyToOne
     @JoinColumn(name= "id_user", nullable= false)
     private User user;
@@ -52,7 +32,7 @@ public class Client {
     private String adresse;
 
     @Column(name = "solde", nullable = false)
-    private Long solde;
+    private Double solde;
 
     @Column(name = "note", nullable = true)
     private String note;
@@ -73,8 +53,8 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user , String contact, String firstName, String lastName, String adresse, Long solde , String note) {
-        this.idc = idc;
+    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Double solde , String note) {
+        this.idc=idc;
         this.user =user;
         this.contact = contact;
         this.lastName = lastName;
@@ -89,8 +69,8 @@ public class Client {
     public Long getIdc() {
         return idc;
     }
-    public void setIdc(Long id) {
-        this.idc = id;
+    public void setIdc(Long idc) {
+        this.idc = idc;
     }
     
     public String getContact() {
@@ -117,10 +97,10 @@ public class Client {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
-    public Long getSolde() {
+    public Double getSolde() {
         return solde;
     }
-    public void setSolde(Long solde) {
+    public void setSolde(Double solde) {
         this.solde = solde;
     }
     public String getNote() {
@@ -133,9 +113,7 @@ public class Client {
         return user.getId();
     }
     public void setId_user(Long id_user) {
-        //this.user.setId(id_user);
-        this.user = new User();
-        this.user.setId(id_user);
+        this.user.setId(1L);
     }
     
     /*public List<Devis> getDevis() {
