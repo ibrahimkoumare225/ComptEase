@@ -10,6 +10,8 @@ import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +88,7 @@ public class ClientDao {
                     .list();
             return !clients.isEmpty();
         }
-        
+
     }
 
     //recuperation du client par son id
@@ -107,6 +109,24 @@ public class ClientDao {
             return Optional.empty();
         }
     }
+
+    public Client findByIdQuery(Long clientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Client> query = session.createQuery("FROM Client WHERE idc = :clientId", Client.class);
+            query.setParameter("clientId", clientId);
+            Client client = query.uniqueResult();
+            if (client == null) {
+                logger.warn("Client avec ID {} non trouvé", clientId);
+                return null;
+            }
+            logger.info("Client trouvé avec ID {} : {}", clientId, client.getFirstName());
+            return client;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du client : {}", e.getMessage());
+            return null;
+        }
+    }
+
 
     //recuperation du client par son nom
     public Optional<Client> findByNames(String nom, String prenom) {

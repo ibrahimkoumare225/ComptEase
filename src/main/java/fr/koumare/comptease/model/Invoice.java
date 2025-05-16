@@ -2,14 +2,12 @@ package fr.koumare.comptease.model;
 
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.model.enumarated.TypeInvoice;
-import fr.koumare.comptease.model.Article;
 import lombok.Getter;
 import lombok.Setter;
-import javax.persistence.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,83 +15,91 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Invoice extends Document {
+public class Invoice {
 
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "date", nullable = false)
+    private Instant date;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "price", nullable = false)
+    private Double price; // Changé en Double pour éviter les problèmes de précision
 
     @Enumerated(EnumType.STRING)
     private StatusInvoice status;
 
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
+
     @Enumerated(EnumType.STRING)
     private TypeInvoice type;
-
-    private int quantity;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    
+    @OneToOne
+    @JoinColumn(name = "devis_id", nullable = true)
+    private Devis devis; // Simplifié en une seule relation
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-        name = "invoice_articles",
-        joinColumns = @JoinColumn(name = "invoice_id"),
+            name = "invoice_articles",
+            joinColumns = @JoinColumn(name = "invoice_id"),
             inverseJoinColumns = @JoinColumn(name = "article_id")
     )
-    private List<Article> articles;
-
-    @OneToOne
-    @JoinColumn(unique = true,name = "devis_id")
-    private Devis devis;
+    private List<Article> articles = new ArrayList<>();
 
     @OneToMany(mappedBy = "invoice")
-    private List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<>();
 
-    //invoice sans devis
+    // Constructeur avec tous les paramètres
     public Invoice(Double price, String description, Instant date, StatusInvoice status, Client client, List<Article> articles, TypeInvoice type, int quantity) {
-        super(price, description, date);
+        this.price = price;
+        this.description = description;
+        this.date = date != null ? date : Instant.now();
         this.status = status;
         this.client = client;
-        this.articles = articles ;
+        this.articles = articles != null ? articles : new ArrayList<>();
         this.type = type;
         this.quantity = quantity;
-        //calculatePrice();
+        calculatePrice(); // Calculer le prix initial
     }
 
-    //cretatio de facture en passant par un devis
-    /*public Invoice(double price, String description, Instant date, StatusInvoice status,Client client, Devis devis, Article articles, ) {
-        super(price, description, date);
-        this.status = status;
-        this.client = client;
-        this.devis = devis;
-        //this.articles = articles != null ? articles : new ArrayList<>();
-        //calculatePrice();
-
-    }*/
-
+    // Constructeur par défaut
     public Invoice() {
-
     }
 
-   /* public Double calculatePrice(Article articles) {
+
+    // Méthode pour calculer le prix
+
+    public void calculatePrice() {
         if (articles == null || articles.isEmpty()) {
             this.price = 0.0;
+            this.quantity = 0;
+            logger.warn("Aucun article pour calculer le prix, prix défini à 0.0 et quantité à 0");
             return;
         }
-        this.price = articles.stream()
-                .mapToDouble(article -> article.getPrice().doubleValue() * article.getQuantite())
+        this.quantity = articles.stream()
+                .mapToInt(Article::getQuantite)
                 .sum();
-        
-        
-    }*/
-    
-    public StatusInvoice getStatus() {
-        return status;
+        this.price = articles.stream()
+                .mapToDouble(article -> {
+                    if (article.getPrice() == null) {
+                        logger.error("Prix de l'article null : {}", article);
+                        return 0.0;
+                    }
+                    return article.getPrice().doubleValue() * article.getQuantite();
+                })
+                .sum();
+        logger.info("Prix calculé de la facture : {}, Quantité totale : {}", this.price, this.quantity);
     }
-    public void setStatus(StatusInvoice status) {
-        this.status = status;
-    }
-    public Client getClient() {
-        return client;
-    }
+    // Getters et setters spécifiques si nécessaires (déjà gérés par Lombok)
 }

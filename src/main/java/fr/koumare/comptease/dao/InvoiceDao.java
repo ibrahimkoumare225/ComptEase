@@ -1,5 +1,5 @@
 package fr.koumare.comptease.dao;
-
+import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,17 +24,31 @@ public class InvoiceDao {
     public void saveFacture(Invoice invoice) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            logger.info("Début de la sauvegarde de la facture : description={}", invoice.getDescription());
             transaction = session.beginTransaction();
             session.save(invoice);
             transaction.commit();
             logger.info("Facture sauvegardée avec succès : ID {}", invoice.getId());
-            
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
+                logger.error("Rollback effectué pour la facture : description={}", invoice.getDescription());
             }
-            logger.error("Erreur lors de la sauvegarde de la facture : {}", e.getMessage());
-            e.printStackTrace();
+            logger.error("Erreur lors de la sauvegarde de la facture : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec de la sauvegarde de la facture", e); // Relancer l’exception
+        }
+    }
+
+    public boolean invoiceExists(String description, Long clientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Invoice> query = session.createQuery(
+                    "FROM Invoice i WHERE i.description = :description AND i.client.idc = :clientId", Invoice.class);
+            query.setParameter("description", description);
+            query.setParameter("clientId", clientId);
+            return query.uniqueResult() != null;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la vérification de l'existence de la facture : {}", e.getMessage());
+            return false;
         }
     }
 
@@ -108,7 +123,7 @@ public class InvoiceDao {
 
     }
 
-    public Double calculatePrice(Article articles, int quantity) {
+    /*public Double calculatePrice(Article articles, int quantity) {
     
         logger.info("Calcul du prix de la facture");
         if (articles == null) {
@@ -118,7 +133,7 @@ public class InvoiceDao {
         Double totalPrice = articles.getPrice() * quantity;
         return totalPrice;
         
-    }
+    }*/
 
     //enregistrer un article
     public void saveArticle(Article article) {
@@ -127,13 +142,13 @@ public class InvoiceDao {
             transaction = session.beginTransaction();
             session.save(article);
             transaction.commit();
-            logger.info("Facture sauvegardée avec succès : ID {}", article.getId());
+            logger.info("Article sauvegardé avec succès : ID {}", article.getId());
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            logger.error("Erreur lors de la sauvegarde de la facture : {}", e.getMessage());
-            e.printStackTrace();
+            logger.error("Erreur lors de la sauvegarde de l'article : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec de la sauvegarde de l'article", e);
         }
     }
 

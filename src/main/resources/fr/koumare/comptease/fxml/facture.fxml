@@ -120,17 +120,14 @@
                                                     <Label text="Prix Total :" styleClass="form-label" />
                                                     <Label fx:id="totalPriceLabel" text="0.0" styleClass="total-price" />
                                                 </HBox>
-                                                
+
                                                 <HBox spacing="10.0" alignment="CENTER_RIGHT">
-                                                    <Label text="Quantité :" styleClass="form-label"/>
-                                                    <TextField fx:id="quantityField"  prefWidth="70.0"/>
                                                     <Label text="Type :" styleClass="form-label"/>
                                                     <ComboBox fx:id="invoiceTypeComboBox" prefWidth="100.0"/>
                                                     <Label text="Statut :" styleClass="form-label"/>
                                                     <ComboBox fx:id="invoiceStatusComboBox" prefWidth="100.0"/>
-                                                    <Button fx:id="createDevisButton" text="Créer Devis" onAction="#createDevis" />
+<!--                                                    <Button fx:id="createDevisButton" text="Créer Devis" onAction="#createDevis" />-->
                                                     <Button fx:id="createInvoiceButton" text="Enregistrer Facture" onAction="#createInvoice" />
-                                                    
                                                 </HBox>
                                                 
                                             </children>

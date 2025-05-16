@@ -11,7 +11,20 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Devis extends Document {
+public class Devis  {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "date", nullable = false)
+    private Instant date;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
 
     @Enumerated(EnumType.STRING)
     private StatusDevis status;
@@ -36,7 +49,9 @@ public class Devis extends Document {
     }
 
     public Devis(Double price, String description, Instant date, StatusDevis status, Client client, List<Article> articles) {
-        super(price, description, date);
+        this.price = price;
+        this.description = description;
+        this.date = date != null ? date : Instant.now();
         this.status = status;
         this.client = client;
         this.articles = articles != null ? articles : new ArrayList<>();
