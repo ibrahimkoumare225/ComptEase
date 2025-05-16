@@ -441,7 +441,7 @@ public class InvoiceController extends BaseController implements Initializable {
         showArticlesInTable(articlesList);
     }
 
-    @FXML
+
     /*public void createInvoice(ActionEvent event) {
         try {
             Client client = clientComboBox.getValue();

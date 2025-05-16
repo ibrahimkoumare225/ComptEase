@@ -169,6 +169,19 @@ public class InvoiceDao {
         }
     }
 
+    public Article findArticleById(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Article article = session.get(Article.class, id);
+            if (article == null) {
+                logger.warn("Article non trouvé pour ID : {}", id);
+            }
+            return article;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la recherche de l'article ID {} : {}", id, e.getMessage(), e);
+            throw new RuntimeException("Échec de la recherche de l'article", e);
+        }
+    }
+
     //recuperer un article par son id
     public Optional<Article> getArticleById(Long articleId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

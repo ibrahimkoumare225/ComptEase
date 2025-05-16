@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "invoice")
 @Getter
 @Setter
 public class Invoice {
@@ -76,6 +77,9 @@ public class Invoice {
     // Constructeur par défaut
     public Invoice() {
     }
+
+
+
 
 
     // Méthode pour calculer le prix
