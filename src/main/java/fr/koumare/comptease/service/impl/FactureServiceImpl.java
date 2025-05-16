@@ -27,46 +27,6 @@ public class FactureServiceImpl implements FactureService {
         this.clientDao = new ClientDao();
     }
 
-//    public boolean addInvoice(Double prix, String description, Instant date, String status, Long clientId, List<Article> articles, String type, int quantity) {
-//        logger.info("Création d'une facture avec paramètres : prix={}, description={}, date={}, status={}, clientId={}, type={}",
-//                prix, description, date, status, clientId, type);
-//
-//        if (articles == null || articles.isEmpty()) {
-//            logger.warn("La liste des articles est vide ou null");
-//            return false;
-//        }
-//
-//        ClientDao clientDao = new ClientDao();
-//        Optional<fr.koumare.comptease.model.Client> clientOptional = clientDao.findById(clientId);
-//        if (!clientOptional.isPresent()) {
-//            logger.warn("Client avec ID {} non trouvé", clientId);
-//            return false;
-//        }
-//
-//        Invoice invoice = new Invoice(
-//                0.0, // Prix initial, sera recalculé par calculatePrice
-//                description,
-//                date != null ? date : Instant.now(),
-//                StatusInvoice.valueOf(status),
-//                clientOptional.get(),
-//                articles,
-//                TypeInvoice.valueOf(type.toUpperCase())
-//        );
-//
-//        invoice.calculatePrice();
-//
-//        try {
-//            invoiceDao.saveFacture(invoice);
-//            logger.debug("ID généré après sauvegarde : {}", invoice.getId());
-//            logger.info("Facture créée avec succès : ID={}, prixTotal={}, description={}, date={}, status={}, clientId={}, type={}",
-//                    invoice.getId(), invoice.getPrice(), description, date, status, clientId, type);
-//            return true;
-//        } catch (Exception e) {
-//            logger.error("Échec de la création de la facture : {}", e.getMessage(), e);
-//            return false;
-//        }
-//    }
-
 
     @Override
     public boolean addInvoice(String description, Instant date, String status, Long clientId,
@@ -177,51 +137,6 @@ public class FactureServiceImpl implements FactureService {
     }
 
 
-   /*  public Invoice createInvoiceFromDevis(Devis devis) {
-        logger.info("Création d'une facture à partir du devis ID : {}", devis.getId());
-        if (devis.getStatus() != StatusDevis.ACCEPTED) {
-            logger.warn("Le devis ID : {} n'est pas accepté, impossible de créer une facture", devis.getId());
-            throw new IllegalStateException("Le devis doit être accepté pour créer une facture");
-        }
-        if (devis.getInvoice() != null) {
-            logger.warn("Le devis ID : {} a déjà une facture associée", devis.getId());
-            throw new IllegalStateException("Une facture existe déjà pour ce devis");
-        }
-
-        Invoice invoice = new Invoice(
-                devis.getPrice(),
-                devis.getDescription(),
-                Instant.now(),
-                StatusInvoice.UNPAID,
-                devis.getClient(),
-                devis,
-                devis.getArticles()
-        );
-
-        Invoice savedInvoice = (Invoice) super.createDocument(invoice);
-        if (savedInvoice == null) {
-            logger.error("Échec de la création de la facture à partir du devis ID : {}", devis.getId());
-            return null;
-        }
-        devis.setInvoice(savedInvoice);
-        super.updateDocument(devis);
-        logger.debug("Facture créée avec succès à partir du devis ID : {}", devis.getId());
-        return savedInvoice;
-    }*/
-
-//    @Override
-//    public void updateInvoiceStatus(Long invoiceId, String status) {
-//        logger.info("Mise à jour du statut de la facture ID : {} avec statut : {}", invoiceId, status);
-//        Invoice invoice = (Invoice) findDocumentById(invoiceId);
-//        if (invoice != null) {
-//            invoice.setStatus(StatusInvoice.valueOf(status.toUpperCase()));
-//            updateDocument(invoice);
-//            logger.debug("Statut de la facture ID : {} mis à jour à : {}", invoiceId, status);
-//        } else {
-//            logger.warn("Facture non trouvée avec l'ID : {}", invoiceId);
-//            throw new IllegalArgumentException("Facture non trouvée avec l'ID : " + invoiceId);
-//        }
-//    }
 
     @Override
     public List<Invoice> getAllInvoices() {
@@ -294,31 +209,4 @@ public class FactureServiceImpl implements FactureService {
         }
     }
 
-//    @Override
-//    public boolean deleteFactureById(Long invoiceId) {
-//        logger.info("Tentative de suppression de la facture avec ID : {}", invoiceId);
-//        try {
-//            invoiceDao.deleteFactureById(invoiceId);
-//            logger.info("Facture supprimée avec succès : ID={}", invoiceId);
-//            return true;
-//        } catch (Exception e) {
-//            logger.error("Échec de la suppression de la facture ID {} : {}", invoiceId, e.getMessage(), e);
-//            return false;
-//        }
-//    }
-//
-
-//    @Override
-//    public ObservableList<Article> getAllArticles(){
-//        logger.info("Récupération de tous les articles");
-//        ObservableList<Article> articles = invoiceDao.getAllArticles();
-//        logger.info("Récupération de {} articles", articles.size());
-//        if(articles.isEmpty()){
-//            logger.warn("Aucun article trouvé");
-//        }
-//        else{
-//            logger.info("Articles récupérés avec succès");
-//        }
-//        return articles;
-//    }
 }

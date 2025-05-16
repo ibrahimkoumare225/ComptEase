@@ -61,7 +61,7 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice")
     private List<Transaction> transactions = new ArrayList<>();
 
-    // Constructeur avec tous les paramètres
+    // constructeur avec tous les paramètres
     public Invoice(Double price, String description, Instant date, StatusInvoice status, Client client, List<Article> articles, TypeInvoice type, int quantity) {
         this.price = price;
         this.description = description;
@@ -71,18 +71,14 @@ public class Invoice {
         this.articles = articles != null ? articles : new ArrayList<>();
         this.type = type;
         this.quantity = quantity;
-        calculatePrice(); // Calculer le prix initial
+        calculatePrice(); // calculer le prix initial
     }
 
-    // Constructeur par défaut
+    // constructeur par défaut
     public Invoice() {
     }
 
-
-
-
-
-    // Méthode pour calculer le prix
+    // calculer le prix total et la quantite total des articles
 
     public void calculatePrice() {
         if (articles == null || articles.isEmpty()) {

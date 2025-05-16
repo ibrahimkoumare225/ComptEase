@@ -33,7 +33,7 @@ public class InvoiceDao {
                 logger.error("Rollback effectué pour la facture : description={}", invoice.getDescription());
             }
             logger.error("Erreur lors de la sauvegarde de la facture : {}", e.getMessage(), e);
-            throw new RuntimeException("Échec de la sauvegarde de la facture", e); // Relancer l’exception
+            throw new RuntimeException("Échec de la sauvegarde de la facture", e);
         }
     }
 
@@ -50,21 +50,6 @@ public class InvoiceDao {
         }
     }
 
-//    public ObservableList<Invoice> getAllFactures() {
-//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-//            List<Invoice> factures = session.createQuery("from Invoice", Invoice.class).list();
-//            if (factures.isEmpty() || factures == null) {
-//                logger.warn("Aucune facture trouvée");
-//            } else {
-//                logger.info("Récupération de {} factures", factures.size());
-//            }
-//            return FXCollections.observableArrayList(factures);
-//        } catch (Exception e) {
-//            logger.error("Erreur lors de la récupération des factures : {}", e.getMessage());
-//            e.printStackTrace();
-//            return null; // retourner null en cas d'erreur
-//        }
-//    }
 
     public List<Invoice> getAllFactures() {
         Transaction transaction = null;
@@ -122,6 +107,7 @@ public class InvoiceDao {
         }
     }
 
+    //la sommes des depenses
     public Double getTotalOutgoingInvoices() {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -142,60 +128,60 @@ public class InvoiceDao {
     }
 
 
-    public void updateFacture(Invoice invoice) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            session.update(invoice);
-            transaction.commit();
-            logger.info("Facture mise à jour avec succès : ID {}", invoice.getId());
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            logger.error("Erreur lors de la mise à jour de la facture : {}", e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteFacture(Long invoiceId) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            Invoice invoice = session.get(Invoice.class, invoiceId);
-            if (invoice != null) {
-                session.delete(invoice);
-                logger.info("Facture supprimée avec succès : ID {}", invoiceId);
-            } else {
-                logger.warn("Facture non trouvée pour suppression : ID {}", invoiceId);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            logger.error("Erreur lors de la suppression de la facture ID {} : {}", invoiceId, e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public Invoice findFactureById(Long invoiceId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Invoice facture = session.get(Invoice.class, invoiceId);
-
-            if (facture != null) {
-                logger.info("Facture trouvée : ID {}", invoiceId);
-            } else {
-                logger.warn("Facture non trouvée : ID {}", invoiceId);
-            }
-            return facture;
-        } catch (Exception e) {
-            logger.error("Erreur lors de la recherche de la facture ID {} : {}", invoiceId, e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-
-    }
+//    public void updateFacture(Invoice invoice) {
+//        Transaction transaction = null;
+//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+//            transaction = session.beginTransaction();
+//            session.update(invoice);
+//            transaction.commit();
+//            logger.info("Facture mise à jour avec succès : ID {}", invoice.getId());
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            logger.error("Erreur lors de la mise à jour de la facture : {}", e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void deleteFacture(Long invoiceId) {
+//        Transaction transaction = null;
+//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+//            transaction = session.beginTransaction();
+//            Invoice invoice = session.get(Invoice.class, invoiceId);
+//            if (invoice != null) {
+//                session.delete(invoice);
+//                logger.info("Facture supprimée avec succès : ID {}", invoiceId);
+//            } else {
+//                logger.warn("Facture non trouvée pour suppression : ID {}", invoiceId);
+//            }
+//            transaction.commit();
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            logger.error("Erreur lors de la suppression de la facture ID {} : {}", invoiceId, e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public Invoice findFactureById(Long invoiceId) {
+//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+//            Invoice facture = session.get(Invoice.class, invoiceId);
+//
+//            if (facture != null) {
+//                logger.info("Facture trouvée : ID {}", invoiceId);
+//            } else {
+//                logger.warn("Facture non trouvée : ID {}", invoiceId);
+//            }
+//            return facture;
+//        } catch (Exception e) {
+//            logger.error("Erreur lors de la recherche de la facture ID {} : {}", invoiceId, e.getMessage());
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//    }
 
     /*public Double calculatePrice(Article articles, int quantity) {
     
@@ -243,18 +229,18 @@ public class InvoiceDao {
         }
     }
 
-    public Article findArticleById(Long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Article article = session.get(Article.class, id);
-            if (article == null) {
-                logger.warn("Article non trouvé pour ID : {}", id);
-            }
-            return article;
-        } catch (Exception e) {
-            logger.error("Erreur lors de la recherche de l'article ID {} : {}", id, e.getMessage(), e);
-            throw new RuntimeException("Échec de la recherche de l'article", e);
-        }
-    }
+//    public Article findArticleById(Long id) {
+//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+//            Article article = session.get(Article.class, id);
+//            if (article == null) {
+//                logger.warn("Article non trouvé pour ID : {}", id);
+//            }
+//            return article;
+//        } catch (Exception e) {
+//            logger.error("Erreur lors de la recherche de l'article ID {} : {}", id, e.getMessage(), e);
+//            throw new RuntimeException("Échec de la recherche de l'article", e);
+//        }
+//    }
 
     //recuperer un article par son id
     public Optional<Article> getArticleById(Long articleId) {
