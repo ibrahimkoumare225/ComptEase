@@ -54,10 +54,10 @@ public class InvoiceController extends BaseController implements Initializable {
     private TableColumn<Article, String> articleDescriptionColumn;
 
     @FXML
-    private TableColumn<Article, BigDecimal> articlePriceColumn;
+    private TableColumn<Article, Double> articlePriceColumn;
 
     @FXML
-    private TableColumn<Article, Long> articleQuantityColumn;
+    private TableColumn<Article,Integer> articleQuantityColumn;
 
     @FXML
     private TableColumn<Article, Double> articleTotalColumn;
@@ -223,10 +223,10 @@ public class InvoiceController extends BaseController implements Initializable {
                 return;
             }
 
-            BigDecimal price;
+            Double price;
             try {
-                price = new BigDecimal(articlePrice.getText());
-                if (price.compareTo(BigDecimal.ZERO) <= 0) {
+                price = Double.parseDouble(articlePrice.getText());
+                if (price<= 0) {
                     showAlert(Alert.AlertType.WARNING, "Avertissement", "Le prix doit être supérieur à 0.");
                     return;
                 }
@@ -235,9 +235,9 @@ public class InvoiceController extends BaseController implements Initializable {
                 return;
             }
 
-            Long quantity;
+            int quantity;
             try {
-                quantity = Long.parseLong(articleQuantity.getText());
+                quantity = Integer.parseInt(articleQuantity.getText());
                 if (quantity <= 0) {
                     showAlert(Alert.AlertType.WARNING, "Avertissement", "La quantité doit être supérieure à 0.");
                     return;

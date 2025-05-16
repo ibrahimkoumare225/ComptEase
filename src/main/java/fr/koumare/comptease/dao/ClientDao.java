@@ -1,9 +1,8 @@
 package fr.koumare.comptease.dao;
 
 import fr.koumare.comptease.model.Client;
-import fr.koumare.comptease.model.User;
-import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.Invoice;
+import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -12,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+/*import javax.mail.*;
+import javax.mail.internet.*;
+import java.util.Properties;*/
 
 public class ClientDao {
     private static final Logger logger = LoggerFactory.getLogger(ClientDao.class);
@@ -34,16 +36,13 @@ public class ClientDao {
 
 
     public List<Client> getAllClients() {
-        //recuperer l'utilisateur connecté
-        User currentUser = CurrentUser.getCurrentUser();
-        if (currentUser == null) {
-            throw new IllegalStateException("Aucun utilisateur connecté. Impossible de récupérer les clients.");
-        }
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Client WHERE user.id = :userId", Client.class)
-                    .setParameter("userId", currentUser.getId())
-                    .list();
+            return session.createQuery("FROM Client", Client.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
+        
     }
 
     public void updateClient(Client client) {
@@ -166,8 +165,41 @@ public class ClientDao {
         }
     }
 
+    //recuperer une facture par son id
+    public Optional<Invoice> findInvoiceById(Long invoiceId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Invoice WHERE id = :invoiceId", Invoice.class)
+                    .setParameter("invoiceId", invoiceId)
+                    .uniqueResultOptional();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération de la facture avec l'Id : {}", invoiceId, e);
+            return Optional.empty();
+        }
+    }
+    //recuperer la somme des factures d'un client pour le mettre dans le solde
+    public Double getClientInvoiceSum(Long clientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT SUM(i.price) FROM Invoice i WHERE i.client.idc = :clientId", Double.class)
+                    .setParameter("clientId", clientId)
+                    .uniqueResult();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération de la somme des factures pour le client avec l'Id : {}", clientId, e);
+            return null;
+        }
+    }
+    //recuperer le nombre de factucres d'un client
+    public int getClientInvoiceCount(Long clientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT COUNT(i.id) FROM Invoice i WHERE i.client.idc = :clientId", Integer.class)
+                    .setParameter("clientId", clientId)
+                    .uniqueResult();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du nombre de factures pour le client avec l'Id : {}", clientId, e);
+            return 0;
+        }
+    }
     //trouver le client par id facture
-    public Optional<Client> findUserByInvoiceId(Long invoiceId) {
+    public Optional<Client> findClientByInvoiceId(Long invoiceId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("SELECT i.client FROM Invoice i WHERE i.id = :invoiceId", Client.class)
                     .setParameter("invoiceId", invoiceId)
@@ -177,4 +209,80 @@ public class ClientDao {
             return Optional.empty();
         }
     }
+
+    //envoyer un mail au client
+    public void sendEmailToClient(Client client, String article) {
+        // Implémentez la logique d'envoi d'email ici
+        // Vous pouvez utiliser JavaMail ou une autre bibliothèque pour envoyer des emails
+        logger.info("Envoi d'un email au client : {}", client.getFirstName());
+        String to = client.getContact();
+        // Exemple : récupération du nom de la société (à adapter selon votre logique)
+        String companyName = ""; // Valeur par défaut
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Object result = session.createQuery("SELECT company_name FROM Company")
+                    .setMaxResults(1)
+                    .uniqueResult();
+            if (result != null) {
+                companyName = result.toString();
+                String subject = "Notification de " + companyName;
+                String body = "Bonjour " + client.getFirstName() + ",\n\n" +
+                        "Ceci est une notification de "+companyName+" concernant votre facture de "+article+"."+
+                        " Nous vous rappelons que cette facture est toujours impayée.\n" +
+                        "Merci de la régler dans les plus brefs délais.\n\n" +
+                        "Cordialement,\n" +
+                        "L'équipe de Comptease";
+                
+            }
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du nom de la société", e);
+        }
+        
+        // Ici, ajoutez la logique d'envoi d'email avec 'to', 'subject' et 'body'
+    }
+
+
+    //modifier description de la facture
+    public void updateInvoiceDescription(Long invoiceId, String newDescription) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Invoice invoice = session.get(Invoice.class, invoiceId);
+            if (invoice != null) {
+                invoice.setDescription(newDescription);
+                session.update(invoice);
+                transaction.commit();
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+
+        }
+    }
+    //POUUR LE DASHBOARD
+    //recuperer la liste des 3 clients avec le plus de factures
+    public List<Client> getClientsWithMostInvoices() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT c FROM Client c JOIN c.invoices i GROUP BY c.idc ORDER BY COUNT(i.id) DESC", Client.class)
+                    .setMaxResults(3)
+                    .list();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des 3 clients avec le plus de factures", e);
+            return null;
+        }
+    }
+
+    //recuperer la liste des 3 clients avec le plus de solde
+    public List<Client> getClientsWithHighestBalance() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Client ORDER BY solde DESC", Client.class)
+                    .setMaxResults(3)
+                    .list();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des 3 clients avec le plus de solde", e);
+            return null;
+        }
+    }
+
 }

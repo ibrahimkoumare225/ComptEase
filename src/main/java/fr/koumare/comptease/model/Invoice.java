@@ -12,7 +12,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Invoice extends Document {
+public class Invoice extends Document{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private StatusInvoice status;
@@ -25,6 +28,15 @@ public class Invoice extends Document {
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
+
+    @Column(name = "description", nullable = true)
+    private String description;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
+
+    @Column(name = "date", nullable = true)
+    private Instant date;
 
     @ManyToMany
     @JoinTable(
@@ -43,7 +55,7 @@ public class Invoice extends Document {
 
     //invoice sans devis
     public Invoice(Double price, String description, Instant date, StatusInvoice status, Client client, List<Article> articles) {
-        super(price, description, date);
+        //super(price, description, date);
         this.status = status;
         this.client = client;
         this.articles = articles != null ? articles : new ArrayList<>();
@@ -52,7 +64,7 @@ public class Invoice extends Document {
 
     //cretatio de facture en passant par un devis
     public Invoice(double price, String description, Instant date, StatusInvoice status,Client client, Devis devis, List<Article> articles) {
-        super(price, description, date);
+       // super(price, description, date);
         this.status = status;
         this.client = client;
         this.devis = devis;

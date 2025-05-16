@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class FacturesController extends BaseController implements Initializable {
+/*public class FacturesController extends BaseController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(FacturesController.class);
 
@@ -387,4 +387,4 @@ public class FacturesController extends BaseController implements Initializable 
         alert.setContentText(message);
         alert.showAndWait();
     }
-}
+}*/
