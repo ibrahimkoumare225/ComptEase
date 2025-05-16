@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class Client {
-    //Modifier setId_user pour qu'il prenne l'utilisateur connecté
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idc;
@@ -36,6 +35,12 @@ public class Client {
 
     @Column(name = "note", nullable = true)
     private String note;
+
+   /* @Column(name = "SIRET/SIREN", nullable = true)
+    private String siren; 
+
+    @Column(name = "rib", nullable = true)
+    private String rib;*/
 
     /*@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

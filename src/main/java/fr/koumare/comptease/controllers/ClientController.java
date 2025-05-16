@@ -459,6 +459,7 @@ public class ClientController extends BaseController implements Initializable {
                     showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès : " + client.getFirstName() +" " + client.getLastName());
                     listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
                     affiche(listAllClients);
+                    EffacerChamps(event);
                 } else {
                     logger.error("Erreur lors de la récupération du client supprimé : {}", client.getFirstName());
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client supprimé.");

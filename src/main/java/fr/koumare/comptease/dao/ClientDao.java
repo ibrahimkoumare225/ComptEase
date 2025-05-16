@@ -184,7 +184,7 @@ public class ClientDao {
                     .uniqueResult();
         } catch (Exception e) {
             logger.error("Erreur lors de la récupération de la somme des factures pour le client avec l'Id : {}", clientId, e);
-            return null;
+            return 0.0;
         }
     }
     //recuperer le nombre de factucres d'un client

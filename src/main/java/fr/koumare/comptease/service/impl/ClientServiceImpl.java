@@ -93,6 +93,7 @@ public class ClientServiceImpl implements ClientService {
         client.setId_user(1L);
         client.setSolde(solde);
         client.setNote(note);
+
         clientDao.saveClient(client);
         logger.info("Client ajouté : {} {}", nom, prenom);
         return true;
