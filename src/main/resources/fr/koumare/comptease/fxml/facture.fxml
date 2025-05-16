@@ -80,7 +80,7 @@
                         </AnchorPane>
                     </left>
                     <center>
-                        <AnchorPane prefHeight="720.0" prefWidth="1000.0" styleClass="body1" BorderPane.alignment="CENTER">
+                        <AnchorPane prefHeight="720.0" prefWidth="1000.0" styleClass="body1" stylesheets="@../css/invoice.css" BorderPane.alignment="CENTER">
                             <children>
                                 <!-- Formulaire de création de facture/devis -->
                                 <AnchorPane fx:id="createForm" prefHeight="350.0" prefWidth="950.0" styleClass="form-container" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
