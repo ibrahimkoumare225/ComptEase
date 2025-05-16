@@ -43,7 +43,7 @@ public class Invoice {
     private TypeInvoice type;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = true)
     private Client client;
 
     @OneToOne

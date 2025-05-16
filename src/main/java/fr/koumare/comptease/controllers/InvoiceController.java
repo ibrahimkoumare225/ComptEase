@@ -244,6 +244,15 @@ public class InvoiceController extends BaseController implements Initializable {
     private void deleteInvoice(Invoice invoice) {
         try {
             if (invoice != null && factureService.deleteInvoice(invoice.getId())) {
+
+                Client client = invoice.getClient();
+                if (client != null) {
+                    clientService.updateClientBalance(client.getIdc());
+                    logger.info("Solde du client ID {} mis à jour après suppression de la facture", client.getIdc());
+                } else {
+                    logger.info("Facture ID {} n'a pas de client associé, pas de mise à jour du solde", invoice.getId());
+                }
+
                 invoicesList.remove(invoice);
                 loadFactures(); // Rafraîchir la table après suppression
                 showAlert(AlertType.INFORMATION, "Succès", "Facture supprimée avec succès !");
@@ -380,8 +389,10 @@ public class InvoiceController extends BaseController implements Initializable {
     public void createInvoice(ActionEvent event) {
         try {
             Client client = clientComboBox.getValue();
-            if (client == null) {
-                showAlert(AlertType.WARNING, "Avertissement", "Veuillez sélectionner un client.");
+            if (getTypeInvoice() != null && getTypeInvoice().equals("OUTGOING")) {
+                client = null; //on force le client a etre a null pour les facture sortante
+            } else if (client == null) {
+                showAlert(AlertType.WARNING, "Avertissement", "Veuillez sélectionner un client pour une facture entrante.");
                 return;
             }
 
@@ -403,7 +414,7 @@ public class InvoiceController extends BaseController implements Initializable {
             }
 
             logger.info("Création d'une facture : client={}, description={}, status={}, type={}",
-                    client.getFirstName() + " " + client.getLastName(), description, status, type);
+                    client != null ? client.getFirstName() + " " + client.getLastName() : "null", description, status, type);
 
             int totalQuantity = articlesList.stream().mapToInt(Article::getQuantite).sum();
             double totalPrice = articlesList.stream()
@@ -423,35 +434,38 @@ public class InvoiceController extends BaseController implements Initializable {
                 }
             }
 
-            // Créer la facture avec les articles persistants
-            if (factureService.addInvoice(description, Instant.now(), status, client.getIdc(), persistentArticles, type, totalQuantity)) {
-                // Mettre à jour les quantités des articles selon le type de facture
-                for (Article article : persistentArticles) {
-                    int newQuantity;
-                    if (type.equals("INCOMING")) {
-                        newQuantity = article.getQuantite() - article.getQuantite();
-                        if (newQuantity < 0) {
-                            showAlert(AlertType.WARNING, "Avertissement", "Impossible !! Vous n'avez pas assez d'articles.");
-                            return;
-                        } else if (newQuantity == 0) {
-                            showAlert(AlertType.WARNING, "Avertissement", "Vous n'avez plus de stock pour l'article " + article.getDescription() + ".");
-                            return;
+
+            if (factureService.addInvoice(description, Instant.now(), status, client != null ? client.getIdc() : null, persistentArticles, type, totalQuantity)) {
+                if (client != null) {
+                    for (Article article : persistentArticles) {
+                        int newQuantity;
+                        if (type.equals("OUTGOING")) {
+                            newQuantity = article.getQuantite() - article.getQuantite();
+                            if (newQuantity < 0) {
+                                showAlert(AlertType.WARNING, "Avertissement", "Impossible !! Vous n'avez pas assez d'articles.");
+                                return;
+                            } else if (newQuantity == 0) {
+                                showAlert(AlertType.WARNING, "Avertissement", "Vous n'avez plus de stock pour l'article " + article.getDescription() + ".");
+                                return;
+                            }
+                            factureService.updateArticle(article.getId(), article.getDescription(), Arrays.asList("Default Category"), newQuantity, article.getPrice());
+                        } else if (type.equals("INCOMING")) {
+                            newQuantity = article.getQuantite() + article.getQuantite();
+                            factureService.updateArticle(article.getId(), article.getDescription(), Arrays.asList("Default Category"), newQuantity, article.getPrice());
                         }
-                        factureService.updateArticle(article.getId(), article.getDescription(), Arrays.asList("Default Category"), newQuantity, article.getPrice());
-                    } else if (type.equals("OUTGOING")) {
-                        newQuantity = article.getQuantite() + article.getQuantite();
-                        factureService.updateArticle(article.getId(), article.getDescription(), Arrays.asList("Default Category"), newQuantity, article.getPrice());
                     }
                 }
 
-                // Mettre à jour le solde du client
+                //mise a jour du solde du client
+                if (client != null) {
                 if (clientService.updateClientBalance(client.getIdc())) {
                     logger.info("Le solde du client a été mis à jour avec succès : {}", client.getIdc());
                 } else {
                     logger.error("Erreur lors de la mise à jour du solde du client : {}", client.getIdc());
                 }
+                }
 
-//                articlesList.clear();
+                articlesList.clear();
                 showArticlesInTable(articlesList);
                 loadFactures();
                 showAlert(AlertType.CONFIRMATION, "Succès", "Facture créée avec succès");

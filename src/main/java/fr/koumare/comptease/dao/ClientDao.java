@@ -186,15 +186,24 @@ public class ClientDao {
         }
     }
 
-    //recuperer la somme des factures d'un client pour le mettre dans le solde
+    //la somme des factures d'un client qui n'est pas null (income)pour le mettre dans le solde
     public Double getClientInvoiceSum(Long clientId) {
+        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("SELECT SUM(i.price) FROM Invoice i WHERE i.client.idc = :clientId", Double.class)
-                    .setParameter("clientId", clientId)
-                    .uniqueResult();
+            transaction = session.beginTransaction();
+            Query<Double> query = session.createQuery(
+                    "SELECT SUM(i.price) FROM Invoice i WHERE i.client.idc = :clientId AND i.type = 'INCOMING'", Double.class);
+            query.setParameter("clientId", clientId);
+            Double total = query.uniqueResult();
+            transaction.commit();
+            logger.info("Somme des factures entrantes pour le client ID {} : {}", clientId, total != null ? total : 0.0);
+            return total != null ? total : 0.0;
         } catch (Exception e) {
-            logger.error("Erreur lors de la récupération de la somme des factures pour le client avec l'Id : {}", clientId, e);
-            return null;
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors du calcul de la somme des factures pour le client ID {} : {}", clientId, e.getMessage(), e);
+            throw new RuntimeException("Échec du calcul de la somme des factures", e);
         }
     }
 
@@ -209,4 +218,5 @@ public class ClientDao {
             return Optional.empty();
         }
     }
+
 }

@@ -75,7 +75,7 @@ public class FactureServiceImpl implements FactureService {
                 description, date, status, clientId, articles != null ? articles.size() : 0, type, quantity);
 
         // Vérification des champs obligatoires
-        if (description == null || date == null || status == null || clientId == null || articles == null || type == null) {
+        if (description == null || date == null || status == null || articles == null || type == null) {
             logger.warn("Informations facture incomplètes");
             return false;
         }
@@ -87,6 +87,17 @@ public class FactureServiceImpl implements FactureService {
             return false;
         }
 
+        try {
+            TypeInvoice.valueOf(type);
+            // si le type est OUTGOING, clientId peut être null (dépense)
+            if (!type.equals("OUTGOING") && clientId == null) {
+                logger.warn("ClientId requis pour une facture de type {}", type);
+                return false;
+            }
+        } catch (IllegalArgumentException e) {
+            logger.error("Type de facture invalide : {}", type);
+            return false;
+        }
 
         if (invoiceDao.invoiceExists(description, clientId)) {
             logger.warn("Facture déjà existante pour ce client");
@@ -94,9 +105,12 @@ public class FactureServiceImpl implements FactureService {
         }
 
         Client client = clientDao.findByIdQuery(clientId);
-        if (client == null) {
-            logger.warn("Client avec ID {} non trouvé", clientId);
-            return false;
+        if (clientId != null) {
+            client = clientDao.findByIdQuery(clientId);
+            if (client == null) {
+                logger.warn("Client avec ID {} non trouvé", clientId);
+                return false;
+            }
         }
 
         Invoice invoice = new Invoice(
@@ -104,7 +118,7 @@ public class FactureServiceImpl implements FactureService {
                 description,
                 date,
                 StatusInvoice.valueOf(status),
-                client,
+                client, // il pourra etre null
                 new ArrayList<>(articles),
                 TypeInvoice.valueOf(type),
                 quantity
@@ -119,6 +133,45 @@ public class FactureServiceImpl implements FactureService {
         } catch (Exception e) {
             logger.error("Échec de l'ajout de la facture : {}", e.getMessage(), e);
             return false;
+        }
+    }
+
+    //somme des factures impayees entrante
+    @Override
+    public Double getTotalUnpaidIncomingInvoices() {
+        try {
+            Double total = invoiceDao.getTotalUnpaidIncomingInvoices();
+            logger.info("Total des factures impayées entrantes récupéré via le service : {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du total des factures impayées entrantes : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec de la récupération du total des factures impayées entrantes", e);
+        }
+    }
+
+    //sommes des factures impayees entrante
+    @Override
+    public Double getTotalPaidIncomingInvoices() {
+        try {
+            Double total = invoiceDao.getTotalPaidIncomingInvoices();
+            logger.info("Total des factures payées entrantes récupéré via le service : {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du total des factures payées entrantes : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec de la récupération du total des factures payées entrantes", e);
+        }
+    }
+
+
+    @Override
+    public Double getTotalOutgoingInvoices() {
+        try {
+            Double total = invoiceDao.getTotalOutgoingInvoices();
+            logger.info("Total de toutes les factures sortantes récupéré via le service : {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du total des factures sortantes : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec de la récupération du total des factures sortantes", e);
         }
     }
 
@@ -185,7 +238,8 @@ public class FactureServiceImpl implements FactureService {
     public boolean deleteInvoice(Long invoiceId) {
         try {
             logger.info("Tentative de suppression de la facture avec ID : {}", invoiceId);
-            invoiceDao.deleteInvoice(invoiceId); // Appel au DAO
+            invoiceDao.deleteInvoice(invoiceId); // appel au DAO
+            clientDao.getClientInvoiceSum(invoiceId);
             logger.info("Facture supprimée avec succès : ID={}", invoiceId);
             return true;
         } catch (Exception e) {

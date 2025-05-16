@@ -540,12 +540,13 @@ public class ClientController extends BaseController implements Initializable {
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
         quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(4));
-        prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
-        prixTp.setCellValueFactory(cellData -> {
-            Invoice invoice = cellData.getValue();
-            double total = invoice.getPrice() * 4; // quantité fixe = 4
-            return new ReadOnlyObjectWrapper<>((Double) total);
-        });
+        //prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
+        prixTp.setCellValueFactory(new PropertyValueFactory<>("price"));
+//        prixTp.setCellValueFactory(cellData -> {
+//            Invoice invoice = cellData.getValue();
+//            double total = invoice.getPrice() * 4; // quantité fixe = 4
+//            return new ReadOnlyObjectWrapper<>((Double) total);
+//        });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
         if (list.isEmpty()) {
             tableClientDetail.setItems(FXCollections.observableArrayList()); // vider la table

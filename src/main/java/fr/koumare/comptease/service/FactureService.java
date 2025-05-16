@@ -14,6 +14,11 @@ public interface FactureService  {
     boolean enregistrerArticle(Article article);
     boolean deleteInvoice(Long invoicdId);
 
+    //les fonctions d'ibrahim pour le dashboard
+    Double getTotalOutgoingInvoices();
+    Double getTotalUnpaidIncomingInvoices();
+    Double getTotalPaidIncomingInvoices();
+
 
 
 

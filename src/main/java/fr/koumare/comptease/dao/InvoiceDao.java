@@ -83,7 +83,63 @@ public class InvoiceDao {
             throw new RuntimeException("Échec de la récupération des factures", e);
         }
     }
+    //la sommes des impayees des entrees
+    public Double getTotalUnpaidIncomingInvoices() {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Query<Double> query = session.createQuery(
+                    "SELECT SUM(i.price) FROM Invoice i WHERE i.type = 'INCOMING' AND i.status = 'UNPAID'", Double.class);
+            Double total = query.uniqueResult();
+            transaction.commit();
+            logger.info("Total des factures impayées entrantes calculé : {}", total != null ? total : 0.0);
+            return total != null ? total : 0.0;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors du calcul du total des factures impayées entrantes : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec du calcul du total des factures impayées entrantes", e);
+        }
+    }
+    //la somme des payes des entrees
+    public Double getTotalPaidIncomingInvoices() {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Query<Double> query = session.createQuery(
+                    "SELECT SUM(i.price) FROM Invoice i WHERE i.type = 'INCOMING' AND i.status = 'PAID'", Double.class);
+            Double total = query.uniqueResult();
+            transaction.commit();
+            logger.info("Total des factures payées entrantes calculé : {}", total != null ? total : 0.0);
+            return total != null ? total : 0.0;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors du calcul du total des factures payées entrantes : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec du calcul du total des factures payées entrantes", e);
+        }
+    }
 
+    public Double getTotalOutgoingInvoices() {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Query<Double> query = session.createQuery(
+                    "SELECT SUM(i.price) FROM Invoice i WHERE i.type = 'OUTGOING'", Double.class);
+            Double total = query.uniqueResult();
+            transaction.commit();
+            logger.info("Total des factures sortantes calculé : {}", total != null ? total : 0.0);
+            return total != null ? total : 0.0;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors du calcul du total des factures sortantes : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec du calcul du total des factures sortantes", e);
+        }
+    }
 
 
     public void updateFacture(Invoice invoice) {
