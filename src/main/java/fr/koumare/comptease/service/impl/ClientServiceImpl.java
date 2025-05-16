@@ -69,7 +69,7 @@ public class ClientServiceImpl implements ClientService {
         logger.info("Client supprimé");
         return true;
     }
-    
+
     @Override
     public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Double solde, String note) {
         logger.info("fonction addClient :{}", nom+" "+ prenom+" "+ adresse+" "+ contact+" "+ idUser+" "+ solde);
@@ -97,7 +97,7 @@ public class ClientServiceImpl implements ClientService {
         clientDao.saveClient(client);
         logger.info("Client ajouté : {} {}", nom, prenom);
         return true;
-        
+
     }
 
     @Override
@@ -117,7 +117,7 @@ public class ClientServiceImpl implements ClientService {
         logger.info("Recherche du client via service par le mot clé : {}", keyword);
         return clientDao.findByKeyword(keyword);
     }
-        
+
     @Override
     public List<Invoice> getClientDetails(Long idClient) {
         logger.info("Recherche des details du client : {}", idClient);
@@ -196,41 +196,5 @@ public class ClientServiceImpl implements ClientService {
         for (Client client : clientsWithHighestBalance) {
             soldeParClients.put(client.getFirstName() + " " + client.getLastName(), client.getSolde());
         }
-    }
-
-
-//    public boolean updateClientBalance(Long clientId) {
-//        logger.info("Mise à jour du solde du client : {}", clientId);
-//        Optional<Client> clientOptional = clientDao.findById(clientId);
-//        if (clientOptional.isPresent()) {
-//            Client client = clientOptional.get();
-//            double totalInvoices = clientDao.getClientInvoiceSum(clientId);
-//            client.setSolde(totalInvoices);
-//            clientDao.updateClient(client);
-//            logger.info("Solde du client mis à jour : {}", client.getSolde());
-//            return true;
-//        } else {
-//            logger.warn("Client non trouvé avec l'ID : {}", clientId);
-//            return false;
-//        }
-//    }
-
-    @Override
-    public boolean updateClientBalance(Long clientId) {
-        logger.info("Mise à jour du solde du client ID : {}", clientId);
-        Optional<fr.koumare.comptease.model.Client> clientOptional = clientDao.findById(clientId);
-        if (!clientOptional.isPresent()) {
-            logger.warn("Client avec ID {} non trouvé", clientId);
-            return false;
-        }
-
-        Double invoiceSum = clientDao.getClientInvoiceSum(clientId);
-        double solde = (invoiceSum != null) ? invoiceSum.doubleValue() : 0.0; // Gérer le cas null
-
-        fr.koumare.comptease.model.Client client = clientOptional.get();
-        client.setSolde(solde);
-        clientDao.updateClient(client);
-        logger.info("Solde du client mis à jour avec succès : ID={}, solde={}", clientId, solde);
-        return true;
     }
 }

@@ -113,9 +113,10 @@ public class Client {
         return user.getId();
     }
     public void setId_user(Long id_user) {
-        //this.user.setId(id_user);
-        this.user = new User();
-        this.user.setId(id_user);
+        if (this.user == null) {
+            this.user = new User();
+        }
+        this.user.setId(1L);
     }
     
     /*public List<Devis> getDevis() {

@@ -1,7 +1,6 @@
 package fr.koumare.comptease.service.impl;
 
 import fr.koumare.comptease.dao.RapportFinancierDao;
-import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.RapportFinancier;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
@@ -41,7 +40,7 @@ public class RapportFinancierServiceImpl {
         return map;
     }
 
-    public void ajouterFactureAuRappor(Invoice invoice) {
+    public void ajouterFactureAuRapport(Invoice invoice) {
         if (invoice == null || invoice.getDate() == null) return;
 
         int mois = invoice.getDate().atZone(ZoneId.systemDefault()).getMonthValue();

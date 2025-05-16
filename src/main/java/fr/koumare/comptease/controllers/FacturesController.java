@@ -1,5 +1,5 @@
-package fr.koumare.comptease.controllers;
 
+/*
 import fr.koumare.comptease.model.*;
 import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;

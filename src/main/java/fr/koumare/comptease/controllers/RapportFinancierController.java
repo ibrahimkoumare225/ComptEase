@@ -5,7 +5,6 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfPTable;
-import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.RapportFinancier;
 import fr.koumare.comptease.service.impl.FactureServiceImpl;
