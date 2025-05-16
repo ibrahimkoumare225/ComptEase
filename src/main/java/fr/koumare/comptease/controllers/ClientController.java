@@ -648,6 +648,27 @@ public class ClientController extends BaseController implements Initializable {
         logger.info("Modification d'un detail du client : {}", modifIdDetail.getText());
         String note=modifNote.getText();
         //fonction update invoice
+        if(clientService.modifDescriptionFacture(Long.parseLong(modifIdDetail.getText()), note)){
+            logger.info("Détail modifié : {}", note);
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Détail modifié avec succès.");
+            //recuperer l'id du client
+            Long idClient = clientService.findClientByInvoiceId(Long.parseLong(modifIdDetail.getText())).orElse(null).getIdc();
+            listAllInvoices = FXCollections.observableArrayList(clientService.getClientDetails(idClient));
+            try {
+                Client c= clientService.findById(idClient).orElse(null);
+                showClientDetails(c, listAllInvoices);
+                form_modifDetail.setVisible(false);
+                form_detailClient.setVisible(true);
+                formInitial_hDetail.setVisible(true);
+            } catch (IOException e) {
+                logger.error("Erreur lors de l'affichage des détails du client : {}", e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'affichage des détails du client.");
+            }
+
+        } else {
+            logger.error("Erreur lors de la modification du détail : {}", note);
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du détail.");
+        }
     }
 
     @FXML

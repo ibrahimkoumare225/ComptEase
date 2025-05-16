@@ -155,23 +155,33 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Double getArticlePrice(Long idInvoice) {
         logger.info("Recherche du prix de l'article de la facture : {}", idInvoice);
-        Long idArticle = clientDao.findArticleIdByInvoiceId(idInvoice);
-        if (idArticle == null) {
-            logger.warn("Aucun article trouvé pour la facture : {}", idInvoice);
-            return null;
-        }
-        Optional<Article> articleOptional = clientDao.findArticleById(idArticle);
-        if (articleOptional.isPresent()) {
-            Article article = articleOptional.get();
-            logger.info("Prix de l'article trouvé : {}", article.getPrice());
-            return article.getPrice();
+        Optional<Invoice> invoiceOptional = clientDao.findInvoiceById(idInvoice);
+        if (invoiceOptional.isPresent()) {
+            Invoice invoice = invoiceOptional.get();
+            Double totalPrice=invoice.getPrice();
+            int quantite = invoice.getQuantity();
+            Double UnitPrice = totalPrice / quantite;
+            logger.info("Prix total des articles : {}", totalPrice);
+            return UnitPrice;
         } else {
-            logger.warn("Aucun article trouvé avec l'ID : {}", idArticle);
-            return null;
+            logger.warn("Facture non trouvée avec l'ID : {}", idInvoice);
+            return 0.0;
         }
     }
 
-
+    @Override
+    public boolean modifDescriptionFacture(Long idInvoice, String description) {
+        logger.info("Modification de la description de la facture : {}", idInvoice);
+        Optional<Invoice> invoiceOptional = clientDao.findInvoiceById(idInvoice);
+        if (invoiceOptional.isPresent()) {
+            clientDao.updateInvoiceDescription(idInvoice, description);
+            logger.info("Description de la facture mise à jour : {}", description);
+            return true;
+        } else {
+            logger.warn("Facture non trouvée avec l'ID : {}", idInvoice);
+            return false;
+        }
+    }
     @Override
     public void drawInDashboard() {
         logger.info("Affichage du graphique tableau de bord");

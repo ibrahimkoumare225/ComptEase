@@ -53,7 +53,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Double solde , String note) {
+    public Client(/*Long idc,*/ User user ,String contact, String firstName, String lastName, String adresse, Double solde , String note) {
         this.idc=idc;
         this.user =user;
         this.contact = contact;
@@ -113,6 +113,9 @@ public class Client {
         return user.getId();
     }
     public void setId_user(Long id_user) {
+        if (this.user == null) {
+        this.user = new User();
+    }
         this.user.setId(1L);
     }
     

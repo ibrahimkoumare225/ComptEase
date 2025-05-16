@@ -164,6 +164,18 @@ public class ClientDao {
             return null;
         }
     }
+
+    //recuperer une facture par son id
+    public Optional<Invoice> findInvoiceById(Long invoiceId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Invoice WHERE id = :invoiceId", Invoice.class)
+                    .setParameter("invoiceId", invoiceId)
+                    .uniqueResultOptional();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération de la facture avec l'Id : {}", invoiceId, e);
+            return Optional.empty();
+        }
+    }
     //recuperer la somme des factures d'un client pour le mettre dans le solde
     public Double getClientInvoiceSum(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -228,31 +240,26 @@ public class ClientDao {
         // Ici, ajoutez la logique d'envoi d'email avec 'to', 'subject' et 'body'
     }
 
-    //recuperer id article par id facture
-    public Long findArticleIdByInvoiceId(Long invoiceId) {
+
+    //modifier description de la facture
+    public void updateInvoiceDescription(Long invoiceId, String newDescription) {
+        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-           return ((Number) session.createNativeQuery("SELECT article_id FROM invoice_articles WHERE invoice_id = :invoiceId")
-                .setParameter("invoiceId", invoiceId)
-                .uniqueResult()).longValue();
+            transaction = session.beginTransaction();
+            Invoice invoice = session.get(Invoice.class, invoiceId);
+            if (invoice != null) {
+                invoice.setDescription(newDescription);
+                session.update(invoice);
+                transaction.commit();
+            }
         } catch (Exception e) {
-            logger.error("Erreur lors de la récupération de l'ID de l'article par l'ID de la facture : {}", invoiceId, e);
-            return null;
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+
         }
     }
-
-    //recuperer article par id article
-    public Optional<Article> findArticleById(Long articleId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Article WHERE id = :articleId", Article.class)
-                    .setParameter("articleId", articleId)
-                    .uniqueResultOptional();
-        } catch (Exception e) {
-            logger.error("Erreur lors de la récupération de l'article par l'ID : {}", articleId, e);
-            return null;
-        }
-    }
-
-
     //POUUR LE DASHBOARD
     //recuperer la liste des 3 clients avec le plus de factures
     public List<Client> getClientsWithMostInvoices() {

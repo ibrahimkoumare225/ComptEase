@@ -37,4 +37,6 @@ public interface ClientService {
 
     void drawInDashboard() ;
 
+    boolean modifDescriptionFacture(Long idInvoice, String description);
+
 }

@@ -218,9 +218,8 @@
                                                          </AnchorPane>
                                                          <AnchorPane fx:id="form_modifDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                                             <children>
-                                                               <Button fx:id="voirDevis" layoutX="566.0" layoutY="73.0" mnemonicParsing="false" onAction="#fctVoirDevis" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Voir devis" AnchorPane.rightAnchor="280.0" />
+                                                               <Button fx:id="voirDevis" layoutX="566.0" layoutY="73.0" mnemonicParsing="false" onAction="#fctVoirDevis" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Voir facture" AnchorPane.rightAnchor="280.0" />
                                                                <Button fx:id="envoyerRappel" layoutX="819.0" layoutY="91.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Notifier" AnchorPane.rightAnchor="27.0" />
-                                                               <Label layoutX="463.0" layoutY="73.0" text="Prix total : " />
                                                                <Label layoutX="394.0" layoutY="-4.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Details de la vente">
                                                                   <font>
                                                                      <Font size="24.0" />
