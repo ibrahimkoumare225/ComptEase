@@ -2,6 +2,7 @@ package fr.koumare.comptease.service.impl;
 
 import fr.koumare.comptease.dao.RapportFinancierDao;
 import fr.koumare.comptease.model.Facture;
+import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.RapportFinancier;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import com.itextpdf.text.Document;
@@ -40,10 +41,10 @@ public class RapportFinancierServiceImpl {
         return map;
     }
 
-    public void ajouterFactureAuRapport(Facture facture) {
-        if (facture == null || facture.getDate() == null) return;
+    public void ajouterFactureAuRappor(Invoice invoice) {
+        if (invoice == null || invoice.getDate() == null) return;
 
-        int mois = facture.getDate().atZone(ZoneId.systemDefault()).getMonthValue();
+        int mois = invoice.getDate().atZone(ZoneId.systemDefault()).getMonthValue();
 
         RapportFinancier rapport = rapportDao.findByMonth(mois);
 
@@ -55,8 +56,8 @@ public class RapportFinancierServiceImpl {
             rapport.setBenefice(0.0);
         }
 
-        double montant = facture.getPrice();
-        if (facture.getStatus() == StatusInvoice.PAID) {
+        double montant = invoice.getPrice();
+        if (invoice.getStatus() == StatusInvoice.PAID) {
             rapport.setIncomeTotal(rapport.getIncomeTotal() + montant);
         } else {
             rapport.setExpenseTotal(rapport.getExpenseTotal() + montant);

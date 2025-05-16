@@ -197,4 +197,40 @@ public class ClientServiceImpl implements ClientService {
             soldeParClients.put(client.getFirstName() + " " + client.getLastName(), client.getSolde());
         }
     }
+
+
+//    public boolean updateClientBalance(Long clientId) {
+//        logger.info("Mise à jour du solde du client : {}", clientId);
+//        Optional<Client> clientOptional = clientDao.findById(clientId);
+//        if (clientOptional.isPresent()) {
+//            Client client = clientOptional.get();
+//            double totalInvoices = clientDao.getClientInvoiceSum(clientId);
+//            client.setSolde(totalInvoices);
+//            clientDao.updateClient(client);
+//            logger.info("Solde du client mis à jour : {}", client.getSolde());
+//            return true;
+//        } else {
+//            logger.warn("Client non trouvé avec l'ID : {}", clientId);
+//            return false;
+//        }
+//    }
+
+    @Override
+    public boolean updateClientBalance(Long clientId) {
+        logger.info("Mise à jour du solde du client ID : {}", clientId);
+        Optional<fr.koumare.comptease.model.Client> clientOptional = clientDao.findById(clientId);
+        if (!clientOptional.isPresent()) {
+            logger.warn("Client avec ID {} non trouvé", clientId);
+            return false;
+        }
+
+        Double invoiceSum = clientDao.getClientInvoiceSum(clientId);
+        double solde = (invoiceSum != null) ? invoiceSum.doubleValue() : 0.0; // Gérer le cas null
+
+        fr.koumare.comptease.model.Client client = clientOptional.get();
+        client.setSolde(solde);
+        clientDao.updateClient(client);
+        logger.info("Solde du client mis à jour avec succès : ID={}, solde={}", clientId, solde);
+        return true;
+    }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Client {
+    //Modifier setId_user pour qu'il prenne l'utilisateur connecté
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idc;
@@ -36,12 +37,6 @@ public class Client {
     @Column(name = "note", nullable = true)
     private String note;
 
-   /* @Column(name = "SIRET/SIREN", nullable = true)
-    private String siren; 
-
-    @Column(name = "rib", nullable = true)
-    private String rib;*/
-
     /*@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;*/
@@ -58,8 +53,8 @@ public class Client {
     public Client() {
     }
 
-    public Client(/*Long idc,*/ User user ,String contact, String firstName, String lastName, String adresse, Double solde , String note) {
-        this.idc=idc;
+    public Client(Long idc, User user , String contact, String firstName, String lastName, String adresse, Double solde , String note) {
+        this.idc = idc;
         this.user =user;
         this.contact = contact;
         this.lastName = lastName;
@@ -74,8 +69,8 @@ public class Client {
     public Long getIdc() {
         return idc;
     }
-    public void setIdc(Long idc) {
-        this.idc = idc;
+    public void setIdc(Long id) {
+        this.idc = id;
     }
     
     public String getContact() {
@@ -118,10 +113,9 @@ public class Client {
         return user.getId();
     }
     public void setId_user(Long id_user) {
-        if (this.user == null) {
+        //this.user.setId(id_user);
         this.user = new User();
-    }
-        this.user.setId(1L);
+        this.user.setId(id_user);
     }
     
     /*public List<Devis> getDevis() {

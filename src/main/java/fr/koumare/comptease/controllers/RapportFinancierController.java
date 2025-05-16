@@ -5,7 +5,6 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfPTable;
-import fr.koumare.comptease.model.Document;
 import fr.koumare.comptease.model.Facture;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.RapportFinancier;
@@ -69,7 +68,7 @@ public class RapportFinancierController extends BaseController implements Initia
         double totalDepenses = rapports.stream().mapToDouble(RapportFinancier::getExpenseTotal).sum();
         double totalBenefices = rapports.stream().mapToDouble(RapportFinancier::getBenefice).sum();
 
-        List<Invoice> factures = factureService.getAllFactures();
+        List<Invoice> factures = factureService.getAllInvoices();
 
         long totalFactures = factures.size();
         long payees = factures.stream().filter(f -> f.getStatus() == PAID).count();

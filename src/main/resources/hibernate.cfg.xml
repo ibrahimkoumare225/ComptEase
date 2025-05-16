@@ -16,8 +16,8 @@
         <mapping class="fr.koumare.comptease.model.Company"/>
         <mapping class="fr.koumare.comptease.model.Article"/>
         <mapping class="fr.koumare.comptease.model.User"/>
-        <mapping class="fr.koumare.comptease.model.Devis"/>
         <mapping class="fr.koumare.comptease.model.Invoice"/>
+        <mapping class="fr.koumare.comptease.model.Devis"/>
         <mapping class="fr.koumare.comptease.model.Notification"/>
         <mapping class="fr.koumare.comptease.model.ObligationFiscale"/>
         <mapping class="fr.koumare.comptease.model.RapportFinancier"/>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -84,9 +83,9 @@
                         <AnchorPane prefHeight="720.0" prefWidth="1000.0" styleClass="body1" BorderPane.alignment="CENTER">
                             <children>
                                 <!-- Formulaire de création de facture/devis -->
-                                <AnchorPane fx:id="createForm" prefHeight="250.0" prefWidth="950.0" styleClass="form-container" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
+                                <AnchorPane fx:id="createForm" prefHeight="350.0" prefWidth="950.0" styleClass="form-container" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
                                     <children>
-                                        <VBox spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                        <VBox spacing="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                             <children>
                                                 <Label text="Créer une Facture / un Devis" styleClass="form-title">
                                                     <font>
@@ -108,7 +107,7 @@
                                                     <TextField fx:id="articleQuantity" promptText="Quantité" prefWidth="100.0" />
                                                     <Button fx:id="addArticleButton" text="Ajouter Article" onAction="#addArticle" />
                                                 </HBox>
-                                                <TableView fx:id="articlesTable" prefHeight="100.0" prefWidth="900.0">
+                                                <TableView fx:id="articlesTable" prefHeight="120.0" prefWidth="900.0">
                                                     <columns>
                                                         <TableColumn fx:id="articleDescriptionColumn" prefWidth="300.0" text="Description" />
                                                         <TableColumn fx:id="articlePriceColumn" prefWidth="150.0" text="Prix" />
@@ -121,16 +120,22 @@
                                                     <Label text="Prix Total :" styleClass="form-label" />
                                                     <Label fx:id="totalPriceLabel" text="0.0" styleClass="total-price" />
                                                 </HBox>
+
                                                 <HBox spacing="10.0" alignment="CENTER_RIGHT">
-                                                    <Button fx:id="createDevisButton" text="Créer Devis" onAction="#createDevis" />
-                                                    <Button fx:id="createInvoiceButton" text="Créer Facture" onAction="#createInvoice" />
+                                                    <Label text="Type :" styleClass="form-label"/>
+                                                    <ComboBox fx:id="invoiceTypeComboBox" prefWidth="100.0"/>
+                                                    <Label text="Statut :" styleClass="form-label"/>
+                                                    <ComboBox fx:id="invoiceStatusComboBox" prefWidth="100.0"/>
+<!--                                                    <Button fx:id="createDevisButton" text="Créer Devis" onAction="#createDevis" />-->
+                                                    <Button fx:id="createInvoiceButton" text="Enregistrer Facture" onAction="#createInvoice" />
                                                 </HBox>
+                                                
                                             </children>
                                         </VBox>
                                     </children>
                                 </AnchorPane>
                                 <!-- Liste des factures existantes -->
-                                <TableView fx:id="invoicesTable" prefHeight="400.0" prefWidth="950.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="290.0">
+                                <TableView fx:id="invoicesTable" prefHeight="300.0" prefWidth="950.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="390.0">
                                     <columns>
                                         <TableColumn fx:id="invoiceIdColumn" prefWidth="100.0" text="ID" />
                                         <TableColumn fx:id="invoiceClientColumn" prefWidth="200.0" text="Client" />
