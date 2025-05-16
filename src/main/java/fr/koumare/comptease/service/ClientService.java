@@ -5,6 +5,7 @@ import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -28,8 +29,12 @@ public interface ClientService {
 
     List<Invoice> findByKeywordDetails(String keyword);
 
-    Optional<Client> findUserByInvoiceId(Long invoiceId);
+    Optional<Client> findClientByInvoiceId(Long invoiceId);
 
     boolean updateClientBalance(Long clientId);
+
+    Double getArticlePrice(Long idInvoice);
+
+    void drawInDashboard() ;
 
 }

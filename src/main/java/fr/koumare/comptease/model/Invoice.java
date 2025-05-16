@@ -12,9 +12,12 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Invoice extends Document {
+public class Invoice {
 
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 
     @Enumerated(EnumType.STRING)
     private StatusInvoice status;
@@ -27,6 +30,15 @@ public class Invoice extends Document {
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
+
+    @Column(name = "description", nullable = true)
+    private String description;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
+
+    @Column(name = "date", nullable = true)
+    private Instant date;
 
     @ManyToMany
     @JoinTable(
@@ -48,11 +60,12 @@ public class Invoice extends Document {
     }
 
     public Invoice(double price, String description, Instant date, StatusInvoice status, Client client, Devis devis) {
-        super(price, description, date);
         this.status = status;
         this.client = client;
         this.devis = devis;
     }
+
+    
     
     
 }

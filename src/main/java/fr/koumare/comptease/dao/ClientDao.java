@@ -2,6 +2,7 @@ package fr.koumare.comptease.dao;
 
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Invoice;
+import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -11,8 +12,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /*import javax.mail.*;
-import javax.mail.internet.*;
-import java.util.Properties;*/
+import javax.mail.internet.*;*/
+import java.util.Properties;
 
 public class ClientDao {
     private static final Logger logger = LoggerFactory.getLogger(ClientDao.class);
@@ -174,8 +175,19 @@ public class ClientDao {
             return null;
         }
     }
+    //recuperer le nombre de factucres d'un client
+    public int getClientInvoiceCount(Long clientId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT COUNT(i.id) FROM Invoice i WHERE i.client.idc = :clientId", Integer.class)
+                    .setParameter("clientId", clientId)
+                    .uniqueResult();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération du nombre de factures pour le client avec l'Id : {}", clientId, e);
+            return 0;
+        }
+    }
     //trouver le client par id facture
-    public Optional<Client> findUserByInvoiceId(Long invoiceId) {
+    public Optional<Client> findClientByInvoiceId(Long invoiceId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("SELECT i.client FROM Invoice i WHERE i.id = :invoiceId", Client.class)
                     .setParameter("invoiceId", invoiceId)
@@ -215,4 +227,55 @@ public class ClientDao {
         
         // Ici, ajoutez la logique d'envoi d'email avec 'to', 'subject' et 'body'
     }
+
+    //recuperer id article par id facture
+    public Long findArticleIdByInvoiceId(Long invoiceId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+           return ((Number) session.createNativeQuery("SELECT article_id FROM invoice_articles WHERE invoice_id = :invoiceId")
+                .setParameter("invoiceId", invoiceId)
+                .uniqueResult()).longValue();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération de l'ID de l'article par l'ID de la facture : {}", invoiceId, e);
+            return null;
+        }
+    }
+
+    //recuperer article par id article
+    public Optional<Article> findArticleById(Long articleId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Article WHERE id = :articleId", Article.class)
+                    .setParameter("articleId", articleId)
+                    .uniqueResultOptional();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération de l'article par l'ID : {}", articleId, e);
+            return null;
+        }
+    }
+
+
+    //POUUR LE DASHBOARD
+    //recuperer la liste des 3 clients avec le plus de factures
+    public List<Client> getClientsWithMostInvoices() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT c FROM Client c JOIN c.invoices i GROUP BY c.idc ORDER BY COUNT(i.id) DESC", Client.class)
+                    .setMaxResults(3)
+                    .list();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des 3 clients avec le plus de factures", e);
+            return null;
+        }
+    }
+
+    //recuperer la liste des 3 clients avec le plus de solde
+    public List<Client> getClientsWithHighestBalance() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Client ORDER BY solde DESC", Client.class)
+                    .setMaxResults(3)
+                    .list();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des 3 clients avec le plus de solde", e);
+            return null;
+        }
+    }
+
 }

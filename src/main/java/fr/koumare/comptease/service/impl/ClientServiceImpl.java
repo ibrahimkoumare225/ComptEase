@@ -3,15 +3,19 @@ import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
+import java.util.Map;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.regex.Matcher;
 
 public class ClientServiceImpl implements ClientService {
 
@@ -126,9 +130,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<Client> findUserByInvoiceId(Long invoiceId) {
+    public Optional<Client> findClientByInvoiceId(Long invoiceId) {
         logger.info("Recherche du client par l'ID de la facture : {}", invoiceId);
-        return clientDao.findUserByInvoiceId(invoiceId);
+        return clientDao.findClientByInvoiceId(invoiceId);
     }
 
     @Override
@@ -145,6 +149,41 @@ public class ClientServiceImpl implements ClientService {
         } else {
             logger.warn("Client non trouvé avec l'ID : {}", clientId);
             return false;
+        }
+    }
+
+    @Override
+    public Double getArticlePrice(Long idInvoice) {
+        logger.info("Recherche du prix de l'article de la facture : {}", idInvoice);
+        Long idArticle = clientDao.findArticleIdByInvoiceId(idInvoice);
+        if (idArticle == null) {
+            logger.warn("Aucun article trouvé pour la facture : {}", idInvoice);
+            return null;
+        }
+        Optional<Article> articleOptional = clientDao.findArticleById(idArticle);
+        if (articleOptional.isPresent()) {
+            Article article = articleOptional.get();
+            logger.info("Prix de l'article trouvé : {}", article.getPrice());
+            return article.getPrice();
+        } else {
+            logger.warn("Aucun article trouvé avec l'ID : {}", idArticle);
+            return null;
+        }
+    }
+
+
+    @Override
+    public void drawInDashboard() {
+        logger.info("Affichage du graphique tableau de bord");
+        Map<String, Integer> achatParClients = new HashMap<>();
+        Map<String, Double> soldeParClients = new HashMap<>();
+        List<Client> clientsWithMostInvoices = clientDao.getClientsWithMostInvoices();
+        List<Client> clientsWithHighestBalance = clientDao.getClientsWithHighestBalance();
+        for (Client client : clientsWithMostInvoices) {
+            achatParClients.put(client.getFirstName() + " " + client.getLastName(),  clientDao.getClientInvoiceCount(client.getIdc()));
+        }
+        for (Client client : clientsWithHighestBalance) {
+            soldeParClients.put(client.getFirstName() + " " + client.getLastName(), client.getSolde());
         }
     }
 }

@@ -15,6 +15,7 @@
     </properties>
 
     <dependencies>
+    
         <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -107,6 +108,14 @@
             <artifactId>lombok</artifactId>
             <version>1.18.34</version>
         </dependency>
+
+        <!--Graphique-->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+
 
         <!--Mail-->
         <dependency>
