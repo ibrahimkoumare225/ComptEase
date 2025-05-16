@@ -19,7 +19,7 @@ public class Document {
     @SequenceGenerator(name = "doc_seq", sequenceName = "document_seq", allocationSize = 1)
     protected Long id;
 
-    protected double price;
+    protected Double price;
 
     protected String description;
 
