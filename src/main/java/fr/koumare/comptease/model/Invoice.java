@@ -31,7 +31,7 @@ public class Invoice {
     private String description;
 
     @Column(name = "price", nullable = false)
-    private Double price; // Changé en Double pour éviter les problèmes de précision
+    private Double price;
 
     @Enumerated(EnumType.STRING)
     private StatusInvoice status;

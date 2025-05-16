@@ -1,5 +1,4 @@
 package fr.koumare.comptease.dao;
-import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.utilis.HibernateUtil;
@@ -13,7 +12,6 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,21 +50,41 @@ public class InvoiceDao {
         }
     }
 
-    public ObservableList<Invoice> getAllFactures() {
+//    public ObservableList<Invoice> getAllFactures() {
+//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+//            List<Invoice> factures = session.createQuery("from Invoice", Invoice.class).list();
+//            if (factures.isEmpty() || factures == null) {
+//                logger.warn("Aucune facture trouvée");
+//            } else {
+//                logger.info("Récupération de {} factures", factures.size());
+//            }
+//            return FXCollections.observableArrayList(factures);
+//        } catch (Exception e) {
+//            logger.error("Erreur lors de la récupération des factures : {}", e.getMessage());
+//            e.printStackTrace();
+//            return null; // retourner null en cas d'erreur
+//        }
+//    }
+
+    public List<Invoice> getAllFactures() {
+        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Invoice> factures = session.createQuery("from Invoice", Invoice.class).list();
-            if (factures.isEmpty() || factures == null) {
-                logger.warn("Aucune facture trouvée");
-            } else {
-                logger.info("Récupération de {} factures", factures.size());
-            }
-            return FXCollections.observableArrayList(factures);
+            transaction = session.beginTransaction();
+            Query<Invoice> query = session.createQuery("FROM Invoice i LEFT JOIN FETCH i.articles LEFT JOIN FETCH i.client", Invoice.class);
+            List<Invoice> invoices = query.list();
+            transaction.commit();
+            logger.info("Factures récupérées avec succès : {}", invoices.size());
+            return invoices;
         } catch (Exception e) {
-            logger.error("Erreur lors de la récupération des factures : {}", e.getMessage());
-            e.printStackTrace();
-            return null; // retourner null en cas d'erreur
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors de la récupération des factures : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec de la récupération des factures", e);
         }
     }
+
+
 
     public void updateFacture(Invoice invoice) {
         Transaction transaction = null;
@@ -213,4 +231,27 @@ public class InvoiceDao {
             return null; // retourner null en cas d'erreur
         }
     }
+    public void deleteInvoice(Long invoiceId) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Invoice invoice = session.get(Invoice.class, invoiceId);
+            if (invoice != null) {
+                session.delete(invoice);
+                logger.info("Facture supprimée avec succès : ID {}", invoiceId);
+            } else {
+                logger.warn("Facture non trouvée pour suppression : ID {}", invoiceId);
+                throw new RuntimeException("Facture non trouvée");
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors de la suppression de la facture ID {} : {}", invoiceId, e.getMessage(), e);
+            throw new RuntimeException("Échec de la suppression de la facture", e);
+        }
+    }
+
+
 }

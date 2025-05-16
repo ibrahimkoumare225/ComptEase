@@ -10,6 +10,7 @@ import fr.koumare.comptease.service.impl.ClientServiceImpl;
 //import fr.koumare.comptease.service.impl.DevisServiceImpl;
 import fr.koumare.comptease.service.impl.FactureServiceImpl;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class InvoiceController extends BaseController implements Initializable {
 
@@ -188,11 +190,7 @@ public class InvoiceController extends BaseController implements Initializable {
             }
         });
         showArticlesInTable(articlesList);
-        // si la liste des artcicles changent on remet le prix ajour
-        articlesList.addListener((javafx.beans.Observable observable) -> updateTotalPrice());
 
-        //showFacturesInTable(invoicesList);
-        /*loadFactures();
         invoiceIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         invoiceClientColumn.setCellValueFactory(new PropertyValueFactory<>("client"));
         invoiceClientColumn.setCellFactory(column -> new TableCell<Invoice, Client>() {
@@ -209,16 +207,27 @@ public class InvoiceController extends BaseController implements Initializable {
         invoiceDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         invoiceStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         invoiceTotalColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        TableColumn<Invoice, String> invoiceArticlesColumn = new TableColumn<>("Articles");
+        invoiceArticlesColumn.setCellValueFactory(cellData -> {
+            Invoice invoice = cellData.getValue();
+            List<Article> articles = invoice.getArticles();
+            if (articles != null && !articles.isEmpty()) {
+                String articlesList = articles.stream()
+                        .map(Article::getDescription)
+                        .collect(Collectors.joining(", "));
+                return new SimpleStringProperty(articlesList);
+            }
+            return new SimpleStringProperty("");
+        });
+        invoicesTable.getColumns().add(invoiceArticlesColumn);
+
+
         invoiceActionsColumn.setCellFactory(param -> new TableCell<Invoice, Void>() {
             private final Button deleteButton = new Button("Supprimer");
 
             {
-                deleteButton.setOnAction(event -> {
-                    Invoice invoice = getTableRow().getItem();
-                    if (invoice != null) {
-                        deleteInvoice(invoice);
-                    }
-                });
+                deleteButton.setOnAction(event -> deleteInvoice(getTableRow().getItem()));
             }
 
             @Override
@@ -227,9 +236,25 @@ public class InvoiceController extends BaseController implements Initializable {
                 setGraphic(empty || getTableRow().getItem() == null ? null : deleteButton);
             }
         });
-        invoicesTable.setItems(invoicesList);*/
+        invoicesTable.setItems(invoicesList);
+        loadFactures();
     }
 
+
+    private void deleteInvoice(Invoice invoice) {
+        try {
+            if (invoice != null && factureService.deleteInvoice(invoice.getId())) {
+                invoicesList.remove(invoice);
+                loadFactures(); // Rafraîchir la table après suppression
+                showAlert(AlertType.INFORMATION, "Succès", "Facture supprimée avec succès !");
+            } else {
+                showAlert(AlertType.ERROR, "Erreur", "Échec de la suppression de la facture.");
+            }
+        } catch (Exception e) {
+            logger.error("Erreur lors de la suppression de la facture ID {} : {}", invoice.getId(), e.getMessage(), e);
+            showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la suppression de la facture : " + e.getMessage());
+        }
+    }
     //recuperer le type de la facture
     private String getTypeInvoice() {
         String selectedType = invoiceTypeComboBox.getValue();
@@ -426,9 +451,9 @@ public class InvoiceController extends BaseController implements Initializable {
                     logger.error("Erreur lors de la mise à jour du solde du client : {}", client.getIdc());
                 }
 
-                articlesList.clear();
+//                articlesList.clear();
                 showArticlesInTable(articlesList);
-                loadFactures(); // Rafraîchir la table des factures
+                loadFactures();
                 showAlert(AlertType.CONFIRMATION, "Succès", "Facture créée avec succès");
             } else {
                 showAlert(AlertType.ERROR, "Erreur", "Échec de la création de la facture.");
@@ -627,7 +652,7 @@ public class InvoiceController extends BaseController implements Initializable {
 
     private void loadFactures() {
         try {
-            List<Invoice> invoices = factureService.getAllFactures();
+            List<Invoice> invoices = factureService.getAllInvoices();
             invoicesList.setAll(invoices);
             logger.info("Chargement de {} factures", invoices.size());
         } catch (Exception e) {

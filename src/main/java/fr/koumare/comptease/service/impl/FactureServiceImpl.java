@@ -4,22 +4,17 @@ import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.dao.InvoiceDao;
 import fr.koumare.comptease.model.*;
 import fr.koumare.comptease.model.enumarated.TypeInvoice;
-import fr.koumare.comptease.model.enumarated.StatusDevis;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.service.FactureService;
 import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.persistence.criteria.CriteriaBuilder.In;
 
 public class FactureServiceImpl implements FactureService {
 
@@ -85,7 +80,6 @@ public class FactureServiceImpl implements FactureService {
             return false;
         }
 
-        // Vérifier si le type est valide
         try {
             TypeInvoice.valueOf(type);
         } catch (IllegalArgumentException e) {
@@ -93,22 +87,20 @@ public class FactureServiceImpl implements FactureService {
             return false;
         }
 
-        // Vérifier si cette facture existe déjà pour ce client
+
         if (invoiceDao.invoiceExists(description, clientId)) {
             logger.warn("Facture déjà existante pour ce client");
             return false;
         }
 
-        // Récupérer le client via ClientDao
         Client client = clientDao.findByIdQuery(clientId);
         if (client == null) {
             logger.warn("Client avec ID {} non trouvé", clientId);
             return false;
         }
 
-        // Créer la facture
         Invoice invoice = new Invoice(
-                0.0, // Prix initial, sera recalculé
+                0.0,
                 description,
                 date,
                 StatusInvoice.valueOf(status),
@@ -117,9 +109,9 @@ public class FactureServiceImpl implements FactureService {
                 TypeInvoice.valueOf(type),
                 quantity
         );
-        invoice.calculatePrice(); // Recalcule price et quantity
+        invoice.calculatePrice();
 
-        // Enregistrer la facture
+
         try {
             invoiceDao.saveFacture(invoice);
             logger.info("Facture ajoutée avec succès : ID={}", invoice.getId());
@@ -176,17 +168,30 @@ public class FactureServiceImpl implements FactureService {
 //            throw new IllegalArgumentException("Facture non trouvée avec l'ID : " + invoiceId);
 //        }
 //    }
+
     @Override
-    public ObservableList<Invoice> getAllFactures() {
-        logger.info("Récupération de toutes les factures");
-        ObservableList<Invoice> invoices = invoiceDao.getAllFactures();
-        logger.info("Récupération de {} factures", invoices.size());
-        if (invoices.isEmpty()) {
-            logger.warn("Aucune facture trouvée");
-        } else {
-            logger.info("Factures récupérées avec succès");
+    public List<Invoice> getAllInvoices() {
+        try {
+            List<Invoice> invoices = invoiceDao.getAllFactures();
+            logger.info("Factures récupérées via le service : {}", invoices.size());
+            return invoices;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des factures via le service : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec de la récupération des factures", e);
         }
-        return invoices;
+    }
+
+    @Override
+    public boolean deleteInvoice(Long invoiceId) {
+        try {
+            logger.info("Tentative de suppression de la facture avec ID : {}", invoiceId);
+            invoiceDao.deleteInvoice(invoiceId); // Appel au DAO
+            logger.info("Facture supprimée avec succès : ID={}", invoiceId);
+            return true;
+        } catch (Exception e) {
+            logger.error("Échec de la suppression de la facture ID {} : {}", invoiceId, e.getMessage(), e);
+            return false;
+        }
     }
 
 
@@ -248,17 +253,17 @@ public class FactureServiceImpl implements FactureService {
 //    }
 //
 
-    @Override
-    public ObservableList<Article> getAllArticles(){
-        logger.info("Récupération de tous les articles");
-        ObservableList<Article> articles = invoiceDao.getAllArticles();
-        logger.info("Récupération de {} articles", articles.size());
-        if(articles.isEmpty()){
-            logger.warn("Aucun article trouvé");
-        }
-        else{
-            logger.info("Articles récupérés avec succès");
-        }
-        return articles;
-    }
+//    @Override
+//    public ObservableList<Article> getAllArticles(){
+//        logger.info("Récupération de tous les articles");
+//        ObservableList<Article> articles = invoiceDao.getAllArticles();
+//        logger.info("Récupération de {} articles", articles.size());
+//        if(articles.isEmpty()){
+//            logger.warn("Aucun article trouvé");
+//        }
+//        else{
+//            logger.info("Articles récupérés avec succès");
+//        }
+//        return articles;
+//    }
 }
