@@ -65,9 +65,9 @@ public class RapportFinancierController extends BaseController implements Initia
         List<RapportFinancier> rapports = rapportService.findAll();
         RapportFinancier dernier = rapports.isEmpty() ? null : rapports.get(rapports.size() - 1);
 
-        double revenus = (dernier != null) ? dernier.getIncomeTotal() : 0.0;
-        double depenses = (dernier != null) ? dernier.getExpenseTotal() : 0.0;
-        double benefice = (dernier != null) ? dernier.getBenefice() : 0.0;
+        double totalRevenus = rapports.stream().mapToDouble(RapportFinancier::getIncomeTotal).sum();
+        double totalDepenses = rapports.stream().mapToDouble(RapportFinancier::getExpenseTotal).sum();
+        double totalBenefices = rapports.stream().mapToDouble(RapportFinancier::getBenefice).sum();
 
         List<Invoice> factures = factureService.getAllFactures();
 
@@ -75,14 +75,14 @@ public class RapportFinancierController extends BaseController implements Initia
         long payees = factures.stream().filter(f -> f.getStatus() == PAID).count();
         long impayees = factures.stream().filter(f -> f.getStatus() == UNPAID).count();
         double tauxPaiement = totalFactures > 0 ? (double) payees / totalFactures * 100 : 0;
-        double moyenne = payees > 0 ? revenus / payees : 0;
+        double moyenne = payees > 0 ? totalRevenus / payees : 0;
 
         double objectif = 500000.0;
-        double ratioObjectif = Math.min(revenus / objectif, 1.0);
+        double ratioObjectif = Math.min(totalRevenus / objectif, 1.0);
 
-        revenuLabel.setText(String.format("%.2f €", revenus));
-        depenseLabel.setText(String.format("%.2f €", depenses));
-        beneficeLabel.setText(String.format("%.2f €", benefice));
+        revenuLabel.setText(String.format("%.2f €", totalRevenus));
+        depenseLabel.setText(String.format("%.2f €", totalDepenses));
+        beneficeLabel.setText(String.format("%.2f €", totalBenefices));
 
         factureTotalLabel.setText(String.valueOf(totalFactures));
         facturePayeeLabel.setText(String.valueOf(payees));
