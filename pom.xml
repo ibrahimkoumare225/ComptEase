@@ -109,25 +109,17 @@
             <version>1.18.34</version>
         </dependency>
 
-        <!--Graphique-->
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.5.3</version>
-        </dependency>
 
-
-        <!--Mail-->
         <dependency>
 
-            <groupId>com.sun.mail</groupId>
+            <groupId>com.itextpdf</groupId>
 
-            <artifactId>jakarta.mail</artifactId>
+            <artifactId>itextpdf</artifactId>
 
-            <version>2.0.1</version>
+            <version>5.5.13.3</version>
 
         </dependency>
-
+        
     </dependencies>
 
     

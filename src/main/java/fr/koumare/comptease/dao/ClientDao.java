@@ -12,8 +12,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /*import javax.mail.*;
-import javax.mail.internet.*;*/
-import java.util.Properties;
+import javax.mail.internet.*;
+import java.util.Properties;*/
 
 public class ClientDao {
     private static final Logger logger = LoggerFactory.getLogger(ClientDao.class);

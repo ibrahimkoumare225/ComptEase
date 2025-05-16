@@ -6,8 +6,15 @@ import fr.koumare.comptease.model.Devis;
 import fr.koumare.comptease.model.Document;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.DocumentService;
+import fr.koumare.comptease.utilis.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DocumentServiceImpl implements DocumentService {
 
@@ -17,43 +24,59 @@ public abstract class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Document createDocument(Document document) {
+        if (document == null) {
+            logger.warn("Tentative de création d'un document null");
+            throw new IllegalArgumentException("Le document ne peut pas être null");
+        }
         logger.info("Création d'un document avec ID : {}", document.getId());
         if (document instanceof Invoice) {
             logger.debug("Le document est une facture");
-            invoiceDao.saveFacture((Invoice) document);
+            Invoice invoice = (Invoice) document;
+            invoiceDao.saveFacture(invoice);
+            if (invoice.getId() == null) {
+                logger.error("Échec de la sauvegarde de la facture");
+                return null;
+            }
         } else if (document instanceof Devis) {
             logger.debug("Le document est un devis");
-            devisDao.saveDevis((Devis) document);
+            Devis devis = (Devis) document;
+            devisDao.saveDevis(devis);
+            if (devis.getId() == null) {
+                logger.error("Échec de la sauvegarde du devis");
+                return null;
+            }
         }
         return document;
     }
 
     @Override
     public Document findDocumentById(Long id) {
-
+        if (id == null) {
+            logger.warn("Tentative de recherche d'un document avec un ID null");
+            throw new IllegalArgumentException("L'ID ne peut pas être null");
+        }
         logger.info("Recherche du document avec ID : {}", id);
-        Invoice invoice = invoiceDao.getAllFactures().stream()
-                .filter(i -> i.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        Invoice invoice = invoiceDao.findFactureById(id);
         if (invoice != null) {
             logger.debug("Facture trouvée avec ID : {}", id);
             return invoice;
         }
 
-        Devis devis = devisDao.getAllDevis().stream()
-                .filter(d -> d.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        Devis devis = devisDao.findDevisById(id);
         if (devis != null) {
             logger.debug("Devis trouvé avec ID : {}", id);
-        } else {
-            logger.warn("Aucun document trouvé avec l'ID : {}", id);
+            return devis;
         }
-        return devis;
+
+        logger.warn("Aucun document trouvé avec l'ID : {}", id);
+        return null;
     }
     @Override
     public void deleteDocumentById(Long id){
+        if (id == null) {
+            logger.warn("Tentative de suppression d'un document avec un ID null");
+            throw new IllegalArgumentException("L'ID ne peut pas être null");
+        }
         logger.info("Suppression du document avec ID : {}", id);
         Document document = findDocumentById(id);
         if (document == null) {
@@ -68,7 +91,27 @@ public abstract class DocumentServiceImpl implements DocumentService {
             logger.debug("Devis avec ID : {} supprimé", id);
         }
     }
+
+    public void deleteDocument(Object document) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(document);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors de la suppression du document : {}", e.getMessage());
+            throw new IllegalStateException("Erreur lors de la suppression du document", e);
+        }
+    }
+
     public void updateDocument(Document document){
+        if (document == null) {
+            logger.warn("Tentative de mise à jour d'un document null");
+            throw new IllegalArgumentException("Le document ne peut pas être null");
+        }
         logger.info("Mise à jour du document avec ID : {}", document.getId());
         if (document instanceof Invoice) {
             invoiceDao.updateFacture((Invoice) document);
@@ -78,6 +121,17 @@ public abstract class DocumentServiceImpl implements DocumentService {
             logger.debug("Devis avec ID : {} mis à jour", document.getId());
         }
     }
+
+    protected <T> List<T> findAllDocumentsByType(Class<T> type) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<T> query = session.createQuery("FROM " + type.getName(), type);
+            return query.list();
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des entités de type {} : {}", type.getSimpleName(), e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
 
     @Override
     public void generatePDF(Document document) {
