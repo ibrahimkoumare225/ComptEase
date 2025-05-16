@@ -134,6 +134,7 @@ public class FactureServiceImpl implements FactureService {
             logger.error("Échec de l'ajout de la facture : {}", e.getMessage(), e);
             return false;
         }
+
     }
 
     //somme des factures impayees entrante
