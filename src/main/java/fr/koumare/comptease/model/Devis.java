@@ -1,28 +1,33 @@
-/*package fr.koumare.comptease.model;
+package fr.koumare.comptease.model;
 
-import com.sun.istack.NotNull;
+import fr.koumare.comptease.model.enumarated.StatusDevis;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Devis {
+public class Devis  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double price;
-
-    private String description;
-
+    @Column(name = "date", nullable = false)
     private Instant date;
 
-    private boolean valid;
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
+
+    @Enumerated(EnumType.STRING)
+    private StatusDevis status;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -34,63 +39,7 @@ public class Devis {
             joinColumns = @JoinColumn(name = "devis_id"),
             inverseJoinColumns = @JoinColumn(name = "article_id")
     )
-    private List<Article> articles;
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @OneToOne(mappedBy = "devis")
-    private Invoice invoice;
-
-    public Devis() {
-    }
-
-    public Devis(double price, String description, Instant date, boolean valid, Client client, List<Article> articles, User user, Invoice invoice) {
-        this.price = price;
-        this.description = description;
-        this.date = date;
-        this.valid = valid;
-        this.client = client;
-        this.articles = articles;
-        this.user = user;
-        this.invoice = invoice;
-    }
-}*/
-package fr.koumare.comptease.model;
-
-import com.sun.istack.NotNull;
-
-import lombok.Getter;
-import lombok.Setter;
-import javax.persistence.*;
-import java.time.Instant;
-import java.util.List;
-
-@Entity
-@Getter
-@Setter
-public class Devis extends Document {
-
-    private boolean valid;
-
-    @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
-
-    @ManyToMany
-    @JoinTable(
-            name = "devis_articles",
-            joinColumns = @JoinColumn(name = "devis_id"),
-            inverseJoinColumns = @JoinColumn(name = "article_id")
-    )
-    private List<Article> articles;
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private List<Article> articles = new ArrayList<>();
 
     @OneToOne(mappedBy = "devis")
     private Invoice invoice;
@@ -99,12 +48,23 @@ public class Devis extends Document {
         super();
     }
 
-    public Devis(double price, String description, Instant date, boolean valid, Client client, List<Article> articles, User user) {
-        super(price, description, date);
-        this.valid = valid;
+    public Devis(Double price, String description, Instant date, StatusDevis status, Client client, List<Article> articles) {
+        this.price = price;
+        this.description = description;
+        this.date = date != null ? date : Instant.now();
+        this.status = status;
         this.client = client;
-        this.articles = articles;
-        this.user = user;
+        this.articles = articles != null ? articles : new ArrayList<>();
+        calculatePrice();
     }
-    
+
+    public void calculatePrice() {
+        if (articles == null || articles.isEmpty()) {
+            this.price = 0.0;
+            return;
+        }
+        this.price = articles.stream()
+                .mapToDouble(article -> article.getPrice().doubleValue() * article.getQuantite())
+                .sum();
+    }
 }

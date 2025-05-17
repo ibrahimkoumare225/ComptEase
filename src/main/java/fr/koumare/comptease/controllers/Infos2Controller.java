@@ -54,23 +54,23 @@ public class Infos2Controller implements Initializable {
             return;
         }
 
-        // Récupérer l'entité Company existante
         Company company = companyDao.findCompanyByUser(currentUser);
         if (company == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune entreprise trouvée pour cet utilisateur.");
             return;
         }
+        
 
-        // Mettre à jour les champs
+
         company.setSalesNature(salesNature);
         company.setCreationDate(creationDate);
         company.setClosingDate(closingDate);
 
-        // Enregistrer dans la base de données
+
         companyDao.saveCompany(company);
         showAlert(Alert.AlertType.INFORMATION, "Succès", "Informations enregistrées !");
 
-        // Redirection vers Dashboard.fxml
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/dashboard.fxml"));
             Scene scene = new Scene(loader.load(), 1300, 720);

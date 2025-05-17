@@ -32,7 +32,7 @@ public class Client {
     private String adresse;
 
     @Column(name = "solde", nullable = false)
-    private Long solde;
+    private Double solde;
 
     @Column(name = "note", nullable = true)
     private String note;
@@ -53,8 +53,8 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user ,String contact, String firstName, String lastName, String adresse, Long solde , String note) {
-        this.idc=idc;
+    public Client(Long idc, User user , String contact, String firstName, String lastName, String adresse, Double solde , String note) {
+        this.idc = idc;
         this.user =user;
         this.contact = contact;
         this.lastName = lastName;
@@ -69,8 +69,8 @@ public class Client {
     public Long getIdc() {
         return idc;
     }
-    public void setIdc(Long idc) {
-        this.idc = idc;
+    public void setIdc(Long id) {
+        this.idc = id;
     }
     
     public String getContact() {
@@ -97,10 +97,10 @@ public class Client {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
-    public Long getSolde() {
+    public Double getSolde() {
         return solde;
     }
-    public void setSolde(Long solde) {
+    public void setSolde(Double solde) {
         this.solde = solde;
     }
     public String getNote() {
@@ -113,9 +113,10 @@ public class Client {
         return user.getId();
     }
     public void setId_user(Long id_user) {
-        //this.user.setId(id_user);
-        this.user = new User();
-        this.user.setId(id_user);
+        if (this.user == null) {
+            this.user = new User();
+        }
+        this.user.setId(1L);
     }
     
     /*public List<Devis> getDevis() {

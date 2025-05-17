@@ -93,7 +93,7 @@ public abstract class BaseController {
     protected void handleNavigateToFactures() {
         logger.debug("Factures button clicked");
         logger.info("Navigating to Factures");
-        navigateTo("/fr/koumare/comptease/fxml/factures.fxml", "Factures");
+        navigateTo("/fr/koumare/comptease/fxml/facture.fxml", "Factures");
     }
 
     @FXML
