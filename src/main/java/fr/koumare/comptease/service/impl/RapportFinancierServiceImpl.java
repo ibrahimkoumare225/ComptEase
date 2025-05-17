@@ -1,7 +1,6 @@
 package fr.koumare.comptease.service.impl;
 
 import fr.koumare.comptease.dao.RapportFinancierDao;
-import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.RapportFinancier;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import com.itextpdf.text.Document;
@@ -38,32 +37,6 @@ public class RapportFinancierServiceImpl {
         }
 
         return map;
-    }
-
-    public void ajouterFactureAuRapport(Invoice invoice) {
-        if (invoice == null || invoice.getDate() == null) return;
-
-        int mois = invoice.getDate().atZone(ZoneId.systemDefault()).getMonthValue();
-
-        RapportFinancier rapport = rapportDao.findByMonth(mois);
-
-        if (rapport == null) {
-            rapport = new RapportFinancier();
-            rapport.setMonth(mois);
-            rapport.setIncomeTotal(0.0);
-            rapport.setExpenseTotal(0.0);
-            rapport.setBenefice(0.0);
-        }
-
-        double montant = invoice.getPrice();
-        if (invoice.getStatus() == StatusInvoice.PAID) {
-            rapport.setIncomeTotal(rapport.getIncomeTotal() + montant);
-        } else {
-            rapport.setExpenseTotal(rapport.getExpenseTotal() + montant);
-        }
-
-        rapport.setBenefice(rapport.getIncomeTotal() - rapport.getExpenseTotal());
-        rapportDao.saveOrUpdate(rapport);
     }
 
     public void exporterRapportPdf() {
