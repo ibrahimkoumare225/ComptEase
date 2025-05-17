@@ -1,29 +1,70 @@
 package fr.koumare.comptease.model;
 
+import fr.koumare.comptease.model.enumarated.StatusDevis;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 @Getter
 @Setter
-@Entity
-public class Devis {
+public class Devis  {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private double price;
-    private String description;
+
+    @Column(name = "date", nullable = false)
     private Instant date;
-    private boolean valid;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
+
+    @Enumerated(EnumType.STRING)
+    private StatusDevis status;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    @ManyToMany
+    @JoinTable(
+            name = "devis_articles",
+            joinColumns = @JoinColumn(name = "devis_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id")
+    )
+    private List<Article> articles = new ArrayList<>();
+
+    @OneToOne(mappedBy = "devis")
+    private Invoice invoice;
 
     public Devis() {
+        super();
     }
 
-    public Devis(Long id, double price, String description, Instant date, boolean valid) {
-        this.id = id;
+    public Devis(Double price, String description, Instant date, StatusDevis status, Client client, List<Article> articles) {
         this.price = price;
         this.description = description;
-        this.date = date;
-        this.valid = valid;
+        this.date = date != null ? date : Instant.now();
+        this.status = status;
+        this.client = client;
+        this.articles = articles != null ? articles : new ArrayList<>();
+        calculatePrice();
+    }
+
+    public void calculatePrice() {
+        if (articles == null || articles.isEmpty()) {
+            this.price = 0.0;
+            return;
+        }
+        this.price = articles.stream()
+                .mapToDouble(article -> article.getPrice().doubleValue() * article.getQuantite())
+                .sum();
     }
 }

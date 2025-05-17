@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/client.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.ClientController">
+   <children>
+      <AnchorPane prefHeight="720.0" prefWidth="1300.0" styleClass="body">
+         <children>
+            <BorderPane prefHeight="720.0" prefWidth="1300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <left>
+                  <AnchorPane prefHeight="650.0" prefWidth="300.0" styleClass="menu_container" BorderPane.alignment="CENTER">
+                     <children>
+                        <Text fill="WHITE" layoutX="77.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Compt" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="15.0">
+                           <font>
+                              <Font name="System Bold" size="28.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#9747ff" layoutX="165.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ease" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="15.0">
+                           <font>
+                              <Font name="System Bold" size="28.0" />
+                           </font>
+                        </Text>
+                        <Circle fill="#53c22b" layoutX="104.0" layoutY="46.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="25.0" />
+                        <Circle fill="#e0b509" layoutX="14.0" layoutY="244.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="25.0" />
+                        <Circle fill="#ff5a52" layoutX="83.0" layoutY="180.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="25.0" />
+                        <Button fx:id="dashboardButton" layoutX="65.0" layoutY="125.0" mnemonicParsing="false" onAction="#handleNavigateToDashboard" text="Dashboard" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="HOME" size="20" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="rapportFinancierButton" layoutX="65.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleNavigateToRapportFinancier" text="Rapport Financier" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="150.0">
+                           <graphic>
+                             <FontAwesomeIconView glyphName="BOOK" size="20" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="transactionButton" layoutX="65.0" layoutY="227.0" mnemonicParsing="false" onAction="#handleNavigateToTransaction" text="Transaction" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="200.0">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="MONEY" size="20" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="obligationFiscaleButton" layoutX="65.0" layoutY="259.0" mnemonicParsing="false" onAction="#handleNavigateToObligationFiscale" text="Obligation Fiscales" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="250.0">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="BALANCE_SCALE" size="20" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="clientButton" layoutX="65.0" layoutY="315.0" mnemonicParsing="false" onAction="#handleNavigateToClient" styleClass="alt_menu_btn" text="Clients" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
+                           <graphic>
+                             <FontAwesomeIconView glyphName="USERS" size="20" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="facturesButton" layoutX="57.0" layoutY="363.0" mnemonicParsing="false" onAction="#handleNavigateToFactures" text="Factures" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="350.0">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="CLIPBOARD" size="20" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="parametreButton" layoutX="57.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleNavigateToParametre" text="Paramètres" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="400.0">
+                           <graphic>
+                             <FontAwesomeIconView glyphName="COGS" size="20" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="logoutButton" layoutX="57.0" layoutY="465.0" mnemonicParsing="false" onAction="#handleLogout" text="Déconnexion" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="450.0">
+                           <graphic>
+                             <FontAwesomeIconView glyphName="SIGN_OUT" size="20" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+               </left>
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <AnchorPane layoutX="400.0" layoutY="193.0" prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <AnchorPane fx:id="main_form" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" styleClass="container" stylesheets="@../css/client.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <AnchorPane layoutX="79.33333333333333" layoutY="168.0" prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                                       <AnchorPane prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
+                                          <children>
+                                             <AnchorPane layoutX="107.0" layoutY="105.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <children>
+                                                   <AnchorPane fx:id="form_initial" layoutX="297.3333333333333" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" stylesheets="@../css/client.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <children>
+                                                         <AnchorPane layoutX="2.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="563.0" prefWidth="1000.0" stylesheets="@../css/client.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                                            <children>
+                                                               <TableView fx:id="tableClient" layoutX="4.0" layoutY="6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="540.0" prefWidth="1000.0" styleClass="table" stylesheets="@../css/client.css" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="4.0">
+                                                                  <columns>
+                                                                     <TableColumn fx:id="idc" maxWidth="1.7976931348623157E308" prefWidth="76.66668462753296" text="Identifiant " />
+                                                                     <TableColumn fx:id="nomc" maxWidth="1.7976931348623157E308" prefWidth="113.3333511352539" text="Nom" />
+                                                                     <TableColumn fx:id="prenomc" maxWidth="1.7976931348623157E308" prefWidth="121.99998474121094" text="Prénom" />
+                                                                     <TableColumn fx:id="contactc" maxWidth="1.7976931348623157E308" prefWidth="156.0001220703125" text="Contact" />
+                                                                     <TableColumn fx:id="soldec" maxWidth="1.7976931348623157E308" prefWidth="162.666748046875" text="Solde" />
+                                                                     <TableColumn fx:id="noteUserc" maxWidth="1.7976931348623157E308" prefWidth="253.33331298828125" text="Note" />
+                                                                     <TableColumn fx:id="detailc" maxWidth="1.7976931348623157E308" prefWidth="114.0001220703125" text="Détail" />
+
+                                                                  </columns>
+                                                               </TableView>
+                                                            </children>
+                                                         </AnchorPane>
+                                                         <AnchorPane fx:id="formInitial_h" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="1000.0" styleClass="ftab" stylesheets="@../css/client.css" AnchorPane.bottomAnchor="568.6666666666666">
+                                                            <children>
+                                                               <Label layoutX="405.0" layoutY="2.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Vos Clients" AnchorPane.topAnchor="30.0">
+                                                                  <font>
+                                                                     <Font size="24.0" />
+                                                                  </font>
+                                                               </Label>
+                                                               <Button fx:id="ajouter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Nouveau client" AnchorPane.rightAnchor="53.00000000000004" />
+                                                               <Button fx:id="chercher" layoutX="500.0" layoutY="59.0" mnemonicParsing="false" onAction="#rechercheClient" styleClass="btn1" text="Chercher" AnchorPane.topAnchor="65.0" />
+                                                               <Button fx:id="annulerRecherche" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" onAction="#annulerRecherche" styleClass="btn1" text="Annuler" visible="false" />
+                                                               <TextField fx:id="searchBarre" layoutX="300.0" layoutY="59.0" prefHeight="30.0" prefWidth="190.0" promptText="Rechercher" AnchorPane.topAnchor="65.0" />
+                                                            </children>
+                                                         </AnchorPane>
+                                                         <AnchorPane fx:id="form_add" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                                            <children>
+                                                               <Button fx:id="addExecuter" layoutX="852.0" layoutY="99.0" mnemonicParsing="false" onAction="#AjoutClient" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Ajouter le client" AnchorPane.rightAnchor="14.666666666666629" />
+                                                               <Label layoutX="405.0" layoutY="-4.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Nouveau Client">
+                                                                  <font>
+                                                                     <Font size="24.0" />
+                                                                  </font>
+                                                               </Label>
+                                                               <Label layoutX="31.0" layoutY="40.0" text="Nom :" />
+                                                               <TextField fx:id="addNom" layoutX="83.0" layoutY="36.0" />
+                                                               <Label layoutX="24.0" layoutY="70.0" text="Prénom :" />
+                                                               <TextField fx:id="addPrenom" layoutX="83.0" layoutY="66.0" />
+                                                               <TextField fx:id="addContact" layoutX="83.0" layoutY="96.0" prefHeight="25.0" prefWidth="266.0" />
+                                                               <Label layoutX="24.0" layoutY="100.0" text="Contact :" />
+                                                               <Label layoutX="385.0" layoutY="70.0" text="Note : " />
+                                                               <!--<TextField fx:id="addSolde" layoutX="447.0" layoutY="66.0" />-->
+                                                               <TextField fx:id="addNote" layoutX="447.0" layoutY="66.0" prefHeight="25.0" prefWidth="286.0" />
+                                                               <Label layoutX="384.0" layoutY="40.0" text="Adresse :" />
+                                                               <TextField fx:id="addAdresse" layoutX="447.0" layoutY="36.0" prefHeight="25.0" prefWidth="286.0" />
+                                                               <Button fx:id="addEffacer" layoutX="733.0" layoutY="99.0" mnemonicParsing="false" onAction="#EffacerChamps" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Effacer" />
+                                                               <Button fx:id="addRetour" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour">
+                                                                  <graphic>
+                                                                     <FontAwesomeIconView fill="white" glyphName="ARROW_LEFT" size="10" />
+                                                                  </graphic>
+                                                               </Button>
+                                                            </children>
+                                                         </AnchorPane>
+                                                         <AnchorPane fx:id="form_modif" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                                            <children>
+                                                               <Button fx:id="modifExecuter" layoutX="791.0" layoutY="50.0" mnemonicParsing="false" onAction="#ModifClient" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Modifier" AnchorPane.rightAnchor="33.0" />
+                                                               <Button fx:id="suprExecuter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#SupprClient" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Supprimer" AnchorPane.rightAnchor="33.0" />
+                                                               <Label layoutX="381.0" layoutY="73.0" text="Adresse : " />
+                                                               <Label layoutX="407.0" layoutY="5.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Informations du client">
+                                                                  <font>
+                                                                     <Font size="24.0" />
+                                                                  </font>
+                                                               </Label>
+                                                               <Label layoutX="37.0" layoutY="73.0" text="Nom :" />
+                                                               <Label layoutX="29.0" layoutY="108.0" text="Prénom :" />
+                                                               <Label layoutX="383.0" layoutY="40.0" text="Contact :" />
+                                                               <Label layoutX="389.0" layoutY="108.0" text="Note : " />
+
+                                                               <TextField fx:id="modifNom" layoutX="99.0" layoutY="69.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
+                                                               <TextField fx:id="modifPrenom" layoutX="99.0" layoutY="104.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" />
+                                                               <Label fx:id="modifId" layoutX="100.0" layoutY="37.0" prefHeight="20.0" prefWidth="145.0" styleClass="label-info" stylesheets="@../css/client.css" />
+                                                               <TextField fx:id="modifContact" layoutX="445.0" layoutY="37.0" prefHeight="25.0" prefWidth="200.0" styleClass="" stylesheets="@../css/client.css" />
+                                                               <TextField fx:id="modifAdresse" layoutX="445.0" layoutY="73.0" prefHeight="25.0" prefWidth="200.0" styleClass="" stylesheets="@../css/client.css" />
+                                                               <TextField fx:id="modifSolde" layoutX="300.0" layoutY="104.0" prefHeight="25.0" prefWidth="145.0" styleClass="" stylesheets="@../css/client.css" visible="false" />
+                                                               <TextField fx:id="modifNoteClient" layoutX="445.0" layoutY="104.0" prefHeight="25.0" prefWidth="289.0" styleClass="" stylesheets="@../css/client.css" />
+
+                                                               <Label layoutX="23.0" layoutY="40.0" text="Identifiant :" />
+                                                               <Button fx:id="modifRetour" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour">
+                                                                  <graphic>
+                                                                     <FontAwesomeIconView fill="white" glyphName="ARROW_LEFT" size="10" />
+                                                                  </graphic>
+                                                               </Button>
+
+                                                            </children>
+                                                         </AnchorPane>
+                                                      </children>
+                                                   </AnchorPane>
+                                                   <AnchorPane fx:id="form_detailClient" layoutX="297.3333333333333" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="581.0" prefWidth="959.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false" AnchorPane.leftAnchor="0.0">
+                                                      <children>
+                                                         <AnchorPane layoutX="2.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="482.0" prefWidth="965.0" stylesheets="@../css/client.css">
+                                                            <children>
+                                                               <TableView fx:id="tableClientDetail" layoutX="4.0" layoutY="6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="475.0" prefWidth="969.0" styleClass="table" stylesheets="@../css/client.css">
+                                                                  <columns>
+                                                                     <TableColumn fx:id="idp" maxWidth="1.7976931348623157E308" prefWidth="76.66668462753296" text="Identifiant " />
+                                                                     <TableColumn fx:id="desp" maxWidth="1.7976931348623157E308" prefWidth="317.3332748413086" text="Description" />
+                                                                     <TableColumn fx:id="datep" maxWidth="1.7976931348623157E308" prefWidth="144.00003051757812" text="Date" />
+                                                                     <TableColumn fx:id="quantitep" maxWidth="1.7976931348623157E308" prefWidth="94.00006103515625" text="Quantité" />
+                                                                     <TableColumn fx:id="prixUp" maxWidth="1.7976931348623157E308" prefWidth="108.666748046875" text="Prix unitaire" />
+                                                                     <TableColumn fx:id="prixTp" maxWidth="1.7976931348623157E308" prefWidth="112.6666259765625" text="Prix total" />
+                                                                     <TableColumn fx:id="Statutp" maxWidth="1.7976931348623157E308" prefWidth="103.99989827473962" text="Satut" />
+                                                                  </columns>
+                                                               </TableView>
+                                                            </children>
+                                                         </AnchorPane>
+                                                         <AnchorPane fx:id="formInitial_hDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css">
+                                                            <children>
+                                                               <Label layoutX="405.0" layoutY="2.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Détails du client">
+                                                                  <font>
+                                                                     <Font size="24.0" />
+                                                                  </font>
+                                                               </Label>
+                                                               <Button fx:id="chercherDetail" layoutX="500.0" layoutY="59.0" mnemonicParsing="false" onAction="#rechercheDetail" styleClass="btn1" text="Chercher" />
+                                                               <Button fx:id="annulerRechercheDetail" layoutX="300.0" layoutY="91.0" mnemonicParsing="false" onAction="#fctannulerRechercheDetail" styleClass="btn1" text="Annuler" visible="false" />
+                                                               <TextField fx:id="searchBarreDetail" layoutX="300.0" layoutY="59.0" prefHeight="30.0" prefWidth="190.0" promptText="Chercher" />
+                                                               <Button fx:id="RetourDetail" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour">
+                                                                  <graphic>
+                                                                     <FontAwesomeIconView fill="white" glyphName="ARROW_LEFT" size="10" />
+                                                                  </graphic>
+                                                               </Button>
+                                                            </children>
+                                                         </AnchorPane>
+                                                         <AnchorPane fx:id="form_modifDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                                            <children>
+                                                               <Button fx:id="voirDevis" layoutX="566.0" layoutY="73.0" mnemonicParsing="false" onAction="#fctVoirDevis" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Voir devis" AnchorPane.rightAnchor="280.0" />
+                                                               <Button fx:id="envoyerRappel" layoutX="819.0" layoutY="91.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Notifier" AnchorPane.rightAnchor="27.0" />
+                                                               <Label layoutX="463.0" layoutY="73.0" text="Prix total : " />
+                                                               <Label layoutX="394.0" layoutY="-4.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Details de la vente">
+                                                                  <font>
+                                                                     <Font size="24.0" />
+                                                                  </font>
+                                                               </Label>
+                                                               <Label layoutX="94.0" layoutY="40.0" text="Identifiant :" />
+                                                               <Label fx:id="modifIdDetail" layoutX="173.0" layoutY="36.0" prefHeight="20.0" prefWidth="145.0" styleClass="label-info" stylesheets="@../css/client.css" />
+                                                               <Label layoutX="108.0" layoutY="73.0" text="Note :" />
+                                                               <TextField fx:id="modifNote" layoutX="173.0" layoutY="69.0" prefHeight="40.0" prefWidth="250.0" styleClass="" stylesheets="@../css/client.css" />
+                                                               <Button fx:id="modifNoteExecuter" layoutX="236.0" layoutY="112.0" mnemonicParsing="false" onAction="#ModifDetail" prefHeight="29.0" prefWidth="123.0" styleClass="btn1" text="Modifier la note" AnchorPane.rightAnchor="608.6666666666667" />
+                                                               <Label layoutX="465.0" layoutY="40.0" text="Satut :" />
+                                                               <Label fx:id="modifStatut" layoutX="527.0" layoutY="36.0" prefHeight="25.0" prefWidth="200.0" styleClass="label-info" stylesheets="@../css/client.css" />
+
+
+                                                               <Button fx:id="modifRetourDetail" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour">
+                                                                  <graphic>
+                                                                     <FontAwesomeIconView fill="white" glyphName="ARROW_LEFT" size="10" />
+                                                                  </graphic>
+                                                               </Button>
+
+                                                            </children>
+                                                         </AnchorPane>
+                                                      </children>
+                                                   </AnchorPane>
+                                                </children>
+                                             </AnchorPane>
+                                          </children>
+                                       </AnchorPane>
+
+                                    </AnchorPane>
+
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
