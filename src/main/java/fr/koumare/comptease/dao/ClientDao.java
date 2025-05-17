@@ -197,6 +197,23 @@ public class ClientDao {
         }
     }
 
+    public Double getClientInvoiceSumByMonth(Long clientId, int year, int month) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Double sum = session.createQuery(
+                            "SELECT SUM(i.price) FROM Invoice i WHERE i.client.idc = :clientId " +
+                                    "AND YEAR(i.date) = :year AND MONTH(i.date) = :month", Double.class)
+                    .setParameter("clientId", clientId)
+                    .setParameter("year", year)
+                    .setParameter("month", month)
+                    .uniqueResult();
+            logger.info("Invoice sum for client ID {} in year {} month {}: {}", clientId, year, month, sum != null ? sum : 0.0);
+            return sum != null ? sum : 0.0;
+        } catch (Exception e) {
+            logger.error("Error retrieving invoice sum for client ID {} in year {} month {}", clientId, year, month, e);
+            return 0.0;
+        }
+    }
+
     public int getClientInvoiceCount(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Long count = session.createQuery("SELECT COUNT(i.id) FROM Invoice i WHERE i.client.idc = :clientId", Long.class)
@@ -267,6 +284,24 @@ public class ClientDao {
             return clients;
         } catch (Exception e) {
             logger.error("Error retrieving clients with highest balance", e);
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Client> getClientsWithHighestBalanceByMonth(int year, int month) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            List<Client> clients = session.createQuery(
+                            "SELECT c FROM Client c JOIN c.invoices i " +
+                                    "WHERE YEAR(i.date) = :year AND MONTH(i.date) = :month " +
+                                    "GROUP BY c.idc ORDER BY SUM(i.price) DESC", Client.class)
+                    .setParameter("year", year)
+                    .setParameter("month", month)
+                    .setMaxResults(3)
+                    .list();
+            logger.info("Retrieved {} clients with highest balance for year {} and month {}", clients.size(), year, month);
+            return clients;
+        } catch (Exception e) {
+            logger.error("Error retrieving clients with highest balance for year {} and month {}", year, month, e);
             return Collections.emptyList();
         }
     }

@@ -1,12 +1,8 @@
 package fr.koumare.comptease.controllers;
 
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfDocument;
-import com.itextpdf.text.pdf.PdfPTable;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.RapportFinancier;
+import fr.koumare.comptease.model.enumarated.TypeInvoice;
 import fr.koumare.comptease.service.impl.FactureServiceImpl;
 import fr.koumare.comptease.service.impl.RapportFinancierServiceImpl;
 import javafx.fxml.FXML;
@@ -25,9 +21,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.net.URL;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import static fr.koumare.comptease.model.enumarated.StatusInvoice.PAID;
 import static fr.koumare.comptease.model.enumarated.StatusInvoice.UNPAID;
@@ -60,27 +58,35 @@ public class RapportFinancierController extends BaseController implements Initia
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de RapportFinancierController");
-        List<RapportFinancier> rapports = rapportService.findAll();
-        RapportFinancier dernier = rapports.isEmpty() ? null : rapports.get(rapports.size() - 1);
-
-        double totalRevenus = rapports.stream().mapToDouble(RapportFinancier::getIncomeTotal).sum();
-        double totalDepenses = rapports.stream().mapToDouble(RapportFinancier::getExpenseTotal).sum();
-        double totalBenefices = rapports.stream().mapToDouble(RapportFinancier::getBenefice).sum();
 
         List<Invoice> factures = factureService.getAllInvoices();
+
+        double revenus = factures.stream()
+                .filter(f -> f.getType() == TypeInvoice.INCOMING)
+                .mapToDouble(Invoice::getPrice)
+                .sum();
+
+        double depenses = factures.stream()
+                .filter(f -> f.getType() == TypeInvoice.OUTGOING)
+                .mapToDouble(Invoice::getPrice)
+                .sum();
+
+        double benefice = revenus - depenses;
+
+
 
         long totalFactures = factures.size();
         long payees = factures.stream().filter(f -> f.getStatus() == PAID).count();
         long impayees = factures.stream().filter(f -> f.getStatus() == UNPAID).count();
         double tauxPaiement = totalFactures > 0 ? (double) payees / totalFactures * 100 : 0;
-        double moyenne = payees > 0 ? totalRevenus / payees : 0;
+        double moyenne = payees > 0 ? revenus / payees : 0;
 
-        double objectif = 500000.0;
-        double ratioObjectif = Math.min(totalRevenus / objectif, 1.0);
+        double objectif = 50000.0;
+        double ratioObjectif = Math.min(revenus / objectif, 1.0);
 
-        revenuLabel.setText(String.format("%.2f €", totalRevenus));
-        depenseLabel.setText(String.format("%.2f €", totalDepenses));
-        beneficeLabel.setText(String.format("%.2f €", totalBenefices));
+        revenuLabel.setText(String.format("%.2f €", revenus));
+        depenseLabel.setText(String.format("%.2f €", depenses));
+        beneficeLabel.setText(String.format("%.2f €", benefice));
 
         factureTotalLabel.setText(String.valueOf(totalFactures));
         facturePayeeLabel.setText(String.valueOf(payees));
@@ -91,17 +97,28 @@ public class RapportFinancierController extends BaseController implements Initia
         objectifLabel.setText(String.format("Objectif : %.0f €", objectif));
         objectifProgress.setProgress(ratioObjectif);
 
-        updateBarChart();
+        updateBarChart(factures);
     }
 
-    private void updateBarChart() {
-        var map = rapportService.getBeneficesParMois();
+
+    private void updateBarChart(List<Invoice> factures) {
+        Map<Integer, Double> beneficeParMois = factures.stream()
+                .collect(Collectors.groupingBy(
+                        f -> f.getDate().atZone(ZoneId.systemDefault()).getMonthValue(),
+                        Collectors.summingDouble(f -> f.getStatus() == PAID ? f.getPrice() : -f.getPrice())
+                ));
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        map.forEach((mois, valeur) -> series.getData().add(new XYChart.Data<>(mois, valeur)));
+        beneficeParMois.forEach((mois, montant) -> {
+            String moisNom = java.time.Month.of(mois).name().substring(0, 3); // ex: JAN, FEB
+            series.getData().add(new XYChart.Data<>(moisNom, montant));
+        });
+
         barChart.getData().clear();
         barChart.getData().add(series);
         barChart.setLegendVisible(false);
     }
+
 
     @FXML
     public void handleExportPdf() {

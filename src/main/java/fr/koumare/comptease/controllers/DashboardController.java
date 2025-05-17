@@ -13,12 +13,14 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
@@ -59,6 +61,12 @@ public class DashboardController extends BaseController implements Initializable
     @FXML
     private Label topClient3Label;
 
+    @FXML
+    private DatePicker barChartDatePicker;
+
+    @FXML
+    private DatePicker clientsDatePicker;
+
     private final FactureServiceImpl factureService = new FactureServiceImpl();
     private final ClientServiceImpl clientService = new ClientServiceImpl();
     private final DecimalFormat decimalFormat = new DecimalFormat("€ #,##0.00");
@@ -66,9 +74,27 @@ public class DashboardController extends BaseController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de DashboardController");
+        setupDatePickers();
         configureBarChart();
         updateDashboardCards();
         updateTopClients();
+    }
+
+    private void setupDatePickers() {
+        // Set default to current year for bar chart
+        barChartDatePicker.setValue(LocalDate.now());
+        barChartDatePicker.valueProperty().addListener((obs, oldValue, newValue) -> {
+            logger.info("Bar chart year changed to: {}", newValue != null ? newValue.getYear() : "null");
+            configureBarChart();
+            updateDashboardCards();
+        });
+
+        // Set default to current month for clients
+        clientsDatePicker.setValue(LocalDate.now());
+        clientsDatePicker.valueProperty().addListener((obs, oldValue, newValue) -> {
+            logger.info("Clients month changed to: {}", newValue != null ? newValue.getMonthValue() + "/" + newValue.getYear() : "null");
+            updateTopClients();
+        });
     }
 
     private void configureBarChart() {
@@ -83,13 +109,19 @@ public class DashboardController extends BaseController implements Initializable
             List<Invoice> invoices = factureService.getAllInvoices();
             if (invoices == null || invoices.isEmpty()) {
                 logger.warn("Aucune facture trouvée pour le graphique.");
+                barChart.getData().clear();
                 return;
             }
 
-            int currentYear = 2025;
+            // Get selected year from DatePicker, default to current year
+            int selectedYear = barChartDatePicker.getValue() != null
+                    ? barChartDatePicker.getValue().getYear()
+                    : LocalDate.now().getYear();
+            logger.info("Configuring bar chart for year: {}", selectedYear);
+
             invoices = invoices.stream()
                     .filter(invoice -> invoice.getDate() != null &&
-                            invoice.getDate().atZone(ZoneId.systemDefault()).getYear() == currentYear)
+                            invoice.getDate().atZone(ZoneId.systemDefault()).getYear() == selectedYear)
                     .collect(Collectors.toList());
 
             Map<Month, Double> incomingTotals = new EnumMap<>(Month.class);
@@ -128,6 +160,7 @@ public class DashboardController extends BaseController implements Initializable
                 outgoingSeries.getData().add(new XYChart.Data<>(monthName, outgoingTotals.get(month)));
             }
 
+            barChart.getData().clear();
             barChart.getData().addAll(incomingSeries, outgoingSeries);
 
             barChart.lookupAll(".default-color0.chart-bar").forEach(node ->
@@ -135,9 +168,10 @@ public class DashboardController extends BaseController implements Initializable
             barChart.lookupAll(".default-color1.chart-bar").forEach(node ->
                     node.setStyle("-fx-bar-fill: red;"));
 
-            logger.info("Graphique à barres configuré avec succès avec {} factures", invoices.size());
+            logger.info("Graphique à barres configuré avec succès avec {} factures pour l'année {}", invoices.size(), selectedYear);
         } catch (Exception e) {
             logger.error("Erreur lors de la configuration du graphique à barres : {}", e.getMessage(), e);
+            barChart.getData().clear();
         }
     }
 
@@ -156,10 +190,13 @@ public class DashboardController extends BaseController implements Initializable
                 return;
             }
 
-            int currentYear = 2025;
+            // Filter by selected year
+            int selectedYear = barChartDatePicker.getValue() != null
+                    ? barChartDatePicker.getValue().getYear()
+                    : LocalDate.now().getYear();
             invoices = invoices.stream()
                     .filter(invoice -> invoice.getDate() != null &&
-                            invoice.getDate().atZone(ZoneId.systemDefault()).getYear() == currentYear)
+                            invoice.getDate().atZone(ZoneId.systemDefault()).getYear() == selectedYear)
                     .collect(Collectors.toList());
 
             double paidIncomingTotal = 0.0;
@@ -193,10 +230,8 @@ public class DashboardController extends BaseController implements Initializable
             expensesLabel.setText(decimalFormat.format(outgoingTotal));
             turnoverLabel.setText(decimalFormat.format(turnoverTotal));
 
-            logger.info("Cartes du tableau de bord mises à jour : Chiffre d'affaires=€{}, Factures payées=€{}, Factures en attente=€{}, Dépenses=€{}",
-                    turnoverTotal, paidIncomingTotal, unpaidIncomingTotal, outgoingTotal);
-
-            updateTopClients();
+            logger.info("Cartes du tableau de bord mises à jour pour l'année {} : Chiffre d'affaires=€{}, Factures payées=€{}, Factures en attente=€{}, Dépenses=€{}",
+                    selectedYear, turnoverTotal, paidIncomingTotal, unpaidIncomingTotal, outgoingTotal);
         } catch (Exception e) {
             logger.error("Erreur lors de la mise à jour des cartes du tableau de bord : {}", e.getMessage(), e);
             paidInvoicesLabel.setText("€ 0.00");
@@ -211,42 +246,42 @@ public class DashboardController extends BaseController implements Initializable
 
     private void updateTopClients() {
         try {
-            // Update balances for all clients
-            List<Client> allClients = clientService.getAllClients();
-            if (allClients != null && !allClients.isEmpty()) {
-                logger.info("Updating balances for {} clients", allClients.size());
-                for (Client client : allClients) {
-                    clientService.updateClientBalance(client.getIdc());
-                    logger.info("Updated balance for client ID {}: {}", client.getIdc(), client.getSolde());
-                }
-            } else {
-                logger.warn("No clients found for balance update");
-            }
+            // Get selected year and month from DatePicker, default to current
+            LocalDate selectedDate = clientsDatePicker.getValue() != null
+                    ? clientsDatePicker.getValue()
+                    : LocalDate.now();
+            int selectedYear = selectedDate.getYear();
+            int selectedMonth = selectedDate.getMonthValue();
+            logger.info("Updating top clients for year {} and month {}", selectedYear, selectedMonth);
 
-            // Fetch top clients with highest balances
-            List<Client> topClients = clientService.getClientsWithHighestBalance();
-            logger.info("Nombre de clients récupérés par getClientsWithHighestBalance : {}", topClients.size());
+            // Fetch top clients for the selected month
+            List<Client> topClients = clientService.getClientsWithHighestBalanceByMonth(selectedYear, selectedMonth);
+            logger.info("Nombre de clients récupérés pour {} : {}", selectedYear + "-" + selectedMonth, topClients.size());
 
             // Log client details for debugging
             if (!topClients.isEmpty()) {
                 for (int i = 0; i < Math.min(topClients.size(), 3); i++) {
                     Client client = topClients.get(i);
+                    double balance = clientService.getClientInvoiceSumByMonth(client.getIdc(), selectedYear, selectedMonth);
                     logger.info("Client {}: ID={}, Nom={} {}, Solde={}",
-                            i + 1, client.getIdc(), client.getFirstName(), client.getLastName(), client.getSolde());
+                            i + 1, client.getIdc(), client.getFirstName(), client.getLastName(), balance);
                 }
             } else {
-                logger.warn("Aucun client retourné par getClientsWithHighestBalance, tentative avec getAllClients");
-                // Fallback: Fetch all clients and sort manually
-                topClients = clientService.getAllClients();
-                if (topClients != null && !topClients.isEmpty()) {
-                    topClients = topClients.stream()
-                            .filter(client -> client.getSolde() != null)
-                            .sorted((c1, c2) -> Double.compare(c2.getSolde() != null ? c2.getSolde() : 0.0,
-                                    c1.getSolde() != null ? c1.getSolde() : 0.0))
+                logger.warn("Aucun client retourné pour {} , tentative avec tous les clients", selectedYear + "-" + selectedMonth);
+                // Fallback: Fetch all clients and filter invoices for the month
+                List<Client> allClients = clientService.getAllClients();
+                if (allClients != null && !allClients.isEmpty()) {
+                    topClients = allClients.stream()
+                            .map(client -> {
+                                double balance = clientService.getClientInvoiceSumByMonth(client.getIdc(), selectedYear, selectedMonth);
+                                client.setSolde(balance);
+                                return client;
+                            })
+                            .filter(client -> client.getSolde() != null && client.getSolde() > 0)
+                            .sorted((c1, c2) -> Double.compare(c2.getSolde(), c1.getSolde()))
                             .limit(3)
                             .collect(Collectors.toList());
-                    logger.info("Clients récupérés via getAllClients après tri : {}", topClients.size());
-                    // Log fallback client details
+                    logger.info("Clients récupérés via getAllClients après tri pour {} : {}", selectedYear + "-" + selectedMonth, topClients.size());
                     for (int i = 0; i < Math.min(topClients.size(), 3); i++) {
                         Client client = topClients.get(i);
                         logger.info("Fallback Client {}: ID={}, Nom={} {}, Solde={}",
@@ -257,7 +292,7 @@ public class DashboardController extends BaseController implements Initializable
 
             // Update labels for top 3 clients
             if (topClients.isEmpty()) {
-                logger.warn("Aucun client disponible pour la section Clients principaux.");
+                logger.warn("Aucun client disponible pour la section Clients principaux pour {}", selectedYear + "-" + selectedMonth);
                 topClient1Label.setText("1. Aucun client");
                 topClient2Label.setText("2. Aucun client");
                 topClient3Label.setText("3. Aucun client");
@@ -266,29 +301,32 @@ public class DashboardController extends BaseController implements Initializable
 
             if (topClients.size() >= 1) {
                 Client client1 = topClients.get(0);
+                double balance1 = clientService.getClientInvoiceSumByMonth(client1.getIdc(), selectedYear, selectedMonth);
                 topClient1Label.setText(String.format("1. %s %s - %s",
-                        client1.getFirstName(), client1.getLastName(), decimalFormat.format(client1.getSolde())));
+                        client1.getFirstName(), client1.getLastName(), decimalFormat.format(balance1)));
             } else {
                 topClient1Label.setText("1. Aucun client");
             }
 
             if (topClients.size() >= 2) {
                 Client client2 = topClients.get(1);
+                double balance2 = clientService.getClientInvoiceSumByMonth(client2.getIdc(), selectedYear, selectedMonth);
                 topClient2Label.setText(String.format("2. %s %s - %s",
-                        client2.getFirstName(), client2.getLastName(), decimalFormat.format(client2.getSolde())));
+                        client2.getFirstName(), client2.getLastName(), decimalFormat.format(balance2)));
             } else {
                 topClient2Label.setText("2. Aucun client");
             }
 
             if (topClients.size() >= 3) {
                 Client client3 = topClients.get(2);
+                double balance3 = clientService.getClientInvoiceSumByMonth(client3.getIdc(), selectedYear, selectedMonth);
                 topClient3Label.setText(String.format("3. %s %s - %s",
-                        client3.getFirstName(), client3.getLastName(), decimalFormat.format(client3.getSolde())));
+                        client3.getFirstName(), client3.getLastName(), decimalFormat.format(balance3)));
             } else {
                 topClient3Label.setText("3. Aucun client");
             }
 
-            logger.info("Section Clients principaux mise à jour avec {} clients", topClients.size());
+            logger.info("Section Clients principaux mise à jour avec {} clients pour {}", topClients.size(), selectedYear + "-" + selectedMonth);
         } catch (Exception e) {
             logger.error("Erreur lors de la mise à jour de la section Clients principaux : {}", e.getMessage(), e);
             topClient1Label.setText("1. Aucun client");

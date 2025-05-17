@@ -37,6 +37,22 @@ public class InvoiceDao {
         }
     }
 
+    public void updateFacture(Invoice invoice) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(invoice);
+            transaction.commit();
+            logger.info("Facture mise à jour avec succès : ID {}", invoice.getId());
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error("Erreur lors de la mise à jour de la facture : {}", e.getMessage(), e);
+            throw new RuntimeException("Échec de la mise à jour de la facture", e);
+        }
+    }
+
     public boolean invoiceExists(String description, Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Invoice> query = session.createQuery(
@@ -292,6 +308,25 @@ public class InvoiceDao {
             }
             logger.error("Erreur lors de la suppression de la facture ID {} : {}", invoiceId, e.getMessage(), e);
             throw new RuntimeException("Échec de la suppression de la facture", e);
+        }
+    }
+
+    
+
+    //recuperer la quantite de la facture par son id
+    public int getQuantityById(Long invoiceId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Invoice invoice = session.get(Invoice.class, invoiceId);
+            if (invoice != null) {
+                return invoice.getQuantity();
+            } else {
+                logger.warn("Facture non trouvée pour ID : {}", invoiceId);
+                return 0;
+            }
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération de la quantité de la facture ID {} : {}", invoiceId, e.getMessage());
+            e.printStackTrace();
+            return 0;
         }
     }
 

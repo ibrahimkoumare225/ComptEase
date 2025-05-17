@@ -48,7 +48,7 @@ public class Invoice {
 
     @OneToOne
     @JoinColumn(name = "devis_id", nullable = true)
-    private Devis devis; // Simplifié en une seule relation
+    private Devis devis;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -61,7 +61,6 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice")
     private List<Transaction> transactions = new ArrayList<>();
 
-    // constructeur avec tous les paramètres
     public Invoice(Double price, String description, Instant date, StatusInvoice status, Client client, List<Article> articles, TypeInvoice type, int quantity) {
         this.price = price;
         this.description = description;
@@ -71,14 +70,11 @@ public class Invoice {
         this.articles = articles != null ? articles : new ArrayList<>();
         this.type = type;
         this.quantity = quantity;
-        calculatePrice(); // calculer le prix initial
+        calculatePrice();
     }
 
-    // constructeur par défaut
     public Invoice() {
     }
-
-    // calculer le prix total et la quantite total des articles
 
     public void calculatePrice() {
         if (articles == null || articles.isEmpty()) {
@@ -101,5 +97,4 @@ public class Invoice {
                 .sum();
         logger.info("Prix calculé de la facture : {}, Quantité totale : {}", this.price, this.quantity);
     }
-    // Getters et setters spécifiques si nécessaires (déjà gérés par Lombok)
 }

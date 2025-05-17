@@ -6,7 +6,6 @@ import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
-//import fr.koumare.comptease.service.impl.DevisServiceImpl;
 import fr.koumare.comptease.service.impl.FactureServiceImpl;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,11 +15,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +42,11 @@ public class InvoiceController extends BaseController implements Initializable {
     @FXML
     private ComboBox<Client> clientComboBox;
 
+    @FXML
+    private Button modifFacture;
+
+    @FXML
+    private Button annulerModif;
 
     @FXML
     private TextField descriptionField;
@@ -94,7 +96,6 @@ public class InvoiceController extends BaseController implements Initializable {
     @FXML
     private ComboBox<String> invoiceStatusComboBox;
 
-
     @FXML
     private TableView<Invoice> invoicesTable;
 
@@ -131,7 +132,6 @@ public class InvoiceController extends BaseController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de FacturesController");
 
-        // la liste des clients
         clientsList = FXCollections.observableArrayList(clientService.getAllClients());
         clientComboBox.setItems(clientsList);
         clientComboBox.setCellFactory(param -> new ListCell<Client>() {
@@ -160,7 +160,6 @@ public class InvoiceController extends BaseController implements Initializable {
         invoiceTypeComboBox.getItems().addAll("Entrante", "Sortante");
         invoiceStatusComboBox.getItems().addAll("Payée", "Non payée");
 
-        // on configure la table des articles
         articleDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         articlePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         articleQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantite"));
@@ -220,7 +219,6 @@ public class InvoiceController extends BaseController implements Initializable {
         });
         invoicesTable.getColumns().add(invoiceArticlesColumn);
 
-
         invoiceActionsColumn.setCellFactory(param -> new TableCell<Invoice, Void>() {
             private final Button deleteButton = new Button("Supprimer");
 
@@ -238,11 +236,9 @@ public class InvoiceController extends BaseController implements Initializable {
         loadFactures();
     }
 
-
     private void deleteInvoice(Invoice invoice) {
         try {
             if (invoice != null && factureService.deleteInvoice(invoice.getId())) {
-
                 Client client = invoice.getClient();
                 if (client != null) {
                     clientService.updateClientBalance(client.getIdc());
@@ -250,19 +246,18 @@ public class InvoiceController extends BaseController implements Initializable {
                 } else {
                     logger.info("Facture ID {} n'a pas de client associé, pas de mise à jour du solde", invoice.getId());
                 }
-
                 invoicesList.remove(invoice);
-                loadFactures(); // Rafraîchir la table après suppression
-                showAlert(AlertType.INFORMATION, "Succès", "Facture supprimée avec succès !");
+                loadFactures();
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture supprimée avec succès !");
             } else {
-                showAlert(AlertType.ERROR, "Erreur", "Échec de la suppression de la facture.");
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la suppression de la facture.");
             }
         } catch (Exception e) {
             logger.error("Erreur lors de la suppression de la facture ID {} : {}", invoice.getId(), e.getMessage(), e);
-            showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la suppression de la facture : " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression de la facture : " + e.getMessage());
         }
     }
-    //recuperer le type de la facture
+
     private String getTypeInvoice() {
         String selectedType = invoiceTypeComboBox.getValue();
         if (selectedType == null) {
@@ -277,7 +272,18 @@ public class InvoiceController extends BaseController implements Initializable {
                 return null;
         }
     }
-    //recuperer le status de la facture
+
+    private String getTypeInvoiceFR(String type) {
+        switch (type) {
+            case "INCOMING":
+                return "Entrante";
+            case "OUTGOING":
+                return "Sortante";
+            default:
+                return null;
+        }
+    }
+
     private String getStatusInvoice() {
         String selectedStatus = invoiceStatusComboBox.getValue();
         if (selectedStatus == null) {
@@ -292,6 +298,18 @@ public class InvoiceController extends BaseController implements Initializable {
                 return null;
         }
     }
+
+    private String getStatusInvoiceFR(String status) {
+        switch (status) {
+            case "PAID":
+                return "Payée";
+            case "UNPAID":
+                return "Non payée";
+            default:
+                return null;
+        }
+    }
+
     @FXML
     public void addArticle(ActionEvent event) {
         try {
@@ -326,7 +344,7 @@ public class InvoiceController extends BaseController implements Initializable {
             }
 
             Article article = new Article(description, Arrays.asList("Default Category"), quantity, price);
-            articlesList.add(article); // Ajouter uniquement à articlesList, sans sauvegarde dans la BD
+            articlesList.add(article);
             logger.info("Article ajouté à la liste temporaire : {}", article);
             showArticlesInTable(articlesList);
 
@@ -340,21 +358,19 @@ public class InvoiceController extends BaseController implements Initializable {
         }
     }
 
-
-
     @FXML
     public void createInvoice(ActionEvent event) {
         try {
             Client client = clientComboBox.getValue();
             if (getTypeInvoice() != null && getTypeInvoice().equals("OUTGOING")) {
-                client = null; //on force le client a etre a null pour les facture sortante
+                client = null;
             } else if (client == null) {
-                showAlert(AlertType.WARNING, "Avertissement", "Veuillez sélectionner un client pour une facture entrante.");
+                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez sélectionner un client pour une facture entrante.");
                 return;
             }
 
             if (articlesList.isEmpty()) {
-                showAlert(AlertType.WARNING, "Avertissement", "Veuillez ajouter au moins un article.");
+                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez ajouter au moins un article.");
                 return;
             }
 
@@ -366,7 +382,7 @@ public class InvoiceController extends BaseController implements Initializable {
             String status = getStatusInvoice();
             String type = getTypeInvoice();
             if (status == null || type == null) {
-                showAlert(AlertType.WARNING, "Avertissement", "Veuillez sélectionner un statut et un type de facture.");
+                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez sélectionner un statut et un type de facture.");
                 return;
             }
 
@@ -378,7 +394,6 @@ public class InvoiceController extends BaseController implements Initializable {
                     .mapToDouble(article -> article.getPrice() * article.getQuantite())
                     .sum();
 
-
             List<Article> persistentArticles = new ArrayList<>();
             for (Article article : articlesList) {
                 if (factureService.enregistrerArticle(article)) {
@@ -386,11 +401,10 @@ public class InvoiceController extends BaseController implements Initializable {
                     logger.info("Article sauvegardé avec succès dans la BD : ID={}", article.getId());
                 } else {
                     logger.error("Erreur lors de la sauvegarde de l'article : {}", article);
-                    showAlert(AlertType.ERROR, "Erreur", "Échec de la sauvegarde d'un article.");
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la sauvegarde d'un article.");
                     return;
                 }
             }
-
 
             if (factureService.addInvoice(description, Instant.now(), status, client != null ? client.getIdc() : null, persistentArticles, type, totalQuantity)) {
                 if (client != null) {
@@ -399,10 +413,10 @@ public class InvoiceController extends BaseController implements Initializable {
                         if (type.equals("OUTGOING")) {
                             newQuantity = article.getQuantite() - article.getQuantite();
                             if (newQuantity < 0) {
-                                showAlert(AlertType.WARNING, "Avertissement", "Impossible !! Vous n'avez pas assez d'articles.");
+                                showAlert(Alert.AlertType.WARNING, "Avertissement", "Impossible !! Vous n'avez pas assez d'articles.");
                                 return;
                             } else if (newQuantity == 0) {
-                                showAlert(AlertType.WARNING, "Avertissement", "Vous n'avez plus de stock pour l'article " + article.getDescription() + ".");
+                                showAlert(Alert.AlertType.WARNING, "Avertissement", "Vous n'avez plus de stock pour l'article " + article.getDescription() + ".");
                                 return;
                             }
                             factureService.updateArticle(article.getId(), article.getDescription(), Arrays.asList("Default Category"), newQuantity, article.getPrice());
@@ -413,25 +427,24 @@ public class InvoiceController extends BaseController implements Initializable {
                     }
                 }
 
-                //mise a jour du solde du client
                 if (client != null) {
-                if (clientService.updateClientBalance(client.getIdc())) {
-                    logger.info("Le solde du client a été mis à jour avec succès : {}", client.getIdc());
-                } else {
-                    logger.error("Erreur lors de la mise à jour du solde du client : {}", client.getIdc());
-                }
+                    if (clientService.updateClientBalance(client.getIdc())) {
+                        logger.info("Le solde du client a été mis à jour avec succès : {}", client.getIdc());
+                    } else {
+                        logger.error("Erreur lors de la mise à jour du solde du client : {}", client.getIdc());
+                    }
                 }
 
                 articlesList.clear();
                 showArticlesInTable(articlesList);
                 loadFactures();
-                showAlert(AlertType.CONFIRMATION, "Succès", "Facture créée avec succès");
+                showAlert(Alert.AlertType.CONFIRMATION, "Succès", "Facture créée avec succès");
             } else {
-                showAlert(AlertType.ERROR, "Erreur", "Échec de la création de la facture.");
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la création de la facture.");
             }
         } catch (Exception e) {
             logger.error("Erreur lors de la création de la facture : {}", e.getMessage(), e);
-            showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la création de la facture : " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la création de la facture : " + e.getMessage());
         }
         resetForm();
         showArticlesInTable(articlesList);
@@ -449,7 +462,6 @@ public class InvoiceController extends BaseController implements Initializable {
         descriptionField.clear();
         invoiceTypeComboBox.getSelectionModel().clearSelection();
         invoiceStatusComboBox.getSelectionModel().clearSelection();
-
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
@@ -461,7 +473,6 @@ public class InvoiceController extends BaseController implements Initializable {
         alert.showAndWait();
     }
 
-    //afficher les articles dans la table
     private void showArticlesInTable(ObservableList<Article> articles) {
         articleDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         articlePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -474,31 +485,109 @@ public class InvoiceController extends BaseController implements Initializable {
         articlesTable.setItems(articles);
         updateTotalPrice();
         articlesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-        if (newSelection != null) {
-            articleDescription.setText(newSelection.getDescription());
-            articlePrice.setText(String.valueOf(newSelection.getPrice()));
-            articleQuantity.setText(String.valueOf(newSelection.getQuantite()));
-            articleSelected.add(newSelection);
-        } else {
-            articleDescription.clear();
-            articlePrice.clear();
-            articleQuantity.clear();
-        }
+            if (newSelection != null) {
+                articleDescription.setText(newSelection.getDescription());
+                articlePrice.setText(String.valueOf(newSelection.getPrice()));
+                articleQuantity.setText(String.valueOf(newSelection.getQuantite()));
+                articleSelected.add(newSelection);
+            } else {
+                articleDescription.clear();
+                articlePrice.clear();
+                articleQuantity.clear();
+            }
         });
     }
-
 
     private void loadFactures() {
         try {
             List<Invoice> invoices = factureService.getAllInvoices();
             invoicesList.setAll(invoices);
             logger.info("Chargement de {} factures", invoices.size());
+            invoicesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    modifFacture.setVisible(true);
+                    annulerModif.setVisible(true);
+                    Invoice selectedInvoice = newSelection;
+                    descriptionField.setText(selectedInvoice.getDescription());
+                    invoiceTypeComboBox.setValue(getTypeInvoiceFR(selectedInvoice.getType().toString()));
+                    invoiceStatusComboBox.setValue(getStatusInvoiceFR(selectedInvoice.getStatus().toString()));
+                    articleDescription.setText(selectedInvoice.getArticles().get(0).getDescription());
+                    articlePrice.setText(String.valueOf(selectedInvoice.getArticles().get(0).getPrice()));
+                    articleQuantity.setText(String.valueOf(selectedInvoice.getArticles().get(0).getQuantite()));
+                    Client selectedClient = selectedInvoice.getClient();
+                    if (selectedClient == null) {
+                        clientComboBox.setValue(null);
+                    } else {
+                        for (Client client : clientsList) {
+                            if (client.getIdc().equals(selectedClient.getIdc())) {
+                                clientComboBox.setValue(client);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
         } catch (Exception e) {
             logger.error("Erreur lors du chargement des factures : {}", e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement des factures : " + e.getMessage());
         }
     }
 
+    @FXML
+    private void updateFacture(ActionEvent event) {
+        try {
+            Long selectedInvoiceId = invoicesTable.getSelectionModel().getSelectedItem().getId();
+            String descriptionFacture = descriptionField.getText();
+            String statut = getStatusInvoice();
+            String type = getTypeInvoice();
+            String descriptionArticle = articleDescription.getText();
+            Double price = Double.parseDouble(articlePrice.getText());
+            int quantity = Integer.parseInt(articleQuantity.getText());
+            Article article = new Article(descriptionArticle, Arrays.asList("Default Category"), quantity, price);
+            ObservableList<Article> articlesListe = FXCollections.observableArrayList();
+            articlesListe.add(article);
 
+            Client client = clientComboBox.getValue();
+            if (client == null && type.equals("INCOMING")) {
+                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez sélectionner un client.");
+                return;
+            }
+            if (descriptionFacture.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer une description.");
+                return;
+            }
+            Boolean update = factureService.updateInvoice(
+                    invoicesTable.getSelectionModel().getSelectedItem().getId(),
+                    descriptionFacture,
+                    Instant.now(),
+                    statut,
+                    client != null ? client.getIdc() : null,
+                    articlesListe,
+                    type,
+                    quantity
+            );
+            if (update) {
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture mise à jour avec succès !");
+                resetForm();
+                modifFacture.setVisible(false);
+                annulerModif.setVisible(false);
+                loadFactures();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la mise à jour de la facture.");
+            }
+        } catch (Exception e) {
+            logger.error("Erreur lors de la mise à jour de la facture : {}", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la mise à jour de la facture : " + e.getMessage());
+        }
+    }
 
+    @FXML
+    private void cancelUpdate(ActionEvent event) {
+        resetForm();
+        modifFacture.setVisible(false);
+        annulerModif.setVisible(false);
+        articleDescription.clear();
+        articlePrice.clear();
+        articleQuantity.clear();
+    }
 }
