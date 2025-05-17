@@ -39,4 +39,5 @@ public interface ClientService {
 
     boolean modifDescriptionFacture(Long idInvoice, String description);
 
+    List<Client> getClientsWithHighestBalance();
 }

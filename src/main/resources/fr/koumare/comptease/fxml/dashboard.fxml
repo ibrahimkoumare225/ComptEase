@@ -94,7 +94,7 @@
                                                                         <Font name="Tahoma" size="20.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label fx:id="turnoverLabel" layoutX="76.0" layoutY="126.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                                <Label fx:id="turnoverLabel" layoutX="76.0" layoutY="126.0" prefHeight="38.0" prefWidth="100.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                     <font>
                                                                         <Font name="Tahoma Bold" size="30.0" />
                                                                     </font>
@@ -109,7 +109,7 @@
                                                                         <Font name="Tahoma" size="20.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label fx:id="paidInvoicesLabel" layoutX="103.0" layoutY="123.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                                <Label fx:id="paidInvoicesLabel" layoutX="103.0" layoutY="123.0" prefHeight="38.0" prefWidth="100.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                     <font>
                                                                         <Font name="Tahoma Bold" size="30.0" />
                                                                     </font>
@@ -124,7 +124,7 @@
                                                                         <Font name="Tahoma" size="20.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label fx:id="expensesLabel" layoutX="136.0" layoutY="100.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                                <Label fx:id="expensesLabel" layoutX="136.0" layoutY="100.0" prefHeight="38.0" prefWidth="100.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                     <font>
                                                                         <Font name="Tahoma Bold" size="30.0" />
                                                                     </font>
@@ -139,7 +139,7 @@
                                                                         <Font name="Tahoma" size="20.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label fx:id="pendingInvoicesLabel" layoutX="99.0" layoutY="104.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                                <Label fx:id="pendingInvoicesLabel" layoutX="99.0" layoutY="104.0" prefHeight="38.0" prefWidth="100.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                     <font>
                                                                         <Font name="Tahoma Bold" size="30.0" />
                                                                     </font>
@@ -154,7 +154,7 @@
                                                             <children>
                                                                 <BarChart fx:id="barChart" layoutX="155.0" layoutY="-145.0" prefHeight="240.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                     <xAxis>
-                                                                        <CategoryAxis fx:id="xAxis" side="BOTTOM" />
+                                                                        <CategoryAxis side="BOTTOM" fx:id="xAxis" />
                                                                     </xAxis>
                                                                     <yAxis>
                                                                         <NumberAxis fx:id="yAxis" side="LEFT" />
@@ -162,10 +162,28 @@
                                                                 </BarChart>
                                                             </children>
                                                         </AnchorPane>
-                                                        <AnchorPane layoutX="21.0" layoutY="259.0" prefHeight="140.0" prefWidth="240.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" />
-                                                        <AnchorPane layoutX="565.0" layoutY="293.0" prefHeight="140.0" prefWidth="330.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="20.0" />
-                                                        <AnchorPane layoutX="214.0" layoutY="277.0" prefHeight="140.0" prefWidth="240.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="305.0" />
-                                                        <AnchorPane layoutX="15.0" layoutY="256.0" prefHeight="40.0" prefWidth="240.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="20.0">
+                                                        <AnchorPane layoutX="21.0" layoutY="259.0" prefHeight="140.0" prefWidth="265.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0">
+                                                            <children>
+                                                                <Label fx:id="topClient1Label" layoutX="10.0" layoutY="20.0" prefHeight="30.0" prefWidth="220.0" text="1. Aucun client" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
+                                                                    <font>
+                                                                        <Font name="Tahoma" size="16.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <Label fx:id="topClient2Label" layoutX="10.0" layoutY="60.0" prefHeight="30.0" prefWidth="220.0" text="2. Aucun client" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0">
+                                                                    <font>
+                                                                        <Font name="Tahoma" size="16.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <Label fx:id="topClient3Label" layoutX="10.0" layoutY="100.0" prefHeight="30.0" prefWidth="220.0" text="3. Aucun client" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+                                                                    <font>
+                                                                        <Font name="Tahoma" size="16.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </AnchorPane>
+                                                        <AnchorPane layoutX="565.0" layoutY="293.0" prefHeight="140.0" prefWidth="280.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="20.0" />
+                                                        <AnchorPane layoutX="214.0" layoutY="277.0" prefHeight="140.0" prefWidth="265.0" styleClass="cd" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="330.0" />
+                                                        <AnchorPane layoutX="15.0" layoutY="256.0" prefHeight="40.0" prefWidth="265.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="20.0">
                                                             <children>
                                                                 <Label layoutX="31.0" layoutY="6.0" text="Clients principaux" AnchorPane.bottomAnchor="7.333333333333332" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="7.333333333333333">
                                                                     <font>
@@ -174,7 +192,7 @@
                                                                 </Label>
                                                             </children>
                                                         </AnchorPane>
-                                                        <AnchorPane layoutX="209.0" layoutY="267.0" prefHeight="40.0" prefWidth="240.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="305.0">
+                                                        <AnchorPane layoutX="209.0" layoutY="267.0" prefHeight="40.0" prefWidth="265.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="330.0">
                                                             <children>
                                                                 <Label layoutX="28.0" layoutY="13.0" text="Profit" AnchorPane.bottomAnchor="7.33" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="7.33">
                                                                     <font>
@@ -183,7 +201,7 @@
                                                                 </Label>
                                                             </children>
                                                         </AnchorPane>
-                                                        <AnchorPane layoutX="295.0" layoutY="260.0" prefHeight="40.0" prefWidth="330.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.rightAnchor="20.0">
+                                                        <AnchorPane layoutX="295.0" layoutY="260.0" prefHeight="40.0" prefWidth="280.0" styleClass="cde" AnchorPane.bottomAnchor="142.0" AnchorPane.rightAnchor="20.0">
                                                             <children>
                                                                 <Label layoutX="74.0" layoutY="6.0" text="Limite fiscales" AnchorPane.bottomAnchor="7.33" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="7.33">
                                                                     <font>
