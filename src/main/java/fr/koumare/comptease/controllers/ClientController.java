@@ -161,7 +161,7 @@ public class ClientController extends BaseController implements Initializable {
     private TextField searchBarre;
 
     @FXML
-    private TableColumn<Client, Long> soldec;
+    private TableColumn<Client, Double> soldec;
 
     @FXML
     private TableColumn<Client, Void> detailc;
@@ -188,7 +188,7 @@ public class ClientController extends BaseController implements Initializable {
     private TableColumn<Invoice, LocalDate> datep;
 
     @FXML
-    private TableColumn<Article, Long> quantitep;
+    private TableColumn<Article, Integer> quantitep;
 
     @FXML
     private TableColumn<Invoice, Double> prixUp;
@@ -260,6 +260,7 @@ public class ClientController extends BaseController implements Initializable {
                 logger.info("Affichage des détails du client : {}", client.getFirstName());
                 try {
                     listAllInvoices = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
+                    logger.info("Détails du client : {}", client.getIdc());
                     showClientDetails(client,listAllInvoices);
 
 
@@ -367,11 +368,11 @@ public class ClientController extends BaseController implements Initializable {
         String prenom=addPrenom.getText();
         String nom=addNom.getText();
         String adresse=addAdresse.getText();
-        Long solde=0L;
+        Double solde=0.0;
+        Long idu=1L;
         String note=addNote.getText();
 
         logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
-        Long idu=1L;
         if(clientService.addClient(nom, prenom, adresse, contact,idu,solde, note)){
             logger.info("Client ajouté : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
@@ -402,7 +403,7 @@ public class ClientController extends BaseController implements Initializable {
         String prenom=modifPrenom.getText();
         String adresse=modifAdresse.getText();
         String contact=modifContact.getText();
-        Long solde= Long.parseLong(modifSolde.getText());
+        Double solde= Double.parseDouble(modifSolde.getText());
         Long id=Long.parseLong(modifId.getText());
         String note=modifNoteClient.getText();
         logger.info("Note : {}", note);
@@ -411,6 +412,12 @@ public class ClientController extends BaseController implements Initializable {
         if(clientService.updateClient(id,nom, prenom, adresse, contact, solde,note)){
             logger.info("Client modifié : {}", nom +" "+ prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
+
+            if(clientService.updateClientBalance(id)){
+                logger.info("Solde du client modifié : {}", nom +" "+ prenom);
+            } else {
+                logger.error("Erreur lors de la modification du solde du client : {}", nom+" " + prenom);
+            }
             //recuperer le client modifié
             Optional<Client> updatedClient = clientService.findByNames(nom, prenom);
             if(updatedClient.isPresent()) {
@@ -419,6 +426,7 @@ public class ClientController extends BaseController implements Initializable {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
                 listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
                 affiche(listAllClients);
+                EffacerChamps(event);
             } else {
                 logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client modifié.");
@@ -451,6 +459,7 @@ public class ClientController extends BaseController implements Initializable {
                     showAlert(Alert.AlertType.INFORMATION, "Succès", "Client supprimé avec succès : " + client.getFirstName() +" " + client.getLastName());
                     listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
                     affiche(listAllClients);
+                    EffacerChamps(event);
                 } else {
                     logger.error("Erreur lors de la récupération du client supprimé : {}", client.getFirstName());
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client supprimé.");
@@ -518,6 +527,7 @@ public class ClientController extends BaseController implements Initializable {
         addPrenom.clear();
         addAdresse.clear();
         addNote.clear();
+        modifId.setText("");
         modifNom.setText("");
         modifPrenom.setText("");
         modifAdresse.setText("");
@@ -542,13 +552,19 @@ public class ClientController extends BaseController implements Initializable {
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
-        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
-        prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
+        quantitep.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        prixUp.setCellValueFactory(cellData -> {
+            Invoice invoice = cellData.getValue();
+            double price = clientService.getArticlePrice(invoice.getId());
+            return new ReadOnlyObjectWrapper<>(price);
+        });
+        prixTp.setCellValueFactory(new PropertyValueFactory<>("price"));
+        /*prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
             Invoice invoice = cellData.getValue();
-            double total = invoice.getPrice() * 4; // quantité fixe = 4
+            double total = invoice.getPrice() * invoice.getQuantity(); //
             return new ReadOnlyObjectWrapper<>((Double) total);
-        });
+        })*/;
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
         if (list.isEmpty()) {
             tableClientDetail.setItems(FXCollections.observableArrayList()); // vider la table
@@ -569,7 +585,7 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private void remplirFormulaireModifDetail(Invoice invoice) {
         modifIdDetail.setText(String.valueOf(invoice.getId()));
-        modifNote.setText(invoice.getDescription()+" |faire une colonne pour la note");
+        modifNote.setText(invoice.getDescription());
         modifStatut.setText(invoice.getStatus().toString());
         /*modifPrixU.setText(String.valueOf(invoice.getPrice()));
         modifPrixT.setText(String.valueOf(invoice.getPrice() * 4L));
@@ -588,11 +604,11 @@ public class ClientController extends BaseController implements Initializable {
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
         desp.setCellValueFactory(new PropertyValueFactory<>("description"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
-        quantitep.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Long>(4L));
+        quantitep.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
         prixTp.setCellValueFactory(cellData -> {
             Invoice invoice = cellData.getValue();
-            double total = invoice.getPrice() * 4; // quantité fixe = 4
+            double total = invoice.getPrice() * invoice.getQuantity(); //
             return new ReadOnlyObjectWrapper<>((Double) total);
         });
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -633,6 +649,27 @@ public class ClientController extends BaseController implements Initializable {
         logger.info("Modification d'un detail du client : {}", modifIdDetail.getText());
         String note=modifNote.getText();
         //fonction update invoice
+        if(clientService.modifDescriptionFacture(Long.parseLong(modifIdDetail.getText()), note)){
+            logger.info("Détail modifié : {}", note);
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Détail modifié avec succès.");
+            //recuperer l'id du client
+            Long idClient = clientService.findClientByInvoiceId(Long.parseLong(modifIdDetail.getText())).orElse(null).getIdc();
+            listAllInvoices = FXCollections.observableArrayList(clientService.getClientDetails(idClient));
+            try {
+                Client c= clientService.findById(idClient).orElse(null);
+                showClientDetails(c, listAllInvoices);
+                form_modifDetail.setVisible(false);
+                form_detailClient.setVisible(true);
+                formInitial_hDetail.setVisible(true);
+            } catch (IOException e) {
+                logger.error("Erreur lors de l'affichage des détails du client : {}", e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'affichage des détails du client.");
+            }
+
+        } else {
+            logger.error("Erreur lors de la modification du détail : {}", note);
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du détail.");
+        }
     }
 
     @FXML

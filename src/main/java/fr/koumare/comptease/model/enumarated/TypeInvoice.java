@@ -1,5 +1,6 @@
 package fr.koumare.comptease.model.enumarated;
 
-public enum StatusInvoice {
-    PAID,UNPAID
+public enum TypeInvoice {
+
+    OUTGOING,INCOMING
 }

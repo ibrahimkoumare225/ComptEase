@@ -29,8 +29,8 @@ public class ObligationFiscale {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "obligationFiscale", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Transaction> transactions = new ArrayList<>();
+    //@OneToMany(mappedBy = "obligationFiscale", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    //private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "obligationFiscale", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Notification> notifications = new ArrayList<>();

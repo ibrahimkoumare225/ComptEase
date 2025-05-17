@@ -6,6 +6,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+
 
 @Entity
 @Table(name = "products")
@@ -23,10 +25,10 @@ public class Article {
     @ElementCollection
     private List<String> category;
 
-    private Long quantite;
+    private int quantite;
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    private Double price;
 
     @ManyToMany(mappedBy = "articles")
     private List<Devis> devis;
@@ -37,13 +39,13 @@ public class Article {
     public Article() {
     }
 
-    public Article(String description, List<String> category, Long quantite, BigDecimal price) {
+    public Article(String description, List<String> category, int quantite, Double price) {
         this.description = description;
         this.category = category;
         this.quantite = quantite;
         this.price = price;
     }
-    public Long getQuantite() {
+    public int getQuantite() {
         return quantite;
     }
 }
