@@ -94,7 +94,7 @@
                                                                         <Font name="Tahoma" size="20.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label layoutX="76.0" layoutY="126.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                                <Label fx:id="turnoverLabel" layoutX="76.0" layoutY="126.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                     <font>
                                                                         <Font name="Tahoma Bold" size="30.0" />
                                                                     </font>
@@ -109,7 +109,7 @@
                                                                         <Font name="Tahoma" size="20.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label layoutX="103.0" layoutY="123.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                                <Label fx:id="paidInvoicesLabel" layoutX="103.0" layoutY="123.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                     <font>
                                                                         <Font name="Tahoma Bold" size="30.0" />
                                                                     </font>
@@ -124,7 +124,7 @@
                                                                         <Font name="Tahoma" size="20.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label layoutX="136.0" layoutY="100.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                                <Label fx:id="expensesLabel" layoutX="136.0" layoutY="100.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                     <font>
                                                                         <Font name="Tahoma Bold" size="30.0" />
                                                                     </font>
@@ -139,7 +139,7 @@
                                                                         <Font name="Tahoma" size="20.0" />
                                                                     </font>
                                                                 </Label>
-                                                                <Label layoutX="99.0" layoutY="104.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                                                <Label fx:id="pendingInvoicesLabel" layoutX="99.0" layoutY="104.0" prefHeight="38.0" prefWidth="15.0" text="€" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                     <font>
                                                                         <Font name="Tahoma Bold" size="30.0" />
                                                                     </font>
