@@ -2,12 +2,20 @@ package fr.koumare.comptease.service.impl;
 import fr.koumare.comptease.dao.ClientDao;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Invoice;
-import fr.koumare.comptease.model.CurrentUser;
+import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
+import java.util.Map;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.regex.Matcher;
 
 public class ClientServiceImpl implements ClientService {
 
@@ -61,7 +69,7 @@ public class ClientServiceImpl implements ClientService {
         logger.info("Client supprimé");
         return true;
     }
-    
+
     @Override
     public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Double solde, String note) {
         logger.info("fonction addClient :{}", nom+" "+ prenom+" "+ adresse+" "+ contact+" "+ idUser+" "+ solde);
@@ -82,13 +90,14 @@ public class ClientServiceImpl implements ClientService {
         client.setFirstName(prenom);
         client.setAdresse(adresse);
         client.setContact(contact);
-        client.setId_user(CurrentUser.getCurrentUser().getId());
+        client.setId_user(1L);
         client.setSolde(solde);
         client.setNote(note);
+
         clientDao.saveClient(client);
         logger.info("Client ajouté : {} {}", nom, prenom);
         return true;
-        
+
     }
 
     @Override
@@ -108,7 +117,7 @@ public class ClientServiceImpl implements ClientService {
         logger.info("Recherche du client via service par le mot clé : {}", keyword);
         return clientDao.findByKeyword(keyword);
     }
-        
+
     @Override
     public List<Invoice> getClientDetails(Long idClient) {
         logger.info("Recherche des details du client : {}", idClient);
@@ -122,44 +131,70 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<Client> findUserByInvoiceId(Long invoiceId) {
+    public Optional<Client> findClientByInvoiceId(Long invoiceId) {
         logger.info("Recherche du client par l'ID de la facture : {}", invoiceId);
-        return clientDao.findUserByInvoiceId(invoiceId);
+        return clientDao.findClientByInvoiceId(invoiceId);
     }
-
-
-//    public boolean updateClientBalance(Long clientId) {
-//        logger.info("Mise à jour du solde du client : {}", clientId);
-//        Optional<Client> clientOptional = clientDao.findById(clientId);
-//        if (clientOptional.isPresent()) {
-//            Client client = clientOptional.get();
-//            double totalInvoices = clientDao.getClientInvoiceSum(clientId);
-//            client.setSolde(totalInvoices);
-//            clientDao.updateClient(client);
-//            logger.info("Solde du client mis à jour : {}", client.getSolde());
-//            return true;
-//        } else {
-//            logger.warn("Client non trouvé avec l'ID : {}", clientId);
-//            return false;
-//        }
-//    }
 
     @Override
     public boolean updateClientBalance(Long clientId) {
-        logger.info("Mise à jour du solde du client ID : {}", clientId);
-        Optional<fr.koumare.comptease.model.Client> clientOptional = clientDao.findById(clientId);
-        if (!clientOptional.isPresent()) {
-            logger.warn("Client avec ID {} non trouvé", clientId);
+        logger.info("Mise à jour du solde du client : {}", clientId);
+        Optional<Client> clientOptional = clientDao.findById(clientId);
+        if (clientOptional.isPresent()) {
+            Client client = clientOptional.get();
+            double totalInvoices = clientDao.getClientInvoiceSum(clientId);
+            client.setSolde(totalInvoices);
+            clientDao.updateClient(client);
+            logger.info("Solde du client mis à jour : {}", client.getSolde());
+            return true;
+        } else {
+            logger.warn("Client non trouvé avec l'ID : {}", clientId);
             return false;
         }
+    }
 
-        Double invoiceSum = clientDao.getClientInvoiceSum(clientId);
-        double solde = (invoiceSum != null) ? invoiceSum.doubleValue() : 0.0; // Gérer le cas null
+    @Override
+    public Double getArticlePrice(Long idInvoice) {
+        logger.info("Recherche du prix de l'article de la facture : {}", idInvoice);
+        Optional<Invoice> invoiceOptional = clientDao.findInvoiceById(idInvoice);
+        if (invoiceOptional.isPresent()) {
+            Invoice invoice = invoiceOptional.get();
+            Double totalPrice=invoice.getPrice();
+            int quantite = invoice.getQuantity();
+            Double UnitPrice = totalPrice / quantite;
+            logger.info("Prix total des articles : {}", totalPrice);
+            return UnitPrice;
+        } else {
+            logger.warn("Facture non trouvée avec l'ID : {}", idInvoice);
+            return 0.0;
+        }
+    }
 
-        fr.koumare.comptease.model.Client client = clientOptional.get();
-        client.setSolde(solde);
-        clientDao.updateClient(client);
-        logger.info("Solde du client mis à jour avec succès : ID={}, solde={}", clientId, solde);
-        return true;
+    @Override
+    public boolean modifDescriptionFacture(Long idInvoice, String description) {
+        logger.info("Modification de la description de la facture : {}", idInvoice);
+        Optional<Invoice> invoiceOptional = clientDao.findInvoiceById(idInvoice);
+        if (invoiceOptional.isPresent()) {
+            clientDao.updateInvoiceDescription(idInvoice, description);
+            logger.info("Description de la facture mise à jour : {}", description);
+            return true;
+        } else {
+            logger.warn("Facture non trouvée avec l'ID : {}", idInvoice);
+            return false;
+        }
+    }
+    @Override
+    public void drawInDashboard() {
+        logger.info("Affichage du graphique tableau de bord");
+        Map<String, Integer> achatParClients = new HashMap<>();
+        Map<String, Double> soldeParClients = new HashMap<>();
+        List<Client> clientsWithMostInvoices = clientDao.getClientsWithMostInvoices();
+        List<Client> clientsWithHighestBalance = clientDao.getClientsWithHighestBalance();
+        for (Client client : clientsWithMostInvoices) {
+            achatParClients.put(client.getFirstName() + " " + client.getLastName(),  clientDao.getClientInvoiceCount(client.getIdc()));
+        }
+        for (Client client : clientsWithHighestBalance) {
+            soldeParClients.put(client.getFirstName() + " " + client.getLastName(), client.getSolde());
+        }
     }
 }

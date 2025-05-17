@@ -28,6 +28,10 @@ public class RapportFinancier {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "month")
+    private Integer month;
+
+
     //@OneToMany(mappedBy = "rapportFinancier")
     //private List<Transaction> transactions;
 
@@ -40,5 +44,9 @@ public class RapportFinancier {
         this.benefice = benefice;
         this.expenseTotal = expenseTotal;
         this.user = user;
+    }
+
+    public void setMonth(int mois) {
+        this.month = month;
     }
 }

@@ -59,6 +59,7 @@ public class Infos2Controller implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune entreprise trouvée pour cet utilisateur.");
             return;
         }
+        
 
 
         company.setSalesNature(salesNature);

@@ -1,6 +1,5 @@
 package fr.koumare.comptease.dao;
 
-import fr.koumare.comptease.model.CurrentUser;
 import fr.koumare.comptease.model.User;
 import fr.koumare.comptease.utilis.HibernateUtil;
 import org.hibernate.Session;
@@ -20,7 +19,6 @@ public class UserDao {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(user);
-            CurrentUser.setCurrentUser(user);
             transaction.commit();
             logger.info("Utilisateur sauvegardé : {}", user.getPseudo());
         } catch (Exception e) {
@@ -39,8 +37,7 @@ public class UserDao {
                     .setParameter("pseudo", pseudo)
                     .uniqueResultOptional();
             if (user.isPresent()) {
-                CurrentUser.setCurrentUser(user.get());
-                logger.info("Utilisateur trouvé : {}", user.get().getPseudo()+" "+user.get().getId()+" "+CurrentUser.getCurrentUser().getId());
+                logger.info("Utilisateur trouvé : {}", user.get().getPseudo()+" "+user.get().getId());
             } else {
                 logger.warn("Aucun utilisateur trouvé pour le pseudo : {}", pseudo);
             }
@@ -71,4 +68,30 @@ public class UserDao {
             e.printStackTrace();
         }
     }
+
+    public void deleteUser(Long userId) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            User user = session.get(User.class, userId);
+            if (user != null) {
+                session.delete(user);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+
+    public User getUserById(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(User.class, id);
+        }
+    }
+
 }
+

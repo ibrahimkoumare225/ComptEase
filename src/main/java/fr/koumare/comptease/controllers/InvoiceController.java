@@ -1,6 +1,5 @@
 package fr.koumare.comptease.controllers;
 
-import com.sun.javafx.collections.ElementObservableListDecorator;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Invoice;
