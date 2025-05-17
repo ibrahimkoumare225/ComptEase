@@ -97,6 +97,63 @@ public class FactureServiceImpl implements FactureService {
 
     }
 
+    @Override
+    public boolean updateInvoice(Long id, String description, Instant date, String status, Long clientId,
+                                 List<Article> articles, String type, int quantity) {
+        logger.info("Mise à jour de la facture : ID={}, description={}, date={}, status={}, clientId={}, articles.size={}, type={}, quantiteTotal={}",
+                id, description, date, status, clientId, articles != null ? articles.size() : 0, type, quantity);
+
+        // Vérification des champs obligatoires
+        if (description == null || date == null || status == null || articles == null || type == null) {
+            logger.warn("Informations facture incomplètes");
+            return false;
+        }
+
+
+        try {
+            TypeInvoice.valueOf(type);
+            // si le type est OUTGOING, clientId peut être null (dépense)
+            if (!type.equals("OUTGOING") && clientId == null) {
+                logger.warn("ClientId requis pour une facture de type {}", type);
+                return false;
+            }
+        } catch (IllegalArgumentException e) {
+            logger.error("Type de facture invalide : {}", type);
+            return false;
+        }
+
+        Client client = clientDao.findByIdQuery(clientId);
+        if (clientId != null) {
+            client = clientDao.findByIdQuery(clientId);
+            if (client == null) {
+                logger.warn("Client avec ID {} non trouvé", clientId);
+                return false;
+            }
+        }
+
+        Invoice invoice = new Invoice(
+                0.0,
+                description,
+                date,
+                StatusInvoice.valueOf(status),
+                client,
+                new ArrayList<>(articles),
+                TypeInvoice.valueOf(type),
+                quantity
+        );
+        invoice.setId(id); // Assurez-vous que l'ID est défini avant la mise à jour
+        invoice.calculatePrice();
+
+        try {
+            invoiceDao.updateFacture(invoice);
+            logger.info("Facture mise à jour avec succès : ID={}", invoice.getId());
+            return true;
+        } catch (Exception e) {
+            logger.error("Échec de la mise à jour de la facture : {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
     //somme des factures impayees entrante
     @Override
     public Double getTotalUnpaidIncomingInvoices() {
@@ -206,6 +263,17 @@ public class FactureServiceImpl implements FactureService {
         } catch (Exception e) {
             logger.error("Échec de l'enregistrement de l'article : {}", e.getMessage(), e);
             return false;
+        }
+    }
+
+    @Override
+    public int getQuantityById(Long invoiceId) {
+        logger.info("Récupération de la quantité pour la facture ID : {}", invoiceId);
+        try {
+            return invoiceDao.getQuantityById(invoiceId);
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération de la quantité pour la facture ID {} : {}", invoiceId, e.getMessage(), e);
+            throw new RuntimeException("Échec de la récupération de la quantité pour la facture", e);
         }
     }
 

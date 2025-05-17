@@ -45,6 +45,11 @@ public class InvoiceController extends BaseController implements Initializable {
     @FXML
     private ComboBox<Client> clientComboBox;
 
+    @FXML
+    private Button modifFacture;
+
+    @FXML
+    private Button annulerModif;
 
     @FXML
     private TextField descriptionField;
@@ -273,6 +278,19 @@ public class InvoiceController extends BaseController implements Initializable {
                 return "INCOMING";
             case "Sortante":
                 return "OUTGOING";
+            
+            default:
+                return null;
+        }
+    }
+    //recuperer le type de la facture pour le comboBox
+    private String getTypeInvoiceFR(String type) {
+        switch (type) {
+            case "INCOMING":
+                return "Entrante";
+            case "OUTGOING":
+                return "Sortante";
+            
             default:
                 return null;
         }
@@ -288,6 +306,17 @@ public class InvoiceController extends BaseController implements Initializable {
                 return "PAID";
             case "Non payée":
                 return "UNPAID";
+            default:
+                return null;
+        }
+    }
+    //recuperer le status de la facture pour le comboBox
+    private String getStatusInvoiceFR(String status) {
+        switch (status) {
+            case "PAID":
+                return "Payée";
+            case "UNPAID":
+                return "Non payée";
             default:
                 return null;
         }
@@ -493,10 +522,99 @@ public class InvoiceController extends BaseController implements Initializable {
             List<Invoice> invoices = factureService.getAllInvoices();
             invoicesList.setAll(invoices);
             logger.info("Chargement de {} factures", invoices.size());
+            invoicesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    modifFacture.setVisible(true);
+                    annulerModif.setVisible(true);
+                    Invoice selectedInvoice = newSelection;
+                    descriptionField.setText(selectedInvoice.getDescription());
+                    invoiceTypeComboBox.setValue(getTypeInvoiceFR(selectedInvoice.getType().toString()));
+                    invoiceStatusComboBox.setValue(getStatusInvoiceFR(selectedInvoice.getStatus().toString()));
+                    articleDescription.setText(selectedInvoice.getArticles().get(0).getDescription());
+                    articlePrice.setText(String.valueOf(selectedInvoice.getArticles().get(0).getPrice()));
+                    articleQuantity.setText(String.valueOf(selectedInvoice.getArticles().get(0).getQuantite()));
+                    Client selectedClient = selectedInvoice.getClient();
+                    if(selectedClient == null){
+                        clientComboBox.setValue(null);
+                    }else{
+                        for (Client client : clientsList) {
+                            if (client.getIdc().equals(selectedClient.getIdc())) {
+                                clientComboBox.setValue(client);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
         } catch (Exception e) {
             logger.error("Erreur lors du chargement des factures : {}", e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement des factures : " + e.getMessage());
         }
+    }
+
+    @FXML
+    private void updateFacture(ActionEvent event) {
+        try {
+            Long selectedInvoiceId = invoicesTable.getSelectionModel().getSelectedItem().getId();
+            String descriptionFacture = descriptionField.getText();
+            String statut = getStatusInvoice();
+            String type = getTypeInvoice();
+            String descriptionArticle = articleDescription.getText();
+            Double price = Double.parseDouble(articlePrice.getText());
+            int quantity = Integer.parseInt(articleQuantity.getText());
+            Article article = new Article(descriptionArticle, Arrays.asList("Default Category"), quantity, price);
+            ObservableList<Article> articlesListe = FXCollections.observableArrayList();
+            articlesListe.add(article);
+
+            Client client = clientComboBox.getValue();
+            if (client == null && type.equals("INCOMING")) {
+                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez sélectionner un client.");
+                return;
+            }
+            if (descriptionFacture.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer une description.");
+                return;
+            }
+            Boolean update=factureService.updateInvoice(
+                    invoicesTable.getSelectionModel().getSelectedItem().getId(),
+                    descriptionFacture,
+                    Instant.now(),
+                    statut,
+                    client != null ? client.getIdc() : null,
+                    articlesListe,
+                    type,
+                    quantity
+            );
+            if(update){
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture mise à jour avec succès !");
+                resetForm();
+                modifFacture.setVisible(false);
+                annulerModif.setVisible(false);
+                loadFactures();
+            }
+            else{
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la mise à jour de la facture.");
+            }
+
+
+
+        } catch (Exception e) {
+            logger.error("Erreur lors de la mise à jour de la facture : {}", e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la mise à jour de la facture : " + e.getMessage());
+        }
+
+    
+    }
+
+    @FXML
+    private void cancelUpdate(ActionEvent event) {
+        resetForm();
+        modifFacture.setVisible(false);
+        annulerModif.setVisible(false);
+        articleDescription.clear();
+        articlePrice.clear();
+        articleQuantity.clear();
+
     }
 
 

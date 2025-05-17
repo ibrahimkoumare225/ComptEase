@@ -14,6 +14,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.Region?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.InvoiceController">
     <children>
@@ -82,9 +83,11 @@
                     <center>
                         <AnchorPane prefHeight="720.0" prefWidth="1000.0" styleClass="body1" stylesheets="@../css/invoice.css" BorderPane.alignment="CENTER">
                             <children>
+                                 
                                 <!-- Formulaire de création de facture/devis -->
                                 <AnchorPane fx:id="createForm" prefHeight="400.0" prefWidth="950.0" maxHeight="450.0" styleClass="form-container" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="300.0">
                                     <children>
+                                    
                                         <VBox spacing="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                             <children>
                                                 <Label text="Créer une Facture / un Devis" styleClass="form-title">
@@ -92,9 +95,15 @@
                                                         <Font name="System Bold" size="18.0" />
                                                     </font>
                                                 </Label>
+                                               
+                                                
                                                 <HBox spacing="10.0">
                                                     <Label text="Client :" styleClass="form-label" />
                                                     <ComboBox fx:id="clientComboBox" prefWidth="200.0" />
+
+                                                    <Region HBox.hgrow="ALWAYS" />
+                                                    <Button fx:id="modifFacture" text="Modifier" onAction="#updateFacture" visible="false" layoutX="400"  />
+                                                    <Button fx:id="annulerModif" text="Annuler" onAction="#cancelUpdate" visible="false" layoutX="500" />
                                                 </HBox>
                                                 <HBox spacing="10.0">
                                                     <Label text="Description :" styleClass="form-label" />

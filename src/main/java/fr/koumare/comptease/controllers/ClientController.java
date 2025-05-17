@@ -427,6 +427,9 @@ public class ClientController extends BaseController implements Initializable {
                 listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
                 affiche(listAllClients);
                 EffacerChamps(event);
+                formInitial_h.setVisible(true);
+                form_modif.setVisible(false);
+                form_add.setVisible(false);
             } else {
                 logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client modifié.");
@@ -587,6 +590,9 @@ public class ClientController extends BaseController implements Initializable {
         modifIdDetail.setText(String.valueOf(invoice.getId()));
         modifNote.setText(invoice.getDescription());
         modifStatut.setText(invoice.getStatus().toString());
+        if(invoice.getStatus() == StatusInvoice.UNPAID) {
+            envoyerRappel.setVisible(true);
+        } 
         /*modifPrixU.setText(String.valueOf(invoice.getPrice()));
         modifPrixT.setText(String.valueOf(invoice.getPrice() * 4L));
         modifDate.setText(String.valueOf(invoice.getDate()));*/
@@ -687,5 +693,18 @@ public class ClientController extends BaseController implements Initializable {
             logger.error("Erreur lors de l'affichage du devis : {}", e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'affichage du devis.");
         }
+    }
+
+    @FXML
+    private void fctEnvoyerRappel(ActionEvent event) {
+        logger.info("Envoi d'un rappel");
+        //envoyer un mail
+        /*if(clientService.envoyerRappel(Long.parseLong(modifIdDetail.getText()))){
+            logger.info("Rappel envoyé");*/
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Rappel envoyé avec succès à "+clientService.findClientByInvoiceId(Long.parseLong(modifIdDetail.getText())).orElse(null).getContact());
+       /*  } else {
+            logger.error("Erreur lors de l'envoi du rappel");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'envoi du rappel.");
+        }*/
     }
 }
