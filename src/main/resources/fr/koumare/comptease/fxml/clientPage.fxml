@@ -108,7 +108,7 @@
                                                                </TableView>
                                                             </children>
                                                          </AnchorPane>
-                                                         <AnchorPane fx:id="formInitial_h" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="1000.0" styleClass="ftab" stylesheets="@../css/client.css" AnchorPane.bottomAnchor="568.6666666666666">
+                                                         <AnchorPane fx:id="formInitial_h" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="990.0" styleClass="ftab" stylesheets="@../css/client.css" AnchorPane.bottomAnchor="568.6666666666666">
                                                             <children>
                                                                <Label layoutX="405.0" layoutY="2.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Vos Clients" AnchorPane.topAnchor="30.0">
                                                                   <font>
@@ -121,7 +121,7 @@
                                                                <TextField fx:id="searchBarre" layoutX="300.0" layoutY="59.0" prefHeight="30.0" prefWidth="190.0" promptText="Rechercher" AnchorPane.topAnchor="65.0" />
                                                             </children>
                                                          </AnchorPane>
-                                                         <AnchorPane fx:id="form_add" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                                         <AnchorPane fx:id="form_add" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="990.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                                             <children>
                                                                <Button fx:id="addExecuter" layoutX="852.0" layoutY="99.0" mnemonicParsing="false" onAction="#AjoutClient" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Ajouter le client" AnchorPane.rightAnchor="14.666666666666629" />
                                                                <Label layoutX="405.0" layoutY="-4.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Nouveau Client">
@@ -148,7 +148,7 @@
                                                                </Button>
                                                             </children>
                                                          </AnchorPane>
-                                                         <AnchorPane fx:id="form_modif" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                                         <AnchorPane fx:id="form_modif" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="990.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                                             <children>
                                                                <Button fx:id="modifExecuter" layoutX="791.0" layoutY="50.0" mnemonicParsing="false" onAction="#ModifClient" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Modifier" AnchorPane.rightAnchor="33.0" />
                                                                <Button fx:id="suprExecuter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#SupprClient" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Supprimer" AnchorPane.rightAnchor="33.0" />
@@ -186,7 +186,7 @@
                                                       <children>
                                                          <AnchorPane layoutX="2.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="482.0" prefWidth="965.0" stylesheets="@../css/client.css">
                                                             <children>
-                                                               <TableView fx:id="tableClientDetail" layoutX="4.0" layoutY="6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="475.0" prefWidth="969.0" styleClass="table" stylesheets="@../css/client.css">
+                                                               <TableView fx:id="tableClientDetail" layoutX="4.0" layoutY="6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="475.0" prefWidth="990.0" styleClass="table" stylesheets="@../css/client.css">
                                                                   <columns>
                                                                      <TableColumn fx:id="idp" maxWidth="1.7976931348623157E308" prefWidth="76.66668462753296" text="Identifiant " />
                                                                      <TableColumn fx:id="desp" maxWidth="1.7976931348623157E308" prefWidth="317.3332748413086" text="Description" />
@@ -199,7 +199,7 @@
                                                                </TableView>
                                                             </children>
                                                          </AnchorPane>
-                                                         <AnchorPane fx:id="formInitial_hDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css">
+                                                         <AnchorPane fx:id="formInitial_hDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="990.0" styleClass="ftab" stylesheets="@../css/client.css">
                                                             <children>
                                                                <Label layoutX="405.0" layoutY="2.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Détails du client">
                                                                   <font>
@@ -216,7 +216,7 @@
                                                                </Button>
                                                             </children>
                                                          </AnchorPane>
-                                                         <AnchorPane fx:id="form_modifDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="143.0" prefWidth="968.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
+                                                         <AnchorPane fx:id="form_modifDetail" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="990.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                                             <children>
                                                                <Button fx:id="voirDevis" layoutX="566.0" layoutY="73.0" mnemonicParsing="false" onAction="#fctVoirDevis" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Voir facture" AnchorPane.rightAnchor="280.0" />
                                                                <Button fx:id="envoyerRappel" layoutX="819.0" layoutY="91.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Notifier" AnchorPane.rightAnchor="27.0" visible="false" />

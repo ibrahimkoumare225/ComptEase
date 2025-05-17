@@ -3,3 +3,74 @@
     -fx-background-color: #A4C2E0;
     -fx-background-radius: 50;
 }
+
+.retour{
+    -fx-background-color: #A4C2E0;
+    -fx-background-radius: 5;
+}
+.retour:hover{
+    -fx-background-color: #1A1F37;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    cursor: pointer;
+}
+.btnVoirDetails{
+    -fx-background-color: #A4C2E0;
+    -fx-background-radius: 5;
+}
+.body {
+    -fx-background-color: #A4C2E0;
+}
+
+/* Navigation Section */
+.menu_container {
+    -fx-padding: 10 10 10 20;
+    -fx-spacing: 20;
+    -fx-background-color: #37383C;
+}
+
+.menu_container Button {
+    -fx-pref-width: 241;
+    -fx-pref-height: 40;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #37383C;
+    -fx-font-size: 1.1em;
+    -fx-alignment: center_left;
+}
+
+.body1 {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 0);
+    -fx-background-color: #FFFFFF;
+}
+
+.menu_container Button:hover {
+    -fx-cursor: hand;
+}
+
+.menu_container Button FontAwesomeIconView {
+    -fx-fill: #FFFFFF;
+}
+
+.alt_menu_btn {
+    -fx-pref-width: 241; /* Ajusté pour correspondre à .menu_container Button */
+    -fx-pref-height: 40;
+    -fx-background-color: #1A1F37;
+    -fx-font-size: 1.1em;
+    -fx-alignment: center_left;
+}
+
+.alt_menu_btn FontAwesomeIconView {
+    -fx-fill: #FFFFFF;
+}
+
+.ftab{
+    -fx-background-color: #fff;
+    -fx-background-radius:8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 0);
+    -fx-border-width: 1px;
+}
+.container_button{
+    -fx-border-bottom: 1px solid gray;
+    -fx-padding-bottom: 10px;
+    -fx-background-color: transparent;
+}

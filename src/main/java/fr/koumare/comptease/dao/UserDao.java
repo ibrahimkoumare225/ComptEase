@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
+import java.util.List;
 
 public class UserDao {
 
@@ -45,6 +46,14 @@ public class UserDao {
         } catch (Exception e) {
             logger.error("Erreur lors de la recherche de l'utilisateur avec pseudo : {}", pseudo, e);
             return Optional.empty();
+        }
+    }
+
+    public Optional<User> findByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM User WHERE email = :email", User.class)
+                    .setParameter("email", email)
+                    .uniqueResultOptional();
         }
     }
 
@@ -90,6 +99,12 @@ public class UserDao {
     public User getUserById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(User.class, id);
+        }
+    }
+
+    public List<User> getAllUsers() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM User", User.class).list();
         }
     }
 
