@@ -18,8 +18,4 @@ public interface FactureService  {
     Double getTotalOutgoingInvoices();
     Double getTotalUnpaidIncomingInvoices();
     Double getTotalPaidIncomingInvoices();
-
-
-
-
 }

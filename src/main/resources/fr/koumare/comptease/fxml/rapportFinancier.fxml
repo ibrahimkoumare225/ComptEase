@@ -100,21 +100,21 @@
                                         <HBox spacing="20" prefWidth="Infinity">
                                             <VBox spacing="5" styleClass="card" HBox.hgrow="ALWAYS">
                                                 <HBox spacing="10" alignment="CENTER_LEFT">
-                                                    <FontAwesomeIconView glyphName="MONEY" size="20" style="-fx-fill: #3b5998;" />
+                                                    <FontAwesomeIconView fill="#ff0404" glyphName="MONEY" layoutX="149.0" layoutY="47.0" selectionFill="#e00808" size="30" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0" />
                                                     <Label text="Revenus" styleClass="card-title" />
                                                 </HBox>
                                                 <Label fx:id="revenuLabel" text="0.0 €" styleClass="card-value" />
                                             </VBox>
                                             <VBox spacing="5" styleClass="card" HBox.hgrow="ALWAYS">
                                                 <HBox spacing="10" alignment="CENTER_LEFT">
-                                                    <FontAwesomeIconView glyphName="CREDIT_CARD" size="20" style="-fx-fill: #3b5998;" />
+                                                    <FontAwesomeIconView fill="#ff0404" glyphName="CREDIT_CARD" layoutX="149.0" layoutY="47.0" selectionFill="#e00808" size="30" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0" />
                                                     <Label text="Dépenses" styleClass="card-title" />
                                                 </HBox>
                                                 <Label fx:id="depenseLabel" text="0.0 €" styleClass="card-value" />
                                             </VBox>
                                             <VBox spacing="5" styleClass="card" HBox.hgrow="ALWAYS">
                                                 <HBox spacing="10" alignment="CENTER_LEFT">
-                                                    <FontAwesomeIconView glyphName="LINE_CHART" size="20" style="-fx-fill: #3b5998;" />
+                                                    <FontAwesomeIconView fill="#ff0404" glyphName="LINE_CHART" layoutX="149.0" layoutY="47.0" selectionFill="#e00808" size="30" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0" />
                                                     <Label text="Bénéfice" styleClass="card-title" />
                                                 </HBox>
                                                 <Label fx:id="beneficeLabel" text="0.0 €" styleClass="card-value" />
