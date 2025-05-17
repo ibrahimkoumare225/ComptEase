@@ -9,6 +9,7 @@ module fr.koumare.comptease {
     requires java.naming;
     requires static lombok;
     requires java.management;
+    requires javafx.graphics;
     requires jbcrypt;
     requires com.sun.istack.runtime;
     requires org.slf4j;

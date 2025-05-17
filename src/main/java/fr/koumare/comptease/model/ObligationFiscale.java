@@ -19,7 +19,11 @@ public class ObligationFiscale {
 
     private Instant dateEchance;
 
+    private String typeImpot;
+
     private double amount;
+
+    private Instant createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -34,9 +38,12 @@ public class ObligationFiscale {
     public ObligationFiscale() {
     }
 
-    public ObligationFiscale(Instant dateEchance, double amount, User user) {
+    public ObligationFiscale(Instant dateEchance, double amount, String typeImpot, User user)
+    {
         this.dateEchance = dateEchance;
         this.amount = amount;
+        this.typeImpot = typeImpot;
         this.user = user;
+        this.createdAt = Instant.now();
     }
 }
