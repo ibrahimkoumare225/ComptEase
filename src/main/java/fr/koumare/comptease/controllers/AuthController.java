@@ -81,9 +81,18 @@ public class AuthController implements Initializable {
 
         if (userService.authenticateUser(pseudo, password)) {
             logger.info("Connexion réussie pour : {}", pseudo);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Authentification réussie !");
-            // Redirection vers Dashboard.fxml (1300x720)
-            loadFXML(event, "/fr/koumare/comptease/fxml/dashboard.fxml", "Tableau de bord", 1300, 720);
+            // Récupérer l'utilisateur connecté
+            Optional<User> userOpt = userService.findByPseudo(pseudo);
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                userService.setCurrentUser(user);
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Authentification réussie !");
+                // Redirection vers Dashboard.fxml (1300x720)
+                loadFXML(event, "/fr/koumare/comptease/fxml/dashboard.fxml", "Tableau de bord", 1300, 720);
+            } else {
+                logger.error("Impossible de récupérer l'utilisateur après connexion : {}", pseudo);
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération des informations utilisateur.");
+            }
         } else {
             logger.warn("Échec de la connexion pour : {}", pseudo);
             showAlert(Alert.AlertType.ERROR, "Erreur", "Identifiants incorrects.");

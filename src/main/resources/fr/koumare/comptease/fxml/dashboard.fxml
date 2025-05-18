@@ -182,8 +182,90 @@
                                                                 </Label>
                                                             </children>
                                                         </AnchorPane>
-                                                        <AnchorPane layoutX="565.0" layoutY="293.0" prefHeight="140.0" prefWidth="280.0" styleClass="cd" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="20.0" />
-                                                        <AnchorPane layoutX="214.0" layoutY="277.0" prefHeight="140.0" prefWidth="265.0" styleClass="cd" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="330.0" />
+                                                        <AnchorPane layoutX="565.0" layoutY="293.0" prefHeight="140.0" prefWidth="280.0" styleClass="cd" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="20.0">
+                                                            <children>
+                                                                <Label fx:id="tax1Label" layoutX="10.0" layoutY="20.0" prefHeight="30.0" prefWidth="220.0" text="1. Aucun impôt" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                                                                    <font>
+                                                                        <Font name="Tahoma" size="16.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <Label fx:id="tax2Label" layoutX="10.0" layoutY="60.0" prefHeight="30.0" prefWidth="220.0" text="2. Aucun impôt" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">
+                                                                    <font>
+                                                                        <Font name="Tahoma" size="16.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <Label fx:id="tax3Label" layoutX="10.0" layoutY="100.0" prefHeight="30.0" prefWidth="220.0" text="3. Aucun impôt" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="110.0">
+                                                                    <font>
+                                                                        <Font name="Tahoma" size="16.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <Label fx:id="totalFiscLabel" layoutX="10.0" layoutY="140.0" prefHeight="30.0" prefWidth="220.0" text="Total: € 0.00" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="140.0">
+                                                                    <font>
+                                                                        <Font name="Tahoma Bold" size="16.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </AnchorPane>
+                                                        <AnchorPane layoutX="214.0" layoutY="277.0" prefHeight="180.0" prefWidth="265.0" styleClass="cd" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="330.0">
+                                                            <children>
+                                                                <AnchorPane prefHeight="30.0" prefWidth="265.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">
+                                                                    <children>
+                                                                        <Label layoutX="10.0" layoutY="6.0" text="Dépenses" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                                                            <font>
+                                                                                <Font name="Tahoma" size="16.0" />
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label fx:id="expensesProfitLabel" layoutX="150.0" layoutY="6.0" prefHeight="30.0" prefWidth="105.0" text="€ 0.00" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+                                                                            <font>
+                                                                                <Font name="Tahoma Bold" size="16.0" />
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </AnchorPane>
+                                                                <AnchorPane prefHeight="30.0" prefWidth="265.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="110.0">
+                                                                    <children>
+                                                                        <Label layoutX="10.0" layoutY="6.0" text="Impôt" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                                                            <font>
+                                                                                <Font name="Tahoma" size="16.0" />
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label fx:id="taxProfitLabel" layoutX="150.0" layoutY="6.0" prefHeight="30.0" prefWidth="105.0" text="€ 0.00" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+                                                                            <font>
+                                                                                <Font name="Tahoma Bold" size="16.0" />
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </AnchorPane>
+                                                                <AnchorPane prefHeight="30.0" prefWidth="265.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="140.0">
+                                                                    <children>
+                                                                        <Label layoutX="10.0" layoutY="6.0" text="Restante" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                                                            <font>
+                                                                                <Font name="Tahoma" size="16.0" />
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label fx:id="restanteLabel" layoutX="150.0" layoutY="6.0" prefHeight="30.0" prefWidth="105.0" text="€ 0.00" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+                                                                            <font>
+                                                                                <Font name="Tahoma Bold" size="16.0" />
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </AnchorPane>
+                                                <AnchorPane layoutX="9.0" layoutY="41.0" prefHeight="30.0" prefWidth="265.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                                                   <children>
+                                                                        <Label fx:id="turnoverProfitLabel" prefHeight="30.0" prefWidth="105.0" text="€ 0.00" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="6.0">
+                                                                            <font>
+                                                                                <Font name="Tahoma Bold" size="16.0" />
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label layoutX="6.0" layoutY="7.0" text="Chiffre d'affaires" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                                                            <font>
+                                                                                <Font name="Tahoma" size="16.0" />
+                                                                            </font>
+                                                                        </Label>
+                                                   </children>
+                                                </AnchorPane>
+                                                            </children>
+                                                        </AnchorPane>
                                                         <AnchorPane layoutX="15.0" layoutY="256.0" prefHeight="40.0" prefWidth="265.0" styleClass="cde" AnchorPane.bottomAnchor="149.0" AnchorPane.leftAnchor="20.0">
                                                             <children>
                                                                 <Label layoutX="31.0" layoutY="6.0" text="Clients principaux" AnchorPane.bottomAnchor="7.333333333333332" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="7.333333333333333">
@@ -207,7 +289,7 @@
                                                                 </Label>
                                                                 <Label layoutX="120.0" layoutY="-7.0" prefWidth="86.0" AnchorPane.bottomAnchor="7.333333333333332" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="7.333333333333333">
                                                                     <graphic>
-                                                                        <DatePicker prefHeight="25.0" prefWidth="85.0" />
+                                                                        <DatePicker fx:id="profitDatePicker" prefHeight="25.0" prefWidth="85.0" />
                                                                     </graphic>
                                                                 </Label>
                                                             </children>
@@ -221,7 +303,7 @@
                                                                 </Label>
                                                                 <Label layoutX="165.0" layoutY="-3.0" prefWidth="86.0" AnchorPane.bottomAnchor="7.333333333333332" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="7.333333333333333">
                                                                     <graphic>
-                                                                        <DatePicker prefHeight="25.0" prefWidth="85.0" />
+                                                                        <DatePicker fx:id="fiscaliteDatePicker" prefHeight="25.0" prefWidth="85.0" />
                                                                     </graphic>
                                                                 </Label>
                                                             </children>

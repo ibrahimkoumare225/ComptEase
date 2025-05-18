@@ -133,13 +133,18 @@
                                                                <TextField fx:id="addNom" layoutX="83.0" layoutY="36.0" />
                                                                <Label layoutX="24.0" layoutY="70.0" text="Prénom :" />
                                                                <TextField fx:id="addPrenom" layoutX="83.0" layoutY="66.0" />
-                                                               <TextField fx:id="addContact" layoutX="83.0" layoutY="96.0" prefHeight="25.0" prefWidth="266.0" />
                                                                <Label layoutX="24.0" layoutY="100.0" text="Contact :" />
+                                                               <TextField fx:id="addContact" layoutX="83.0" layoutY="96.0" prefHeight="25.0" prefWidth="266.0" />
                                                                <Label layoutX="385.0" layoutY="70.0" text="Note : " />
-                                                               <!--<TextField fx:id="addSolde" layoutX="447.0" layoutY="66.0" />-->
                                                                <TextField fx:id="addNote" layoutX="447.0" layoutY="66.0" prefHeight="25.0" prefWidth="286.0" />
                                                                <Label layoutX="384.0" layoutY="40.0" text="Adresse :" />
                                                                <TextField fx:id="addAdresse" layoutX="447.0" layoutY="36.0" prefHeight="25.0" prefWidth="286.0" />
+                                                               
+                                                               <!-- Nouveaux champs SIRET et RIB -->
+                                                               <Label layoutX="31.0" layoutY="130.0" text="SIRET :" />
+                                                               <TextField fx:id="addSiret" layoutX="83.0" layoutY="126.0" prefHeight="25.0" prefWidth="266.0" />
+                                                               <Label layoutX="384.0" layoutY="130.0" text="RIB :" />
+                                                               <TextField fx:id="addRib" layoutX="447.0" layoutY="126.0" prefHeight="25.0" prefWidth="286.0" />
                                                                <Button fx:id="addEffacer" layoutX="733.0" layoutY="99.0" mnemonicParsing="false" onAction="#EffacerChamps" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Effacer" />
                                                                <Button fx:id="addRetour" layoutX="945.0" layoutY="0.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="25.0" prefWidth="25.0" styleClass="retour">
                                                                   <graphic>

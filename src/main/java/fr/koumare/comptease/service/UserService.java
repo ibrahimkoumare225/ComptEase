@@ -13,5 +13,7 @@ public interface UserService {
     List<User> getAllUsers();
     boolean updateUser(String pseudo, String email);
     boolean updateUserPassword(List<User> user, String password);
+    User getCurrentUser();
+    void setCurrentUser(User user);
 
 }

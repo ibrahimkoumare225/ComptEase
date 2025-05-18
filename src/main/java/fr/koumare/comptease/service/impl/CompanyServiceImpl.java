@@ -43,7 +43,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public boolean updateCompany(String companyName, String legalForm, String taxRegime, String profession,
-                   String salesNature, LocalDate creationDate, LocalDate closingDate, User user) {
+                   String salesNature, LocalDate creationDate, LocalDate closingDate, User user,
+                   String siret, String rib, String address, String phone, String email,
+                   Double capitalSocial, String tvaNumber) {
         Company company = companyDao.getCompanyInformations();
 
         if(company == null) {
@@ -57,6 +59,14 @@ public class CompanyServiceImpl implements CompanyService {
         company.setSalesNature(salesNature);
         company.setCreationDate(creationDate);
         company.setClosingDate(closingDate);
+        company.setSiret(siret);
+        company.setRib(rib);
+        company.setAddress(address);
+        company.setPhone(phone);
+        company.setEmail(email);
+        company.setCapitalSocial(capitalSocial);
+        company.setTvaNumber(tvaNumber);
+        
         companyDao.updateCompany(company);
         logger.info("Informations de l'entreprise mises à jour avec succès : " + company.getCompanyName());
         return true;

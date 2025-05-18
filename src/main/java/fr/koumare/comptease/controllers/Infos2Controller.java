@@ -1,8 +1,8 @@
 package fr.koumare.comptease.controllers;
 
-import fr.koumare.comptease.dao.CompanyDao;
 import fr.koumare.comptease.model.Company;
 import fr.koumare.comptease.model.User;
+import fr.koumare.comptease.service.impl.CompanyServiceImpl;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,7 +31,7 @@ public class Infos2Controller implements Initializable {
     private DatePicker closingDatePicker;
 
     private User currentUser; // Utilisateur connecté
-    private CompanyDao companyDao = new CompanyDao();
+    private CompanyServiceImpl companyService = new CompanyServiceImpl();
 
     // Méthode pour définir l'utilisateur connecté
     public void setCurrentUser(User user) {
@@ -54,34 +54,31 @@ public class Infos2Controller implements Initializable {
             return;
         }
 
-        Company company = companyDao.findCompanyByUser(currentUser);
+        Company company = companyService.findCompanyByUser(currentUser);
         if (company == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune entreprise trouvée pour cet utilisateur.");
             return;
         }
-        
-
 
         company.setSalesNature(salesNature);
         company.setCreationDate(creationDate);
         company.setClosingDate(closingDate);
 
-
-        companyDao.saveCompany(company);
-        showAlert(Alert.AlertType.INFORMATION, "Succès", "Informations enregistrées !");
-
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/dashboard.fxml"));
-            Scene scene = new Scene(loader.load(), 1300, 720);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.setTitle("Tableau de bord");
-            stage.show();
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger Dashboard.fxml : " + e.getMessage());
-            System.out.println("Impossible de charger Dashboard.fxml : " + e.getMessage());
-            e.printStackTrace();
+        if (companyService.saveCompany(company)) {
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Informations enregistrées !");
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/dashboard.fxml"));
+                Scene scene = new Scene(loader.load(), 1300, 720);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.setTitle("Tableau de bord");
+                stage.show();
+            } catch (IOException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger Dashboard.fxml : " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la sauvegarde des informations.");
         }
     }
 

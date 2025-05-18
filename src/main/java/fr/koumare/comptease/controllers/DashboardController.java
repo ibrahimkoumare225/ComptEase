@@ -2,13 +2,17 @@ package fr.koumare.comptease.controllers;
 
 import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Invoice;
+import fr.koumare.comptease.model.ObligationFiscale;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.model.enumarated.TypeInvoice;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
 import fr.koumare.comptease.service.impl.FactureServiceImpl;
+import fr.koumare.comptease.dao.ObligationFiscaleDao;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -62,14 +66,49 @@ public class DashboardController extends BaseController implements Initializable
     private Label topClient3Label;
 
     @FXML
+    private Label tax1Label;
+
+    @FXML
+    private Label tax2Label;
+
+    @FXML
+    private Label tax3Label;
+
+    @FXML
+    private Label totalFiscLabel;
+
+    @FXML
+    private Label turnoverProfitLabel;
+
+    @FXML
+    private Label expensesProfitLabel;
+
+    @FXML
+    private Label taxProfitLabel;
+
+    @FXML
+    private Label restanteLabel;
+
+    @FXML
     private DatePicker barChartDatePicker;
 
     @FXML
     private DatePicker clientsDatePicker;
 
+    @FXML
+    private DatePicker fiscaliteDatePicker;
+
+    @FXML
+    private DatePicker profitDatePicker;
+
     private final FactureServiceImpl factureService = new FactureServiceImpl();
     private final ClientServiceImpl clientService = new ClientServiceImpl();
+    private final ObligationFiscaleDao obligationFiscaleDao = new ObligationFiscaleDao();
     private final DecimalFormat decimalFormat = new DecimalFormat("€ #,##0.00");
+
+    private double turnoverTotal = 0.0;
+    private double outgoingTotal = 0.0;
+    private double totalFisc = 0.0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -78,6 +117,8 @@ public class DashboardController extends BaseController implements Initializable
         configureBarChart();
         updateDashboardCards();
         updateTopClients();
+        updateFiscaliteSection();
+        updateProfitSection();
     }
 
     private void setupDatePickers() {
@@ -87,6 +128,7 @@ public class DashboardController extends BaseController implements Initializable
             logger.info("Bar chart year changed to: {}", newValue != null ? newValue.getYear() : "null");
             configureBarChart();
             updateDashboardCards();
+            updateProfitSection();
         });
 
         // Set default to current month for clients
@@ -94,6 +136,21 @@ public class DashboardController extends BaseController implements Initializable
         clientsDatePicker.valueProperty().addListener((obs, oldValue, newValue) -> {
             logger.info("Clients month changed to: {}", newValue != null ? newValue.getMonthValue() + "/" + newValue.getYear() : "null");
             updateTopClients();
+        });
+
+        // Set default to current year for fiscalite
+        fiscaliteDatePicker.setValue(LocalDate.now());
+        fiscaliteDatePicker.valueProperty().addListener((obs, oldValue, newValue) -> {
+            logger.info("Fiscalité year changed to: {}", newValue != null ? newValue.getYear() : "null");
+            updateFiscaliteSection();
+            updateProfitSection();
+        });
+
+        // Set default to current year for profit
+        profitDatePicker.setValue(LocalDate.now());
+        profitDatePicker.valueProperty().addListener((obs, oldValue, newValue) -> {
+            logger.info("Profit year changed to: {}", newValue != null ? newValue.getYear() : "null");
+            updateProfitSection();
         });
     }
 
@@ -163,10 +220,57 @@ public class DashboardController extends BaseController implements Initializable
             barChart.getData().clear();
             barChart.getData().addAll(incomingSeries, outgoingSeries);
 
-            barChart.lookupAll(".default-color0.chart-bar").forEach(node ->
-                    node.setStyle("-fx-bar-fill: green;"));
-            barChart.lookupAll(".default-color1.chart-bar").forEach(node ->
-                    node.setStyle("-fx-bar-fill: red;"));
+            // Clear all default and inherited styles
+            barChart.setStyle("-fx-bar-fill: transparent; -fx-background-color: transparent;");
+
+            // Apply colors after chart rendering
+            Platform.runLater(() -> {
+                // Style bars (already correct: green for incoming, red for outgoing)
+                logger.info("Applying green (#00FF00) to Factures Entrantes bars");
+                incomingSeries.getData().forEach(data -> {
+                    if (data.getNode() != null) {
+                        data.getNode().setStyle("-fx-bar-fill: #00FF00 !important;");
+                        logger.debug("Styled bar for month {} (Entrantes) with green", data.getXValue());
+                    } else {
+                        logger.warn("Node null for incoming data: {}", data.getXValue());
+                    }
+                });
+
+                logger.info("Applying red (#FF0000) to Factures Sortantes bars");
+                outgoingSeries.getData().forEach(data -> {
+                    if (data.getNode() != null) {
+                        data.getNode().setStyle("-fx-bar-fill: #FF0000 !important;");
+                        logger.debug("Styled bar for month {} (Sortantes) with red", data.getXValue());
+                    } else {
+                        logger.warn("Node null for outgoing data: {}", data.getXValue());
+                    }
+                });
+
+                // Style legend indicators
+                logger.info("Styling legend indicators");
+                barChart.lookupAll(".chart-legend-item").forEach(node -> {
+                    Node labelNode = node.lookup(".text");
+                    if (labelNode != null) {
+                        String seriesName = labelNode.toString().toLowerCase();
+                        Node symbol = node.lookup(".chart-legend-item-symbol");
+                        if (symbol != null) {
+                            if (seriesName.contains("entrantes")) {
+                                symbol.setStyle("-fx-background-color: #00FF00 !important;");
+                                logger.debug("Styled legend symbol for Factures Entrantes with green");
+                            } else if (seriesName.contains("sortantes")) {
+                                symbol.setStyle("-fx-background-color: #FF0000 !important;");
+                                logger.debug("Styled legend symbol for Factures Sortantes with red");
+                            } else {
+                                logger.warn("Unknown series in legend: {}", seriesName);
+                            }
+                        } else {
+                            logger.warn("Legend symbol not found for series: {}", seriesName);
+                        }
+                    } else {
+                        logger.warn("Label not found in legend item: {}", node);
+                    }
+                });
+            });
 
             logger.info("Graphique à barres configuré avec succès avec {} factures pour l'année {}", invoices.size(), selectedYear);
         } catch (Exception e) {
@@ -187,6 +291,8 @@ public class DashboardController extends BaseController implements Initializable
                 topClient1Label.setText("1. Aucun client");
                 topClient2Label.setText("2. Aucun client");
                 topClient3Label.setText("3. Aucun client");
+                turnoverTotal = 0.0;
+                outgoingTotal = 0.0;
                 return;
             }
 
@@ -201,7 +307,7 @@ public class DashboardController extends BaseController implements Initializable
 
             double paidIncomingTotal = 0.0;
             double unpaidIncomingTotal = 0.0;
-            double outgoingTotal = 0.0;
+            outgoingTotal = 0.0;
 
             for (Invoice invoice : invoices) {
                 if (invoice.getPrice() == null || invoice.getType() == null || invoice.getStatus() == null) {
@@ -223,7 +329,7 @@ public class DashboardController extends BaseController implements Initializable
                 }
             }
 
-            double turnoverTotal = paidIncomingTotal + unpaidIncomingTotal;
+            turnoverTotal = paidIncomingTotal + unpaidIncomingTotal;
 
             paidInvoicesLabel.setText(decimalFormat.format(paidIncomingTotal));
             pendingInvoicesLabel.setText(decimalFormat.format(unpaidIncomingTotal));
@@ -241,6 +347,8 @@ public class DashboardController extends BaseController implements Initializable
             topClient1Label.setText("1. Aucun client");
             topClient2Label.setText("2. Aucun client");
             topClient3Label.setText("3. Aucun client");
+            turnoverTotal = 0.0;
+            outgoingTotal = 0.0;
         }
     }
 
@@ -332,6 +440,160 @@ public class DashboardController extends BaseController implements Initializable
             topClient1Label.setText("1. Aucun client");
             topClient2Label.setText("2. Aucun client");
             topClient3Label.setText("3. Aucun client");
+        }
+    }
+
+    private void updateFiscaliteSection() {
+        try {
+            List<ObligationFiscale> obligations = obligationFiscaleDao.getAllObligationFiscale();
+            if (obligations == null || obligations.isEmpty()) {
+                logger.warn("Aucune obligation fiscale trouvée.");
+                tax1Label.setText("1. Aucun impôt");
+                tax2Label.setText("2. Aucun impôt");
+                tax3Label.setText("3. Aucun impôt");
+                totalFiscLabel.setText("Total: € 0.00");
+                totalFisc = 0.0;
+                return;
+            }
+
+            int selectedYear = fiscaliteDatePicker.getValue() != null
+                    ? fiscaliteDatePicker.getValue().getYear()
+                    : LocalDate.now().getYear();
+            logger.info("Updating fiscalité section for year: {}", selectedYear);
+
+            obligations = obligations.stream()
+                    .filter(ob -> ob.getDateEchance() != null &&
+                            ob.getDateEchance().atZone(ZoneId.systemDefault()).getYear() == selectedYear)
+                    .collect(Collectors.toList());
+
+            totalFisc = obligations.stream()
+                    .mapToDouble(ObligationFiscale::getAmount)
+                    .sum();
+
+            // Update labels for up to 3 tax obligations
+            if (obligations.isEmpty()) {
+                tax1Label.setText("1. Aucun impôt");
+                tax2Label.setText("2. Aucun impôt");
+                tax3Label.setText("3. Aucun impôt");
+            } else {
+                if (obligations.size() >= 1) {
+                    ObligationFiscale tax1 = obligations.get(0);
+                    tax1Label.setText(String.format("1. %s - %s", tax1.getTypeImpot(), decimalFormat.format(tax1.getAmount())));
+                } else {
+                    tax1Label.setText("1. Aucun impôt");
+                }
+
+                if (obligations.size() >= 2) {
+                    ObligationFiscale tax2 = obligations.get(1);
+                    tax2Label.setText(String.format("2. %s - %s", tax2.getTypeImpot(), decimalFormat.format(tax2.getAmount())));
+                } else {
+                    tax2Label.setText("2. Aucun impôt");
+                }
+
+                if (obligations.size() >= 3) {
+                    ObligationFiscale tax3 = obligations.get(2);
+                    tax3Label.setText(String.format("3. %s - %s", tax3.getTypeImpot(), decimalFormat.format(tax3.getAmount())));
+                } else {
+                    tax3Label.setText("3. Aucun impôt");
+                }
+            }
+
+            totalFiscLabel.setText(String.format("Total: %s", decimalFormat.format(totalFisc)));
+
+            logger.info("Fiscalité section updated with {} obligations for year {}. Total: €{}", obligations.size(), selectedYear, totalFisc);
+        } catch (Exception e) {
+            logger.error("Erreur lors de la mise à jour de la section fiscalité : {}", e.getMessage(), e);
+            tax1Label.setText("1. Aucun impôt");
+            tax2Label.setText("2. Aucun impôt");
+            tax3Label.setText("3. Aucun impôt");
+            totalFiscLabel.setText("Total: € 0.00");
+            totalFisc = 0.0;
+        }
+    }
+
+    private void updateProfitSection() {
+        try {
+            int profitYear = profitDatePicker.getValue() != null
+                    ? profitDatePicker.getValue().getYear()
+                    : LocalDate.now().getYear();
+            logger.info("Updating profit section for year: {}", profitYear);
+
+            // Check if the years match for turnover, expenses, and taxes
+            int barChartYear = barChartDatePicker.getValue() != null
+                    ? barChartDatePicker.getValue().getYear()
+                    : LocalDate.now().getYear();
+            int fiscaliteYear = fiscaliteDatePicker.getValue() != null
+                    ? fiscaliteDatePicker.getValue().getYear()
+                    : LocalDate.now().getYear();
+
+            // If the years don't match, recompute the values
+            if (profitYear != barChartYear) {
+                List<Invoice> invoices = factureService.getAllInvoices();
+                if (invoices != null && !invoices.isEmpty()) {
+                    invoices = invoices.stream()
+                            .filter(invoice -> invoice.getDate() != null &&
+                                    invoice.getDate().atZone(ZoneId.systemDefault()).getYear() == profitYear)
+                            .collect(Collectors.toList());
+
+                    double paidIncomingTotal = 0.0;
+                    double unpaidIncomingTotal = 0.0;
+                    outgoingTotal = 0.0;
+
+                    for (Invoice invoice : invoices) {
+                        if (invoice.getPrice() == null || invoice.getType() == null || invoice.getStatus() == null) {
+                            logger.warn("Facture ID {} a un prix, un type ou un statut null", invoice.getId());
+                            continue;
+                        }
+                        double price = invoice.getPrice();
+                        TypeInvoice type = invoice.getType();
+                        StatusInvoice status = invoice.getStatus();
+
+                        if (type == TypeInvoice.INCOMING) {
+                            if (status == StatusInvoice.PAID) {
+                                paidIncomingTotal += price;
+                            } else if (status == StatusInvoice.UNPAID) {
+                                unpaidIncomingTotal += price;
+                            }
+                        } else if (type == TypeInvoice.OUTGOING) {
+                            outgoingTotal += price;
+                        }
+                    }
+                    turnoverTotal = paidIncomingTotal + unpaidIncomingTotal;
+                } else {
+                    turnoverTotal = 0.0;
+                    outgoingTotal = 0.0;
+                }
+            }
+
+            if (profitYear != fiscaliteYear) {
+                List<ObligationFiscale> obligations = obligationFiscaleDao.getAllObligationFiscale();
+                if (obligations != null && !obligations.isEmpty()) {
+                    obligations = obligations.stream()
+                            .filter(ob -> ob.getDateEchance() != null &&
+                                    ob.getDateEchance().atZone(ZoneId.systemDefault()).getYear() == profitYear)
+                            .collect(Collectors.toList());
+                    totalFisc = obligations.stream()
+                            .mapToDouble(ObligationFiscale::getAmount)
+                            .sum();
+                } else {
+                    totalFisc = 0.0;
+                }
+            }
+
+            double restante = turnoverTotal - outgoingTotal - totalFisc;
+            turnoverProfitLabel.setText(decimalFormat.format(turnoverTotal));
+            expensesProfitLabel.setText(decimalFormat.format(outgoingTotal));
+            taxProfitLabel.setText(decimalFormat.format(totalFisc));
+            restanteLabel.setText(decimalFormat.format(restante));
+
+            logger.info("Profit section updated for year {}: Chiffre d'affaires=€{}, Dépenses=€{}, Impôt=€{}, Restante=€{}",
+                    profitYear, turnoverTotal, outgoingTotal, totalFisc, restante);
+        } catch (Exception e) {
+            logger.error("Erreur lors de la mise à jour de la section profit : {}", e.getMessage(), e);
+            turnoverProfitLabel.setText("€ 0.00");
+            expensesProfitLabel.setText("€ 0.00");
+            taxProfitLabel.setText("€ 0.00");
+            restanteLabel.setText("€ 0.00");
         }
     }
 }

@@ -48,7 +48,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user, String contact, String firstName, String lastName, String adresse, Double solde, String note) {
+    public Client(Long idc, User user, String contact, String lastName, String firstName, String adresse, Double solde, String note, List<Devis> devis, List<Invoice> invoices, List<Notification> notifications, String siret, String rib) {
         this.idc = idc;
         this.user = user;
         this.contact = contact;
@@ -57,6 +57,11 @@ public class Client {
         this.adresse = adresse;
         this.solde = solde;
         this.note = note;
+        this.devis = devis;
+        this.invoices = invoices;
+        this.notifications = notifications;
+        this.siret = siret;
+        this.rib = rib;
     }
 
     public Long getIdc() {
@@ -111,6 +116,11 @@ public class Client {
         }
         this.user.setId(1L);
     }
+    @Column(name = "siret", length = 14, unique = true)
+    private String siret;
+
+    @Column(name = "rib", length = 23)
+    private String rib;
 
     public List<Notification> getNotifications() {
         return notifications;
@@ -130,4 +140,6 @@ public class Client {
                 ", solde=" + solde +
                 '}';
     }
+
+
 }

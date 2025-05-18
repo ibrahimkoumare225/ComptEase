@@ -24,4 +24,6 @@ public interface ClientService {
     List<Client> getClientsWithHighestBalance();
     List<Client> getClientsWithHighestBalanceByMonth(int year, int month);
     Double getClientInvoiceSumByMonth(Long clientId, int year, int month);
+
+    boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser, Double solde, String note, String siret, String rib);
 }

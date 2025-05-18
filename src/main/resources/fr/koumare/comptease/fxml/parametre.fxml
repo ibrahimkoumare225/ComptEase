@@ -125,64 +125,61 @@
                                             <children>
                                                 <Button fx:id="retourAc_Info" layoutX="910.0" layoutY="20.0" onAction="#retourAccueil" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="retour" text="Retour"/>
                                                  
-                                                <Label layoutX="47.0" layoutY="116.0" prefHeight="27.0" prefWidth="177.0" text="Nom de l'entreprise:" AnchorPane.leftAnchor="47.0" AnchorPane.topAnchor="116.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
-                                                </Label>
-                                                <TextField fx:id="nomEntreprise" layoutX="252.0" layoutY="116.0" prefHeight="25.0" prefWidth="272.0" AnchorPane.leftAnchor="252.0" AnchorPane.topAnchor="116.0" />
-                                                <Label layoutX="35.0" layoutY="170.0" prefHeight="27.0" prefWidth="199.0" text="Nom du créateur: " AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="170.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
-                                                </Label>
-                                                <ChoiceBox fx:id="nomCreateur" layoutX="252.0" layoutY="171.0" prefHeight="25.0" prefWidth="272.0" AnchorPane.leftAnchor="252.0" AnchorPane.topAnchor="171.0" />
+                                                <GridPane layoutX="40.0" layoutY="60.0" hgap="20" vgap="15" prefWidth="900.0">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints prefWidth="350.0" />
+                                                        <ColumnConstraints prefWidth="350.0" />
+                                                    </columnConstraints>
+                                                    <!-- Colonne 1 -->
+                                                    <Label text="Nom de l'entreprise :" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                                                    <TextField fx:id="nomEntreprise" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-                                                <Label layoutX="62.0" layoutY="434.0" text="Forme jurique: " AnchorPane.topAnchor="434.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
-                                                </Label>
-                                                
-                                                <Label layoutX="61.0" layoutY="368.0" prefHeight="27.0" prefWidth="155.0" text="Régime fiscal: " AnchorPane.bottomAnchor="324.6666666666667" AnchorPane.leftAnchor="61.0" AnchorPane.topAnchor="368.0">
-                                                    <font>
-                                                        <Font size="18.0" />
-                                                    </font>
-                                                </Label>
+                                                    <Label text="Nom du créateur :" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                                                    <ChoiceBox fx:id="nomCreateur" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
-                                                            
-                                                <ChoiceBox fx:id="choiceActivite" layoutX="252.0" layoutY="240.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="454.6666666666667" AnchorPane.leftAnchor="252.0" />
-                                                <ChoiceBox fx:id="choiceProfession" layoutX="252.0" layoutY="390.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="390.0" AnchorPane.leftAnchor="252.0" />
-                                                <Label layoutX="51.0" layoutY="307.0" text="Votre profession :" AnchorPane.bottomAnchor="390.0" AnchorPane.leftAnchor="43.0">
-                                                <font>
-                                                    <Font name="Tahoma" size="18.0" />
-                                                </font>
-                                                </Label>
-                                                <ChoiceBox fx:id="choiceRegime" layoutX="252.0" layoutY="368.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="323.6666666666667" AnchorPane.leftAnchor="244.0" />
-                                                <Label layoutX="313.0" layoutY="33.0" prefHeight="36.0" prefWidth="379.0" text="INFORMATIONS DE L'ENTREPRISE">
-                                                    <font>
-                                                        <Font size="25.0" />
-                                                    </font>
-                                                </Label>
-                                                <Label layoutX="64.0" layoutY="240.0" text="Votre activité :" AnchorPane.bottomAnchor="456.6666666666667">
-                                                    <font>
-                                                        <Font name="Tahoma" size="18.0" />
-                                                    </font>
-                                                </Label>
-                                                <ChoiceBox fx:id="ChoiceFormeJuridique" layoutX="252.0" layoutY="434.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" />
-                                                <Label layoutX="49.0" layoutY="502.0" prefHeight="23.0" prefWidth="166.0" text="Date de création: ">
-                                                    <font>
-                                                        <Font name="Tahoma" size="18.0" />
-                                                    </font>
-                                                </Label>
-                                                <DatePicker fx:id="dateCreation" layoutX="252.0" layoutY="502.0" prefHeight="25.0" prefWidth="291.0" />
-                                                <Label layoutX="37.0" layoutY="560.0" prefHeight="23.0" prefWidth="198.0" text="Cloture comptable:  ">
-                                                    <font>
-                                                        <Font name="Tahoma" size="18.0" />
-                                                    </font>
-                                                </Label>
-                                                <DatePicker fx:id="dateCloture" layoutX="252.0" layoutY="560.0" prefHeight="25.0" prefWidth="291.0" />
-                                                <Button layoutX="425.0" layoutY="610.0" mnemonicParsing="false" onAction="#updateEntreprise" prefHeight="25.0" prefWidth="118.0" styleClass="btn1" stylesheets="@../css/parametre.css" text="Modifier" />
+                                                    <Label text="Forme juridique :" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                                                    <ChoiceBox fx:id="ChoiceFormeJuridique" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                                                    <Label text="Régime fiscal :" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                                                    <ChoiceBox fx:id="choiceRegime" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+                                                    <Label text="Activité :" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                                                    <ChoiceBox fx:id="choiceActivite" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+
+                                                    <Label text="Profession :" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                                                    <ChoiceBox fx:id="choiceProfession" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+
+                                                    <Label text="SIRET :" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                                                    <TextField fx:id="siretField" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+
+                                                    <Label text="RIB :" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+                                                    <TextField fx:id="ribField" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+
+                                                    <Label text="Capital social :" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+                                                    <TextField fx:id="capitalSocialField" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+
+                                                    <Label text="Numéro de TVA :" GridPane.rowIndex="9" GridPane.columnIndex="0" />
+                                                    <TextField fx:id="tvaNumberField" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+
+                                                    <!-- Colonne 2 -->
+                                                    <Label text="Adresse :" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+                                                    <TextField fx:id="addressField" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+
+                                                    <Label text="Téléphone :" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+                                                    <TextField fx:id="phoneField" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+
+                                                    <Label text="Email :" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+                                                    <TextField fx:id="emailField" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+
+                                                    <Label text="Date de création :" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+                                                    <DatePicker fx:id="dateCreation" GridPane.rowIndex="3" GridPane.columnIndex="3" />
+
+                                                    <Label text="Clôture comptable :" GridPane.rowIndex="4" GridPane.columnIndex="2" />
+                                                    <DatePicker fx:id="dateCloture" GridPane.rowIndex="4" GridPane.columnIndex="3" />
+
+                                                    <!-- Bouton Modifier -->
+                                                    <Button text="Modifier" onAction="#handleSave" GridPane.rowIndex="11" GridPane.columnIndex="0" GridPane.columnSpan="4" maxWidth="200" styleClass="btn1" style="-fx-alignment: center;" />
+                                                </GridPane>
                                             </children>
                                         </AnchorPane>
                                         <AnchorPane fx:id="FormUserEntreprise" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: white;" styleClass="container" stylesheets="@../css/parametre.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" visible="false">
@@ -292,7 +289,7 @@
                                                     </HBox>
 
                                                     <!-- Signature -->
-                                                    <Label text="— L’équipe ComptEASE" style="-fx-font-style: italic; -fx-text-fill: #95a5a6;" />
+                                                    <Label text="— L'équipe ComptEASE" style="-fx-font-style: italic; -fx-text-fill: #95a5a6;" />
 
                                                 </VBox>
 
