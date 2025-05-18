@@ -26,6 +26,7 @@
 
 
 
+
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/parametre.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.ParametreController">
     <children>
         <AnchorPane prefHeight="720.0" prefWidth="1300.0" styleClass="body">
@@ -91,9 +92,9 @@
                         </AnchorPane>
                     </left>
                     <center>
-                        <AnchorPane  fx:id="main_form" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <AnchorPane  prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane layoutX="400.0" layoutY="193.0" prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <AnchorPane  fx:id="main_form" layoutX="400.0" layoutY="193.0" prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
                                         <AnchorPane fx:id="accueilParam" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0"  styleClass="container" stylesheets="@../css/client.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" style="-fx-background-color: #f4f7f9;">
                                             <children>
@@ -123,63 +124,74 @@
                                         </AnchorPane>
                                         <AnchorPane fx:id="FormInfoEntreprise" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: white;" styleClass="container" stylesheets="@../css/parametre.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
-                                                <Button fx:id="retourAc_Info" layoutX="910.0" layoutY="20.0" onAction="#retourAccueil" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" styleClass="retour" text="Retour"/>
+                                                <Label layoutX="400.0" layoutY="50.0" prefHeight="36.0" prefWidth="379.0" text="INFORMATIONS ENTREPRISE">
+                                                    <font>
+                                                        <Font size="25.0" />
+                                                    </font>
+                                                </Label>
+                                                <Button fx:id="retourAc_Info" layoutX="920.0" layoutY="10.0" onAction="#retourAccueil" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" styleClass="retour" text="Retour"/>
                                                  
-                                                <GridPane layoutX="40.0" layoutY="60.0" hgap="20" vgap="15" prefWidth="900.0">
+                                                <GridPane layoutX="20" hgap="5" vgap="15" maxWidth="950.0"  maxHeight="Infinity" alignment="CENTER" AnchorPane.topAnchor="150.0">
                                                     <columnConstraints>
-                                                        <ColumnConstraints prefWidth="350.0" />
-                                                        <ColumnConstraints prefWidth="350.0" />
+                                                        <ColumnConstraints  hgrow="NEVER" minWidth="10.0" prefWidth="125.0" />
+                                                        <ColumnConstraints  hgrow="NEVER" minWidth="10.0"  prefWidth="300.0" />
+                                                        <ColumnConstraints  hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints  hgrow="NEVER" minWidth="10.0" prefWidth="125.0" />
+                                                        <ColumnConstraints  hgrow="NEVER" minWidth="10.0"  prefWidth="300.0" />
                                                     </columnConstraints>
                                                     <!-- Colonne 1 -->
-                                                    <Label text="Nom de l'entreprise :" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                                                    <Label text="Entreprise :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label_info" />
                                                     <TextField fx:id="nomEntreprise" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-                                                    <Label text="Nom du créateur :" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                                                    <ChoiceBox fx:id="nomCreateur" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                                                    <Label text="Créateur :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label_info" />
+                                                    <ChoiceBox fx:id="nomCreateur" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="cb_info" />
 
-                                                    <Label text="Forme juridique :" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                                                    <ChoiceBox fx:id="ChoiceFormeJuridique" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                                                    <Label text="Forme juridique :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="label_info" />
+                                                    <ChoiceBox fx:id="ChoiceFormeJuridique" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="cb_info" />
 
-                                                    <Label text="Régime fiscal :" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                                                    <ChoiceBox fx:id="choiceRegime" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                                                    <Label text="Régime fiscal :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="label_info" />
+                                                    <ChoiceBox fx:id="choiceRegime" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="cb_info" />
 
-                                                    <Label text="Activité :" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-                                                    <ChoiceBox fx:id="choiceActivite" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                                                    <Label text="Activité :" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="label_info" />
+                                                    <ChoiceBox fx:id="choiceActivite" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="cb_info" />
 
-                                                    <Label text="Profession :" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-                                                    <ChoiceBox fx:id="choiceProfession" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+                                                    <Label text="Profession :" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="label_info" />
+                                                    <ChoiceBox fx:id="choiceProfession" GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="cb_info" />
 
-                                                    <Label text="SIRET :" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                                                    <Label text="SIRET :" GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="label_info" />
                                                     <TextField fx:id="siretField" GridPane.rowIndex="6" GridPane.columnIndex="1" />
 
-                                                    <Label text="RIB :" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+                                                    <Label text="RIB :" GridPane.rowIndex="7" GridPane.columnIndex="0" styleClass="label_info"  />
                                                     <TextField fx:id="ribField" GridPane.rowIndex="7" GridPane.columnIndex="1" />
-
-                                                    <Label text="Capital social :" GridPane.rowIndex="8" GridPane.columnIndex="0" />
-                                                    <TextField fx:id="capitalSocialField" GridPane.rowIndex="8" GridPane.columnIndex="1" />
-
-                                                    <Label text="Numéro de TVA :" GridPane.rowIndex="9" GridPane.columnIndex="0" />
-                                                    <TextField fx:id="tvaNumberField" GridPane.rowIndex="9" GridPane.columnIndex="1" />
-
                                                     <!-- Colonne 2 -->
-                                                    <Label text="Adresse :" GridPane.rowIndex="0" GridPane.columnIndex="2" />
-                                                    <TextField fx:id="addressField" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+                                                    <Label text="TEST:" GridPane.rowIndex="0" GridPane.columnIndex="2" visible="false" />
 
-                                                    <Label text="Téléphone :" GridPane.rowIndex="1" GridPane.columnIndex="2" />
-                                                    <TextField fx:id="phoneField" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+                                                    <!-- Colonne 3 -->
+                                                    <Label text="Capital social :" GridPane.rowIndex="0" GridPane.columnIndex="3" styleClass="label_info"  />
+                                                    <TextField fx:id="capitalSocialField" GridPane.rowIndex="0" GridPane.columnIndex="4" />
 
-                                                    <Label text="Email :" GridPane.rowIndex="2" GridPane.columnIndex="2" />
-                                                    <TextField fx:id="emailField" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+                                                    <Label text="Numéro de TVA :" GridPane.rowIndex="1" GridPane.columnIndex="3" styleClass="label_info" />
+                                                    <TextField fx:id="tvaNumberField" GridPane.rowIndex="1" GridPane.columnIndex="4" />
 
-                                                    <Label text="Date de création :" GridPane.rowIndex="3" GridPane.columnIndex="2" />
-                                                    <DatePicker fx:id="dateCreation" GridPane.rowIndex="3" GridPane.columnIndex="3" />
+                                                    <Label text="Adresse :" GridPane.rowIndex="2" GridPane.columnIndex="3" styleClass="label_info" />
+                                                    <TextField fx:id="addressField" GridPane.rowIndex="2" GridPane.columnIndex="4" />
 
-                                                    <Label text="Clôture comptable :" GridPane.rowIndex="4" GridPane.columnIndex="2" />
-                                                    <DatePicker fx:id="dateCloture" GridPane.rowIndex="4" GridPane.columnIndex="3" />
+                                                    <Label text="Téléphone :" GridPane.rowIndex="3" GridPane.columnIndex="3" styleClass="label_info" />
+                                                    <TextField fx:id="phoneField" GridPane.rowIndex="3" GridPane.columnIndex="4" />
+
+                                                    <Label text="Email :" GridPane.rowIndex="4" GridPane.columnIndex="3" styleClass="label_info" />
+                                                    <TextField fx:id="emailField" GridPane.rowIndex="4" GridPane.columnIndex="4" />
+
+                                                    <Label text="Date de création :" GridPane.rowIndex="5" GridPane.columnIndex="3" styleClass="label_info" />
+                                                    <DatePicker fx:id="dateCreation" GridPane.rowIndex="5" GridPane.columnIndex="4" />
+
+                                                    <Label text="Clôture comptable :" GridPane.rowIndex="6" GridPane.columnIndex="3" styleClass="label_info" />
+                                                    <DatePicker fx:id="dateCloture" GridPane.rowIndex="6" GridPane.columnIndex="4" />
 
                                                     <!-- Bouton Modifier -->
-                                                    <Button text="Modifier" onAction="#handleSave" GridPane.rowIndex="11" GridPane.columnIndex="0" GridPane.columnSpan="4" maxWidth="200" styleClass="btn1" style="-fx-alignment: center;" />
                                                 </GridPane>
+                                                <Button text="Modifier" onAction="#handleSave" layoutX="450.0" layoutY="550.0" prefHeight="40.0" prefWidth="120.0" styleClass="btn1" style="-fx-alignment: center;" />
+
                                             </children>
                                         </AnchorPane>
                                         <AnchorPane fx:id="FormUserEntreprise" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: white;" styleClass="container" stylesheets="@../css/parametre.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" visible="false">
