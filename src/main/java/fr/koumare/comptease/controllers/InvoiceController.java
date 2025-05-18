@@ -261,8 +261,11 @@ public class InvoiceController extends BaseController implements Initializable {
 
                 Client client = invoice.getClient();
                 if (client != null) {
-                    clientService.updateClientBalance(client.getIdc());
-                    logger.info("Solde du client ID {} mis à jour après suppression de la facture", client.getIdc());
+                   if (clientService.updateClientBalance(client.getIdc())) {
+                    logger.info("Le solde du client a été mis à jour avec succès : {}", client.getIdc());
+                } else {
+                    logger.error("Erreur lors de la mise à jour du solde du client : {}", client.getIdc());
+                }
                 } else {
                     logger.info("Facture ID {} n'a pas de client associé, pas de mise à jour du solde", invoice.getId());
                 }
@@ -598,6 +601,11 @@ public class InvoiceController extends BaseController implements Initializable {
             );
             if(update){
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture mise à jour avec succès !");
+                if (clientService.updateClientBalance(client.getIdc())) {
+                    logger.info("Le solde du client a été mis à jour avec succès : {}", client.getIdc());
+                } else {
+                    logger.error("Erreur lors de la mise à jour du solde du client : {}", client.getIdc());
+                }
                 resetForm();
                 modifFacture.setVisible(false);
                 annulerModif.setVisible(false);

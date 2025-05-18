@@ -146,6 +146,7 @@ public class FactureServiceImpl implements FactureService {
 
         try {
             invoiceDao.updateFacture(invoice);
+            
             logger.info("Facture mise à jour avec succès : ID={}", invoice.getId());
             return true;
         } catch (Exception e) {

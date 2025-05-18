@@ -15,7 +15,7 @@ public interface ClientService {
 
     public List<Client> getAllClients() ;
 
-    public boolean updateClient(Long id,String nom, String prenom, String adresse, String contact,Double solde, String note) ;
+    public boolean updateClient(Long id,String nom, String prenom, String adresse, String contact,Double solde, String note, String siret, String rib); ;
 
     public boolean deleteClient(Long id) ;
 

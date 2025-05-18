@@ -129,7 +129,7 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private Button minimize;
 
-    @FXML
+    /*@FXML
     private TextField modifContact;
 
     @FXML
@@ -151,7 +151,7 @@ public class ClientController extends BaseController implements Initializable {
     private TextField modifAdresse;
 
     @FXML
-    private Button modifRetour;
+    private Button modifRetour;*/
 
 
     @FXML
@@ -246,7 +246,7 @@ public class ClientController extends BaseController implements Initializable {
     @FXML
     private Button modifNoteExecuter;
 
-    
+
     
 
     private ClientService clientService = new ClientServiceImpl();
@@ -316,11 +316,11 @@ public class ClientController extends BaseController implements Initializable {
             form_modif.setVisible(false);
             form_add.setVisible(false);
         }
-        else if(event.getSource()==modifRetour){
+        /*else if(event.getSource()==modifRetour){
             formInitial_h.setVisible(true);
             form_modif.setVisible(false);
             form_add.setVisible(false);
-        }
+        }*/
         else if(event.getSource()==RetourDetail){
             form_initial.setVisible(true);
             form_modifDetail.setVisible(false);
@@ -360,16 +360,33 @@ public class ClientController extends BaseController implements Initializable {
         //mofication de la ligne selectionnée
         tableClient.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
         if (newSelection != null) {
-            formInitial_h.setVisible(false);
+           /*  formInitial_h.setVisible(false);
             form_modif.setVisible(true);
             form_add.setVisible(false);
-            remplirFormulaireModif(newSelection);
+            remplirFormulaireModif(newSelection);*/
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/modifClientForm.fxml"));
+                Scene scene = new Scene(loader.load());
+                Stage stage = new Stage();
+                stage.setTitle("Votre Client");
+                stage.setScene(scene);
+                
+                ModifClientFormController controller = loader.getController();
+                controller.setParentController(this);
+                controller.setClientData(newSelection);
+                
+                stage.show();
+            } catch (IOException e) {
+                logger.error("Erreur lors de l'ouverture du formulaire d'ajout de client : {}", e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ouverture du formulaire d'ajout de client.");
+            }
         }
         });
 
     }
     
-    private void remplirFormulaireModif(Client client) {
+    /*private void remplirFormulaireModif(Client client) {
         modifId.setText(String.valueOf(client.getIdc())); 
         modifNom.setText(client.getLastName());
         modifPrenom.setText(client.getFirstName());
@@ -377,7 +394,8 @@ public class ClientController extends BaseController implements Initializable {
         modifContact.setText(client.getContact());
         modifSolde.setText(String.valueOf(client.getSolde()));
         modifNoteClient.setText(client.getNote());
-    }
+        
+    }*/
 
 
     // Ajoute un client
@@ -418,7 +436,7 @@ public class ClientController extends BaseController implements Initializable {
     }
 
     // Modifie un client
-    @FXML
+    /*@FXML
     private void ModifClient(ActionEvent event) {
         String nom=modifNom.getText();
         String prenom=modifPrenom.getText();
@@ -459,7 +477,7 @@ public class ClientController extends BaseController implements Initializable {
             logger.error("Erreur lors de la modification du client : {}", nom+" " + prenom);
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du client.");
         }
-    }
+    }*/
 
     // Supprime un client
     @FXML
@@ -553,13 +571,13 @@ public class ClientController extends BaseController implements Initializable {
         addNote.clear();
         addSiret.clear();
         addRib.clear();
-        modifId.setText("");
+        /*modifId.setText("");
         modifNom.setText("");
         modifPrenom.setText("");
         modifAdresse.setText("");
         modifContact.setText("");
         modifSolde.setText("");
-        modifNoteClient.setText("");
+        modifNoteClient.setText("");*/
     }
 
    

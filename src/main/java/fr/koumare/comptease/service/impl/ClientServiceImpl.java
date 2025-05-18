@@ -34,7 +34,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean updateClient(Long id, String nom, String prenom, String adresse, String contact,Double solde, String note) {
+    public boolean updateClient(Long id, String nom, String prenom, String adresse, String contact,Double solde, String note, String siret, String rib) {
         if(nom == null || prenom == null || adresse == null ) {
             logger.warn("Informations client incomplete");
             return false;
@@ -50,6 +50,8 @@ public class ClientServiceImpl implements ClientService {
             client.setAdresse(adresse);
             client.setSolde(solde);
             client.setNote(note);
+            client.setSiret(siret);
+            client.setRib(rib);
             clientDao.updateClient(client);
             logger.info("Client modifié : {} {}", nom, prenom, note);
             return true;
