@@ -34,7 +34,7 @@
                </rowConstraints>
                
                <children>
-                  <Label text="Nom :" GridPane.rowIndex="0" textAlignment="CENTER_RIGHT" />
+                  <Label text="Nom :" GridPane.rowIndex="0" textAlignment="CENTER" />
                   <TextField fx:id="nomField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                   
                   <Label text="Prénom :" GridPane.rowIndex="1" />

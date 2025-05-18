@@ -1,5 +1,6 @@
 package fr.koumare.comptease.service.impl;
 
+import com.sun.istack.logging.Logger;
 import fr.koumare.comptease.dao.RapportFinancierDao;
 import fr.koumare.comptease.model.RapportFinancier;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
@@ -15,6 +16,7 @@ import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class RapportFinancierServiceImpl {
     private final RapportFinancierDao rapportDao = new RapportFinancierDao();
