@@ -5,20 +5,20 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.AddClientFormController"  stylesheets="@../css/client.css">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.ModifClientFormController" stylesheets="@../css/client.css">
    <children>
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: white;">
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
-            <Label text="Nouveau Client" textAlignment="CENTER">
+            <Label text="Votre Client" textAlignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
             
-            <GridPane hgap="5" vgap="10">
+            <GridPane hgap="10" vgap="10">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
@@ -34,7 +34,8 @@
                </rowConstraints>
                
                <children>
-                  <Label text="Nom :" GridPane.rowIndex="0" textAlignment="CENTER_RIGHT" />
+                   
+                  <Label text="Nom :" GridPane.rowIndex="0" />
                   <TextField fx:id="nomField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                   
                   <Label text="Prénom :" GridPane.rowIndex="1" />
@@ -45,23 +46,28 @@
                   
                   <Label text="Contact :" GridPane.rowIndex="3" />
                   <TextField fx:id="contactField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                  <Label text="Solde :" GridPane.rowIndex="4" />
+                    <TextField fx:id="soldeField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   
-                  <Label text="SIRET :" GridPane.rowIndex="4" />
-                  <TextField fx:id="siretField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label text="SIRET :" GridPane.rowIndex="5" />
+                  <TextField fx:id="siretField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   
-                  <Label text="RIB :" GridPane.rowIndex="5" />
-                  <TextField fx:id="ribField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Label text="RIB :" GridPane.rowIndex="6" />
+                  <TextField fx:id="ribField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   
-                  <Label text="Note :" GridPane.rowIndex="6" />
-                  <TextArea fx:id="noteField" prefHeight="100.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Label text="Note :" GridPane.rowIndex="7" />
+                  <TextArea fx:id="noteField" prefHeight="100.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                </children>
             </GridPane>
             
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" prefHeight="40.0" prefWidth="120.0" text="Enregistrer"  />
-                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="120.0" text="Annuler" />
-               </children>
+                    <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" prefHeight="40.0" prefWidth="120.0" text="Enregistrer" styleClass="btn1" />
+                    <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="120.0" text="Annuler"  styleClass="btn1"/>
+                    <Label text="Identifiant :" visible="false" />
+                    <TextField fx:id="idField"  visible="false" />              
+                </children>
             </HBox>
          </children>
       </VBox>

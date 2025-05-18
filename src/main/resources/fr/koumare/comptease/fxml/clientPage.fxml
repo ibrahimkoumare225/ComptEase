@@ -155,7 +155,7 @@
                                                          </AnchorPane>
                                                          <AnchorPane fx:id="form_modif" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="990.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                                             <children>
-                                                               <Button fx:id="modifExecuter" layoutX="791.0" layoutY="50.0" mnemonicParsing="false" onAction="#ModifClient" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Modifier" AnchorPane.rightAnchor="33.0" />
+                                                               <Button fx:id="modifExecuter" layoutX="791.0" layoutY="50.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Modifier" AnchorPane.rightAnchor="33.0" />
                                                                <Button fx:id="suprExecuter" layoutX="791.0" layoutY="91.0" mnemonicParsing="false" onAction="#SupprClient" prefHeight="36.0" prefWidth="122.0" styleClass="btn1" text="Supprimer" AnchorPane.rightAnchor="33.0" />
                                                                <Label layoutX="381.0" layoutY="73.0" text="Adresse : " />
                                                                <Label layoutX="407.0" layoutY="5.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Informations du client">
