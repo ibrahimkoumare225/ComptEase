@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox spacing="20" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.InvoiceDetailPopupController" style="-fx-background-color: white; -fx-padding: 30;">
+    <children>
+        <Label text="FACTURE" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #512da8; -fx-padding: 0 0 20 0;" alignment="CENTER" />
+        <HBox spacing="60" alignment="TOP_CENTER">
+            <VBox spacing="5" alignment="TOP_LEFT">
+                <Label text="Entreprise :" style="-fx-font-weight: bold; -fx-font-size: 15px;" />
+                <Label fx:id="companyNameLabel" />
+                <Label fx:id="companyAddressLabel" />
+                <Label fx:id="companySiretLabel" />
+                <Label fx:id="companyRibLabel" />
+                <Label fx:id="companyTvaLabel" />
+                <Label fx:id="companyPhoneLabel" />
+                <Label fx:id="companyEmailLabel" />
+                <Label fx:id="companyCapitalLabel" />
+            </VBox>
+            <VBox spacing="5" alignment="TOP_LEFT">
+                <Label text="Client :" style="-fx-font-weight: bold; -fx-font-size: 15px;" />
+                <Label fx:id="clientNameLabel" />
+                <Label fx:id="clientAddressLabel" />
+                <Label fx:id="clientSiretLabel" />
+                <Label fx:id="clientRibLabel" />
+                <Label fx:id="clientEmailLabel" />
+                <Label fx:id="clientPhoneLabel" />
+            </VBox>
+        </HBox>
+        <GridPane hgap="20" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="120" />
+                <ColumnConstraints prefWidth="250" />
+                <ColumnConstraints prefWidth="120" />
+                <ColumnConstraints prefWidth="250" />
+            </columnConstraints>
+            <children>
+                <Label text="Numéro :" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <Label fx:id="invoiceIdLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                <Label text="Date :" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+                <Label fx:id="invoiceDateLabel" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+
+                <Label text="Client :" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <Label fx:id="clientLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                <Label text="Statut :" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+                <Label fx:id="statusLabel" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+
+                <Label text="Type :" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <Label fx:id="typeLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                <Label text="Description :" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+                <Label fx:id="descriptionLabel" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+            </children>
+        </GridPane>
+        <TableView fx:id="articlesTable" prefHeight="200" prefWidth="600">
+            <columns>
+                <TableColumn fx:id="descCol" text="Description" prefWidth="250" />
+                <TableColumn fx:id="qtyCol" text="Quantité" prefWidth="100" />
+                <TableColumn fx:id="unitCol" text="Prix unitaire" prefWidth="120" />
+                <TableColumn fx:id="totalCol" text="Total" prefWidth="120" />
+            </columns>
+        </TableView>
+        <HBox alignment="CENTER_RIGHT" spacing="20">
+            <Label text="Total général :" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="totalLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" />
+        </HBox>
+        <HBox alignment="CENTER" spacing="20">
+            <Button text="Exporter en PDF" onAction="#handleExportPDF" maxWidth="160" style="-fx-background-color: #388e3c; -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Button text="Fermer" onAction="#handleClose" maxWidth="120" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;" />
+        </HBox>
+    </children>
+</VBox> 

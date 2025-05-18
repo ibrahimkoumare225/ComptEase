@@ -71,15 +71,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Double solde, String note) {
-        logger.info("fonction addClient :{}", nom+" "+ prenom+" "+ adresse+" "+ contact+" "+ idUser+" "+ solde);
+    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser, Double solde, String note, String siret, String rib) {
+        logger.info("fonction addClient :{}", nom + " " + prenom + " " + adresse + " " + contact + " " + idUser + " " + solde);
         //verification si ce client existe deja
-        if(clientDao.clientExists(nom,prenom)) {
+        if(clientDao.clientExists(nom, prenom)) {
             logger.warn("Client déjà existant");
             return false;
         }
         //verification des champs
-        if(nom == null || prenom == null || adresse == null ) {
+        if(nom == null || prenom == null || adresse == null) {
             logger.warn("Informations client incomplete");
             return false;
         }
@@ -93,11 +93,12 @@ public class ClientServiceImpl implements ClientService {
         client.setId_user(1L);
         client.setSolde(solde);
         client.setNote(note);
+        client.setSiret(siret);
+        client.setRib(rib);
 
         clientDao.saveClient(client);
         logger.info("Client ajouté : {} {}", nom, prenom);
         return true;
-
     }
 
     @Override

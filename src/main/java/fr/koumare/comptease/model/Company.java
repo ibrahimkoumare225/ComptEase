@@ -32,6 +32,27 @@ public class Company {
     @Column(name = "closing_date")
     private LocalDate closingDate;
 
+    @Column(name = "siret", length = 14, unique = true)
+    private String siret;
+
+    @Column(name = "rib", length = 23)
+    private String rib;
+
+    @Column(name = "address", length = 300)
+    private String address;
+
+    @Column(name = "phone", length = 20)
+    private String phone;
+
+    @Column(name = "email", length = 100)
+    private String email;
+
+    @Column(name = "capital_social")
+    private Double capitalSocial;
+
+    @Column(name = "tva_number", length = 20)
+    private String tvaNumber;
+
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -41,7 +62,9 @@ public class Company {
     }
 
     public Company(String companyName, String legalForm, String taxRegime, String profession,
-                   String salesNature, LocalDate creationDate, LocalDate closingDate, User user) {
+                   String salesNature, LocalDate creationDate, LocalDate closingDate, User user,
+                   String siret, String rib, String address, String phone, String email,
+                   Double capitalSocial, String tvaNumber) {
         this.companyName = companyName;
         this.legalForm = legalForm;
         this.taxRegime = taxRegime;
@@ -50,6 +73,13 @@ public class Company {
         this.creationDate = creationDate;
         this.closingDate = closingDate;
         this.user = user;
+        this.siret = siret;
+        this.rib = rib;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.capitalSocial = capitalSocial;
+        this.tvaNumber = tvaNumber;
     }
 
     // Getters et Setters
@@ -123,5 +153,62 @@ public class Company {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    // Nouveaux getters et setters
+    public String getSiret() {
+        return siret;
+    }
+
+    public void setSiret(String siret) {
+        this.siret = siret;
+    }
+
+    public String getRib() {
+        return rib;
+    }
+
+    public void setRib(String rib) {
+        this.rib = rib;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Double getCapitalSocial() {
+        return capitalSocial;
+    }
+
+    public void setCapitalSocial(Double capitalSocial) {
+        this.capitalSocial = capitalSocial;
+    }
+
+    public String getTvaNumber() {
+        return tvaNumber;
+    }
+
+    public void setTvaNumber(String tvaNumber) {
+        this.tvaNumber = tvaNumber;
     }
 }

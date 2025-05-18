@@ -44,6 +44,7 @@ import java.util.Observable;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
+import java.util.List;
 
 public class ParametreController extends BaseController implements Initializable {
 
@@ -109,6 +110,14 @@ public class ParametreController extends BaseController implements Initializable
     @FXML private Button modifExecuter;
     @FXML private Button retour;
 
+    @FXML private TextField siretField;
+    @FXML private TextField ribField;
+    @FXML private TextField addressField;
+    @FXML private TextField phoneField;
+    @FXML private TextField emailField;
+    @FXML private TextField capitalSocialField;
+    @FXML private TextField tvaNumberField;
+
     CompanyServiceImpl companyService = new CompanyServiceImpl();
     UserServiceImpl userService = new UserServiceImpl();
 
@@ -117,25 +126,29 @@ public class ParametreController extends BaseController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logger.info("Initialisation de ParametreController");
-        // Initialisation des choix pour les ChoiceBox
-        ChoiceFormeJuridique.setItems(FXCollections.observableArrayList(
-                "SARL", "SAS", "SA", "EURL", "SASU", "Auto-entrepreneur", "SCI"
-        ));
-        choiceRegime.setItems(FXCollections.observableArrayList(
-                "Régime réel normal", "Régime réel simplifié", "Micro-entreprise", "Franchise en base de TVA"
-        ));
-        choiceProfession.setItems(FXCollections.observableArrayList(
-                "Commerce", "Artisanat", "Profession libérale", "Services", "Industrie", "Agriculture"
-        ));
-        nomCreateur.setItems(FXCollections.observableArrayList(userService.getAllUsers().stream()
-                .map(User::getPseudo)
-                .toArray(String[]::new)));
-
+        
+        // Initialisation des ChoiceBox
         choiceActivite.setItems(FXCollections.observableArrayList(
-                "Vente de marchandises", "Prestation de services", "Mixte", "Exportation"
+            "Vente de marchandises", "Prestation de services", "Mixte", "Exportation"
+        ));
+        
+        choiceProfession.setItems(FXCollections.observableArrayList(
+            "Commerce", "Artisanat", "Profession libérale", "Services", "Industrie", "Agriculture"
+        ));
+        
+        choiceRegime.setItems(FXCollections.observableArrayList(
+            "Régime réel normal", "Régime réel simplifié", "Micro-entreprise", "Franchise en base de TVA"
+        ));
+        
+        ChoiceFormeJuridique.setItems(FXCollections.observableArrayList(
+            "SARL", "SAS", "SA", "EURL", "SASU", "Auto-entrepreneur", "SCI"
         ));
 
-        actionUser.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
+        // Initialisation de la TableView
+        pseudoUser.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPseudo()));
+        mailUser.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getEmail()));
+        
+        // Configuration de la colonne d'actions
         actionUser.setCellFactory(param -> new TableCell<User, Void>() {
             private final Button btn = new Button("Modifier");
             {
@@ -147,7 +160,7 @@ public class ParametreController extends BaseController implements Initializable
                     modifInfoUser.setVisible(true);
                     remplirFormulaireModif(user);
                     userTable.setLayoutY(260.0);
-                     userTable.setPrefHeight(359);
+                    userTable.setPrefHeight(359);
                 });
             }
             @Override
@@ -156,9 +169,10 @@ public class ParametreController extends BaseController implements Initializable
                 setGraphic(empty ? null : btn);
             }
         });
+
+        // Afficher les informations initiales
         showInformations();
         showUsers();
-        
     }
 
     @FXML
@@ -199,55 +213,128 @@ public class ParametreController extends BaseController implements Initializable
             FormNousContacterEntreprise.setVisible(true);
         }
     }
-    private void showInformations(){
-        Company company = companyService.getCompanyInformations();
-        if(company != null) {
-            nomEntreprise.setText(company.getCompanyName());
-            nomCreateur.setValue(company.getUser().getPseudo());
-            choiceActivite.setValue(company.getSalesNature());
-            choiceProfession.setValue(company.getProfession());
-            choiceRegime.setValue(company.getTaxRegime());
-            ChoiceFormeJuridique.setValue(company.getLegalForm());
-            dateCreation.setValue(company.getCreationDate());
-            dateCloture.setValue(company.getClosingDate());
-        } else {
-            logger.error("Erreur lors de la récupération des informations de l'entreprise.");
+    private void showInformations() {
+        try {
+            Company company = companyService.getCompanyInformations();
+            if (company != null) {
+                // Récupérer la liste des utilisateurs pour le ChoiceBox
+                nomCreateur.setItems(FXCollections.observableArrayList(
+                    userService.getAllUsers().stream()
+                        .map(User::getPseudo)
+                        .toArray(String[]::new)
+                ));
+
+                // Remplir les champs avec les informations de l'entreprise
+                nomEntreprise.setText(company.getCompanyName());
+                nomCreateur.setValue(company.getUser().getPseudo());
+                choiceActivite.setValue(company.getSalesNature());
+                choiceProfession.setValue(company.getProfession());
+                choiceRegime.setValue(company.getTaxRegime());
+                ChoiceFormeJuridique.setValue(company.getLegalForm());
+                dateCreation.setValue(company.getCreationDate());
+                dateCloture.setValue(company.getClosingDate());
+                siretField.setText(company.getSiret());
+                ribField.setText(company.getRib());
+                addressField.setText(company.getAddress());
+                phoneField.setText(company.getPhone());
+                emailField.setText(company.getEmail());
+                capitalSocialField.setText(String.valueOf(company.getCapitalSocial()));
+                tvaNumberField.setText(company.getTvaNumber());
+            } else {
+                logger.error("Aucune entreprise trouvée");
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune entreprise trouvée. Veuillez créer une entreprise.");
+            }
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des informations de l'entreprise : {}", e.getMessage(), e);
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération des informations de l'entreprise : " + e.getMessage());
         }
     }
 
     @FXML
-    public void updateEntreprise() {
-        // Logique pour mettre à jour les informations de l'entreprise
-        logger.info("Mise à jour des informations de l'entreprise");
-        // Récupérer les valeurs des champs et les enregistrer dans la base de données
-        String nom = nomEntreprise.getText();
-        String createur = nomCreateur.getValue();
-        String activite = choiceActivite.getValue();
-        String profession = choiceProfession.getValue();
-        String regime = choiceRegime.getValue();
-        String formeJuridique = ChoiceFormeJuridique.getValue();
-        LocalDate dateCreationValue = dateCreation.getValue();
-        LocalDate dateClotureValue = dateCloture.getValue();
-        User user = userService.findByPseudo(createur).orElse(null);
-        if (user == null) {
-            logger.error("Utilisateur non trouvé pour le pseudo : {}", createur);
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Utilisateur non trouvé.");
-            return;
-        }
-
-        if(nom.isEmpty() || createur.isEmpty() || activite.isEmpty() || profession.isEmpty()|| regime.isEmpty()|| formeJuridique.isEmpty()) {
-            logger.warn("Champs vides détectés : nom = '{}', createur = '{}', activite = '{}', profession = '{}', regime = '{}', formeJuridique = '{}'", nom, createur, activite, profession, regime, formeJuridique);
-
-        } else {
-            
-            if(companyService.updateCompany(nom, formeJuridique, regime, profession, activite, dateCreationValue, dateClotureValue, user)) {
-                showAlert(Alert.AlertType.INFORMATION, "succès", "Informations de l'entreprise mise à jour avec succès");
-                showInformations();            
-            } 
-            else {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la mise à jour des informations de l'entreprise");
+    private void handleSave() {
+        try {
+            // Validation des champs obligatoires
+            if (nomEntreprise.getText() == null || nomEntreprise.getText().trim().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom de l'entreprise est obligatoire");
+                return;
             }
+
+            if (nomCreateur.getValue() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le créateur est obligatoire");
+                return;
+            }
+
+            if (choiceActivite.getValue() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "L'activité est obligatoire");
+                return;
+            }
+
+            if (choiceProfession.getValue() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "La profession est obligatoire");
+                return;
+            }
+
+            if (choiceRegime.getValue() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le régime fiscal est obligatoire");
+                return;
+            }
+
+            if (ChoiceFormeJuridique.getValue() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "La forme juridique est obligatoire");
+                return;
+            }
+
+            if (dateCreation.getValue() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "La date de création est obligatoire");
+                return;
+            }
+
+            if (dateCloture.getValue() == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "La date de clôture est obligatoire");
+                return;
+            }
+
+            // Récupération de l'entreprise actuelle
+            Company company = companyService.getCompanyInformations();
+            if (company == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune entreprise trouvée");
+                return;
+            }
+
+            // Mise à jour des informations
+            company.setCompanyName(nomEntreprise.getText().trim());
+            company.setSalesNature(choiceActivite.getValue());
+            company.setProfession(choiceProfession.getValue());
+            company.setTaxRegime(choiceRegime.getValue());
+            company.setLegalForm(ChoiceFormeJuridique.getValue());
+            company.setCreationDate(dateCreation.getValue());
+            company.setClosingDate(dateCloture.getValue());
+            company.setSiret(siretField.getText());
+            company.setRib(ribField.getText());
+            company.setAddress(addressField.getText());
+            company.setPhone(phoneField.getText());
+            company.setEmail(emailField.getText());
             
+            try {
+                double capitalSocial = Double.parseDouble(capitalSocialField.getText());
+                company.setCapitalSocial(capitalSocial);
+            } catch (NumberFormatException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le capital social doit être un nombre valide");
+                return;
+            }
+
+            company.setTvaNumber(tvaNumberField.getText());
+
+            // Sauvegarde des modifications
+            if (companyService.saveCompany(company)) {
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Les modifications ont été enregistrées avec succès");
+                showInformations(); // Rafraîchir l'affichage
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la sauvegarde des modifications");
+            }
+        } catch (Exception e) {
+            logger.error("Erreur lors de la sauvegarde des modifications : {}", e.getMessage(), e);
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la sauvegarde des modifications : " + e.getMessage());
         }
     }
 
@@ -262,20 +349,19 @@ public class ParametreController extends BaseController implements Initializable
 
     @FXML
     public void showUsers() {
-        logger.info("Affichage de la liste des utilisateurs");
-        listAllUsers = FXCollections.observableArrayList(userService.getAllUsers());
-        userTable.setItems(listAllUsers);
-        pseudoUser.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPseudo()));
-        mailUser.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getEmail()));
-        userTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-            modifInfoUser.setVisible(true);
-            remplirFormulaireModif(newSelection);
-            userTable.setLayoutY(260.0);
-            userTable.setPrefHeight(359);
-
+        try {
+            List<User> users = userService.getAllUsers();
+            if (users != null && !users.isEmpty()) {
+                userTable.setItems(FXCollections.observableArrayList(users));
+            } else {
+                logger.warn("Aucun utilisateur trouvé");
+                userTable.setItems(FXCollections.observableArrayList());
+            }
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des utilisateurs : {}", e.getMessage(), e);
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération des utilisateurs : " + e.getMessage());
+            userTable.setItems(FXCollections.observableArrayList());
         }
-        });
     }
 
     public void remplirFormulaireModif(User user) {

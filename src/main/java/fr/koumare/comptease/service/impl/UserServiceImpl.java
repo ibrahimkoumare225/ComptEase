@@ -14,6 +14,7 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private UserDao userDao = new UserDao();
+    private User currentUser;
 
     @Override
     public boolean registerUser(String pseudo, String email, String password) {
@@ -106,5 +107,13 @@ public class UserServiceImpl implements UserService {
         userDao.updateUser(userToUpdate);
         logger.info("Mot de passe mis à jour avec succès pour : {}", user.get(0).getPseudo());
         return true;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
     }
 }

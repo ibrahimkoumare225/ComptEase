@@ -37,6 +37,12 @@ public class Client {
     @Column(name = "note", nullable = true)
     private String note;
 
+    @Column(name = "siret", length = 14, unique = true)
+    private String siret;
+
+    @Column(name = "rib", length = 23)
+    private String rib;
+
     /*@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;*/
@@ -53,16 +59,17 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user , String contact, String firstName, String lastName, String adresse, Double solde , String note) {
+    public Client(Long idc, User user, String contact, String firstName, String lastName, String adresse, Double solde, String note, String siret, String rib) {
         this.idc = idc;
-        this.user =user;
+        this.user = user;
         this.contact = contact;
         this.lastName = lastName;
         this.firstName = firstName;
         this.adresse = adresse;
         this.solde = solde;
         this.note = note;
-
+        this.siret = siret;
+        this.rib = rib;
     }
 
     //getters et setters
@@ -137,6 +144,18 @@ public class Client {
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
+    public String getSiret() {
+        return siret;
+    }
+    public void setSiret(String siret) {
+        this.siret = siret;
+    }
+    public String getRib() {
+        return rib;
+    }
+    public void setRib(String rib) {
+        this.rib = rib;
+    }
     @Override
     public String toString() {
         return "Client{" +
@@ -147,6 +166,8 @@ public class Client {
                 ", firstName='" + firstName + '\'' +
                 ", adresse='" + adresse + '\'' +
                 ", solde=" + solde +
+                ", siret='" + siret + '\'' +
+                ", rib='" + rib + '\'' +
                 '}';
     }
 }

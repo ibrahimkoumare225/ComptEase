@@ -8,42 +8,109 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.geometry.Insets?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.InfosController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.InfosController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="auth" stylesheets="@../css/infos.css">
+      <AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="auth" stylesheets="@../css/infos.css">
          <children>
             <Label layoutX="176.0" layoutY="45.0" text="Votre Entreprise" textFill="WHITE">
                <font>
                   <Font name="Tahoma Bold" size="25.0" />
                </font>
             </Label>
-            <Label layoutX="41.0" layoutY="104.0" text="Quelle forme jurique comptez-vous choisir ?" textFill="WHITE" AnchorPane.bottomAnchor="265.0">
-               <font>
-                  <Font name="Tahoma" size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="40.0" layoutY="172.0" text="Quel sera votre régime fiscal ?" textFill="WHITE" AnchorPane.bottomAnchor="210.0" AnchorPane.leftAnchor="40.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="41.0" layoutY="253.0" text="Quel est le nom de votre entreprise (raison sociale) ?" textFill="WHITE" AnchorPane.bottomAnchor="155.0">
-               <font>
-                  <Font name="Tahoma" size="18.0" />
-               </font>
-            </Label>
-            <TextField fx:id="companyNameField" layoutX="40.0" layoutY="290.0" prefHeight="30.0" prefWidth="423.0" promptText="Nom de l'entreprise" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="40.0" />
-            <ChoiceBox fx:id="legalFormChoice" layoutX="41.0" layoutY="137.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="40.0" />
-            <ChoiceBox fx:id="taxRegimeChoice" layoutX="41.0" layoutY="218.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="185.0" AnchorPane.leftAnchor="40.0" />
-            <Button fx:id="continueButton" layoutX="460.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleContinue" prefHeight="30.0" prefWidth="125.0" styleClass="btn_c" text="Continuer" textFill="WHITE" />
-            <FontAwesomeIconView fill="WHITE" glyphName="ARROW_RIGHT" layoutX="566.0" layoutY="363.0" />
-            <Label layoutX="41.0" layoutY="275.0" text="Quelle est votre profession ?" textFill="WHITE" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="40.0">
-               <font>
-                  <Font name="Tahoma" size="18.0" />
-               </font>
-            </Label>
-            <ChoiceBox fx:id="professionChoice" layoutX="40.0" layoutY="300.0" prefHeight="25.0" prefWidth="423.0" styleClass="btn" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="40.0" />
+
+            <GridPane hgap="10" vgap="10" layoutX="40.0" layoutY="100.0" prefWidth="720.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0"/>
+                </columnConstraints>
+
+                <!-- Informations de base -->
+                <Label text="Nom de l'entreprise :" textFill="WHITE" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="companyNameField" GridPane.rowIndex="0" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <Label text="Forme juridique :" textFill="WHITE" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <ChoiceBox fx:id="legalFormChoice" GridPane.rowIndex="1" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <Label text="Régime fiscal :" textFill="WHITE" GridPane.rowIndex="2" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <ChoiceBox fx:id="taxRegimeChoice" GridPane.rowIndex="2" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <Label text="Profession :" textFill="WHITE" GridPane.rowIndex="3" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <ChoiceBox fx:id="professionChoice" GridPane.rowIndex="3" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <!-- Informations financières -->
+                <Label text="SIRET :" textFill="WHITE" GridPane.rowIndex="4" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="siretField" GridPane.rowIndex="4" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <Label text="RIB :" textFill="WHITE" GridPane.rowIndex="5" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="ribField" GridPane.rowIndex="5" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <Label text="Capital social :" textFill="WHITE" GridPane.rowIndex="6" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="capitalSocialField" GridPane.rowIndex="6" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <Label text="Numéro de TVA :" textFill="WHITE" GridPane.rowIndex="7" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="tvaNumberField" GridPane.rowIndex="7" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <!-- Informations de contact -->
+                <Label text="Adresse :" textFill="WHITE" GridPane.rowIndex="8" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="addressField" GridPane.rowIndex="8" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <Label text="Téléphone :" textFill="WHITE" GridPane.rowIndex="9" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="phoneField" GridPane.rowIndex="9" GridPane.columnIndex="1" prefHeight="30.0"/>
+
+                <Label text="Email :" textFill="WHITE" GridPane.rowIndex="10" GridPane.columnIndex="0">
+                    <font>
+                        <Font name="Tahoma" size="14.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="emailField" GridPane.rowIndex="10" GridPane.columnIndex="1" prefHeight="30.0"/>
+            </GridPane>
+
+            <Button fx:id="continueButton" layoutX="460.0" layoutY="544.0" mnemonicParsing="false" onAction="#handleContinue" prefHeight="30.0" prefWidth="125.0" styleClass="btn_c" text="Continuer" textFill="WHITE" />
+            <FontAwesomeIconView fill="WHITE" glyphName="ARROW_RIGHT" layoutX="566.0" layoutY="563.0" />
          </children>
       </AnchorPane>
    </children>

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ClientService {
 
-    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser,Double solde, String note) ;
+    public boolean addClient(String nom, String prenom, String adresse, String contact, Long idUser, Double solde, String note, String siret, String rib);
 
     public List<Client> getAllClients() ;
 

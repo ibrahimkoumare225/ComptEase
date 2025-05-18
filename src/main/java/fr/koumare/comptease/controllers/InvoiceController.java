@@ -14,12 +14,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -228,15 +234,20 @@ public class InvoiceController extends BaseController implements Initializable {
 
         invoiceActionsColumn.setCellFactory(param -> new TableCell<Invoice, Void>() {
             private final Button deleteButton = new Button("Supprimer");
-
+            private final Button detailButton = new Button("Détail");
             {
                 deleteButton.setOnAction(event -> deleteInvoice(getTableRow().getItem()));
+                detailButton.setOnAction(event -> showInvoiceDetails(getTableRow().getItem()));
             }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty || getTableRow().getItem() == null ? null : deleteButton);
+                if (empty || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    HBox box = new HBox(10, detailButton, deleteButton);
+                    setGraphic(box);
+                }
             }
         });
         invoicesTable.setItems(invoicesList);
@@ -617,6 +628,22 @@ public class InvoiceController extends BaseController implements Initializable {
 
     }
 
-
+    private void showInvoiceDetails(Invoice invoice) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/invoiceDetailPopup.fxml"));
+            Parent root = loader.load();
+            InvoiceDetailPopupController controller = loader.getController();
+            controller.setInvoice(invoice);
+            Stage stage = new Stage();
+            stage.setTitle("Détail de la facture");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            logger.error("Erreur lors de l'affichage du détail de la facture : {}", e.getMessage(), e);
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'afficher le détail de la facture : " + e.getMessage());
+        }
+    }
 
 }

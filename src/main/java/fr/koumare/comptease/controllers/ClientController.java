@@ -81,6 +81,12 @@ public class ClientController extends BaseController implements Initializable {
     private TextField addNote;
 
     @FXML
+    private TextField addSiret;
+
+    @FXML
+    private TextField addRib;
+
+    @FXML
     private Button ajouter;
 
     @FXML
@@ -286,11 +292,24 @@ public class ClientController extends BaseController implements Initializable {
         Stage stage= (Stage)main_form.getScene().getWindow();
         stage.setIconified(true);
     }
-    public void switchForm(ActionEvent event){
+    @FXML
+    private void switchForm(ActionEvent event) {
         if(event.getSource()==ajouter){
-            formInitial_h.setVisible(false);
-            form_modif.setVisible(false);
-            form_add.setVisible(true);
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/addClientForm.fxml"));
+                Scene scene = new Scene(loader.load());
+                Stage stage = new Stage();
+                stage.setTitle("Nouveau Client");
+                stage.setScene(scene);
+                
+                AddClientFormController controller = loader.getController();
+                controller.setParentController(this);
+                
+                stage.show();
+            } catch (IOException e) {
+                logger.error("Erreur lors de l'ouverture du formulaire d'ajout de client : {}", e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ouverture du formulaire d'ajout de client.");
+            }
         }
         else if(event.getSource()==addRetour){
             formInitial_h.setVisible(true);
@@ -364,17 +383,19 @@ public class ClientController extends BaseController implements Initializable {
     // Ajoute un client
     @FXML
     private void AjoutClient(ActionEvent event) {
-        String contact=addContact.getText();
-        String prenom=addPrenom.getText();
-        String nom=addNom.getText();
-        String adresse=addAdresse.getText();
-        Double solde=0.0;
-        Long idu=1L;
-        String note=addNote.getText();
+        String contact = addContact.getText();
+        String prenom = addPrenom.getText();
+        String nom = addNom.getText();
+        String adresse = addAdresse.getText();
+        Double solde = 0.0;
+        Long idu = 1L;
+        String note = addNote.getText();
+        String siret = addSiret.getText();
+        String rib = addRib.getText();
 
-        logger.info("Ajout d'un client : {}", nom +" "+ prenom+ " "+ adresse + " "+ contact + " "+ solde);
-        if(clientService.addClient(nom, prenom, adresse, contact,idu,solde, note)){
-            logger.info("Client ajouté : {}", nom +" "+ prenom);
+        logger.info("Ajout d'un client : {}", nom + " " + prenom + " " + adresse + " " + contact + " " + solde);
+        if(clientService.addClient(nom, prenom, adresse, contact, idu, solde, note, siret, rib)){
+            logger.info("Client ajouté : {}", nom + " " + prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
 
             //recuperer le client ajouté
@@ -382,16 +403,16 @@ public class ClientController extends BaseController implements Initializable {
             if(addedClient.isPresent()) {
                 Client newClient = addedClient.get();
                 logger.info("Client ajouté : {}", newClient.getFirstName());
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
-                listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès : " + newClient.getFirstName() + " " + newClient.getLastName());
+                listAllClients = FXCollections.observableArrayList(clientService.getAllClients());
                 affiche(listAllClients);
                 EffacerChamps(event);
             } else {
-                logger.error("Erreur lors de la récupération du client ajouté : {}", nom+" " + prenom);
+                logger.error("Erreur lors de la récupération du client ajouté : {}", nom + " " + prenom);
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client ajouté.");
             }
         } else {
-            logger.error("Erreur lors de l'ajout du client : {}", nom+" " + prenom);
+            logger.error("Erreur lors de l'ajout du client : {}", nom + " " + prenom);
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ajout du client.");
         }
     }
@@ -530,6 +551,8 @@ public class ClientController extends BaseController implements Initializable {
         addPrenom.clear();
         addAdresse.clear();
         addNote.clear();
+        addSiret.clear();
+        addRib.clear();
         modifId.setText("");
         modifNom.setText("");
         modifPrenom.setText("");
@@ -706,5 +729,11 @@ public class ClientController extends BaseController implements Initializable {
             logger.error("Erreur lors de l'envoi du rappel");
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'envoi du rappel.");
         }*/
+    }
+
+    public void refreshClientList() {
+        logger.info("Rafraîchissement de la liste des clients");
+        listAllClients = FXCollections.observableArrayList(clientService.getAllClients());
+        affiche(listAllClients);
     }
 }
