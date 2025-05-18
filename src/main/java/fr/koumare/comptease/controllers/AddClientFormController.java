@@ -12,31 +12,41 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AddClientFormController {
+
     private static final Logger logger = LoggerFactory.getLogger(AddClientFormController.class);
-    private ClientService clientService = new ClientServiceImpl();
-    private ClientController parentController;
 
     @FXML
     private TextField nomField;
+
     @FXML
     private TextField prenomField;
+
     @FXML
     private TextField adresseField;
+
     @FXML
     private TextField contactField;
+
     @FXML
     private TextField siretField;
+
     @FXML
     private TextField ribField;
+
     @FXML
     private TextArea noteField;
+
     @FXML
     private Button saveButton;
+
     @FXML
     private Button cancelButton;
 
-    public void setParentController(ClientController controller) {
-        this.parentController = controller;
+    private ClientService clientService = new ClientServiceImpl();
+    private ClientController parentController;
+
+    public void setParentController(ClientController parentController) {
+        this.parentController = parentController;
     }
 
     @FXML
@@ -49,16 +59,15 @@ public class AddClientFormController {
         String rib = ribField.getText();
         String note = noteField.getText();
         Double solde = 0.0;
-        Long idUser = 1L;
+        Long idu = 1L; // Assuming a default user ID; adjust as needed
 
-        logger.info("Tentative d'ajout d'un nouveau client : {} {}", nom, prenom);
+        logger.info("Ajout d'un client : {} {} (Adresse: {}, Contact: {}, SIRET: {}, RIB: {}, Note: {})",
+                nom, prenom, adresse, contact, siret, rib, note);
 
-        if (clientService.addClient(nom, prenom, adresse, contact, idUser, solde, note, siret, rib)) {
+        if (clientService.addClient(nom, prenom, adresse, contact, idu, solde, note, siret, rib)) {
             logger.info("Client ajouté avec succès : {} {}", nom, prenom);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
-            if (parentController != null) {
-                parentController.refreshClientList();
-            }
+            parentController.refreshClientList();
             closeWindow();
         } else {
             logger.error("Erreur lors de l'ajout du client : {} {}", nom, prenom);
@@ -68,6 +77,7 @@ public class AddClientFormController {
 
     @FXML
     private void handleCancel() {
+        logger.info("Annulation de l'ajout du client");
         closeWindow();
     }
 
@@ -77,10 +87,11 @@ public class AddClientFormController {
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
+        logger.info("Affichage d'une alerte : {} - {}", title, message);
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
-} 
+}

@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.AddClientFormController"  stylesheets="@../css/client.css">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.AddClientFormController" stylesheets="@../css/client.css">
    <children>
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: white;">
          <padding>
@@ -17,7 +17,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            
+
             <GridPane hgap="5" vgap="10">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -32,38 +32,38 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
-               
+
                <children>
                   <Label text="Nom :" GridPane.rowIndex="0" textAlignment="CENTER_RIGHT" />
                   <TextField fx:id="nomField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                  
+
                   <Label text="Prénom :" GridPane.rowIndex="1" />
                   <TextField fx:id="prenomField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  
+
                   <Label text="Adresse :" GridPane.rowIndex="2" />
                   <TextField fx:id="adresseField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  
+
                   <Label text="Contact :" GridPane.rowIndex="3" />
                   <TextField fx:id="contactField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  
+
                   <Label text="SIRET :" GridPane.rowIndex="4" />
                   <TextField fx:id="siretField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  
+
                   <Label text="RIB :" GridPane.rowIndex="5" />
                   <TextField fx:id="ribField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  
+
                   <Label text="Note :" GridPane.rowIndex="6" />
                   <TextArea fx:id="noteField" prefHeight="100.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                </children>
             </GridPane>
-            
+
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" prefHeight="40.0" prefWidth="120.0" text="Enregistrer"  />
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSave" prefHeight="40.0" prefWidth="120.0" text="Enregistrer" />
                   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="120.0" text="Annuler" />
                </children>
             </HBox>
          </children>
       </VBox>
    </children>
-</StackPane> 
+</StackPane>
