@@ -386,8 +386,8 @@ public class ClientController extends BaseController implements Initializable {
                 
                 stage.show();
             } catch (IOException e) {
-                logger.error("Erreur lors de l'ouverture du formulaire d'ajout de client : {}", e.getMessage());
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ouverture du formulaire d'ajout de client.");
+                logger.error("Erreur lors de l'ouverture du formulaire de modif de client : {}", e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ouverture du formulaire de modif du client.");
             }
         }
         });

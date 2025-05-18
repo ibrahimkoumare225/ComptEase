@@ -407,6 +407,9 @@ public class ParametreController extends BaseController implements Initializable
             }
             if(userService.updateUserPassword(selectedUser, newMdpValue)){
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Utilisateur mis à jour avec succès.");
+                modifMdp.clear();
+                newMdp.clear();
+                confirmNewMdp.clear();
                 retourModifUser();
             }
             else {

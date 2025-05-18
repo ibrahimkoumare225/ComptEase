@@ -69,10 +69,32 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 0);
     -fx-border-width: 1px;
 }
-.container_button{
-    -fx-border-bottom: 1px solid gray;
-    -fx-padding-bottom: 10px;
-    -fx-background-color: transparent;
+.container_button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-padding: 10 20 10 20;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
+    -fx-alignment: center-left;
+    -fx-spacing: 10;
+    -fx-pref-width: 300;
+    -fx-pref-height: 45;
+    -fx-content-display: left;
+    -fx-graphic-text-gap: 15px;
+    -fx-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container_button:hover {
+    -fx-background-color: #2980b9;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 6, 0, 0, 3);
+}
+
+.container_button:pressed {
+    -fx-background-color: #1c5980;
 }
 
 .label_info{
