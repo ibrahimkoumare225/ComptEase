@@ -55,6 +55,7 @@ public class InvoiceDetailPopupController {
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private Invoice currentInvoice;
+    ObservableList<Article> articles;
 
     public void setInvoice(Invoice invoice) {
         this.currentInvoice = invoice;
@@ -64,9 +65,22 @@ public class InvoiceDetailPopupController {
         clientLabel.setText(client != null ? client.getFirstName() + " " + client.getLastName() : "-");
         statusLabel.setText(invoice.getStatus() != null ? invoice.getStatus().toString() : "");
         typeLabel.setText(invoice.getType() != null ? invoice.getType().toString() : "");
-        descriptionLabel.setText(invoice.getDescription());
+        descriptionLabel.setText(invoice.getDescriptionArticle());
 
-        ObservableList<Article> articles = FXCollections.observableArrayList(invoice.getArticles());
+        /*if(invoice.getArticles().size() == 0) {
+            Article article = new Article();
+            article.setDescription(invoice.getDescriptionArticle());
+            article.setQuantite(invoice.getQuantity());
+            article.setPrice(invoice.getPrice()/invoice.getQuantity());
+            articles = FXCollections.observableArrayList(article);
+        } else {*/
+         Article art = new Article();
+            art.setDescription(invoice.getDescriptionArticle());
+            art.setQuantite(invoice.getQuantity());
+            art.setPrice(invoice.getPrice()/invoice.getQuantity());
+            //articles = FXCollections.observableArrayList(article);
+        articles = FXCollections.observableArrayList(art);
+        //}
         descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         qtyCol.setCellValueFactory(new PropertyValueFactory<>("quantite"));
         unitCol.setCellValueFactory(new PropertyValueFactory<>("price"));

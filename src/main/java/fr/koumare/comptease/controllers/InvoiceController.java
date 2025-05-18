@@ -421,7 +421,11 @@ public class InvoiceController extends BaseController implements Initializable {
                     .mapToDouble(article -> article.getPrice() * article.getQuantite())
                     .sum();
 
-
+            String descriptionArticle=articleDescription.getText();
+            if(descriptionArticle.isEmpty()){
+                showAlert(AlertType.WARNING, "Avertissement", "Veuillez entrer une description d'article.");
+                return;
+            }
             List<Article> persistentArticles = new ArrayList<>();
             for (Article article : articlesList) {
                 if (factureService.enregistrerArticle(article)) {
@@ -435,7 +439,7 @@ public class InvoiceController extends BaseController implements Initializable {
             }
 
 
-            if (factureService.addInvoice(description, Instant.now(), status, client != null ? client.getIdc() : null, persistentArticles, type, totalQuantity)) {
+            if (factureService.addInvoice(description, Instant.now(), status, client != null ? client.getIdc() : null, persistentArticles, type, totalQuantity,descriptionArticle)) {
                 if (client != null) {
                     for (Article article : persistentArticles) {
                         int newQuantity;
@@ -597,7 +601,8 @@ public class InvoiceController extends BaseController implements Initializable {
                     client != null ? client.getIdc() : null,
                     articlesListe,
                     type,
-                    quantity
+                    quantity,
+                    descriptionArticle
             );
             if(update){
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Facture mise à jour avec succès !");

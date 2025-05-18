@@ -39,4 +39,6 @@ public interface ClientService {
 
     boolean modifDescriptionFacture(Long idInvoice, String description);
 
+    Invoice findInvoiceWithArticle(Long id);
+
 }

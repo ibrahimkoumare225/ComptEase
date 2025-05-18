@@ -200,4 +200,15 @@ public class ClientServiceImpl implements ClientService {
             soldeParClients.put(client.getFirstName() + " " + client.getLastName(), client.getSolde());
         }
     }
+
+    @Override
+    public Invoice findInvoiceWithArticle(Long id){
+        logger.info("Recherche de la facture avec l'article : {}", id);
+        Invoice invoiceOptional = clientDao.findInvoiceWithArticle(id);
+        if (invoiceOptional == null) {
+            logger.warn("Facture non trouvée avec l'ID : {}", id);
+            return null;
+        } 
+        return invoiceOptional;
+    }
 }

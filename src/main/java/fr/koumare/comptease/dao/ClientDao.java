@@ -4,6 +4,8 @@ import fr.koumare.comptease.model.Client;
 import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.utilis.HibernateUtil;
+
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -305,6 +307,16 @@ public class ClientDao {
         }
     }
 
+    public Invoice findInvoiceWithArticle(Long id){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Invoice invoice = session.get(Invoice.class, id);
+            if (invoice != null) {
+                Hibernate.initialize(invoice.getArticles());
+            }
+            session.close();
+            return invoice;
+        }
+    }
 
 
 }

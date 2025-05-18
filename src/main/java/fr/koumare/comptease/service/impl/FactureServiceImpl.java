@@ -30,12 +30,12 @@ public class FactureServiceImpl implements FactureService {
 
     @Override
     public boolean addInvoice(String description, Instant date, String status, Long clientId,
-                              java.util.List<Article> articles, String type, int quantity) {
+                              java.util.List<Article> articles, String type, int quantity, String descriptionArticle) {
         logger.info("Ajout d'une facture : description={}, date={}, status={}, clientId={}, articles.size={}, type={}, quantiteTotal={}",
                 description, date, status, clientId, articles != null ? articles.size() : 0, type, quantity);
 
         // Vérification des champs obligatoires
-        if (description == null || date == null || status == null || articles == null || type == null) {
+        if (description == null || date == null || status == null || articles == null || type == null || descriptionArticle == null) {
             logger.warn("Informations facture incomplètes");
             return false;
         }
@@ -81,7 +81,8 @@ public class FactureServiceImpl implements FactureService {
                 client, // il pourra etre null
                 new ArrayList<>(articles),
                 TypeInvoice.valueOf(type),
-                quantity
+                quantity,
+                descriptionArticle
         );
         invoice.calculatePrice();
 
@@ -99,12 +100,12 @@ public class FactureServiceImpl implements FactureService {
 
     @Override
     public boolean updateInvoice(Long id, String description, Instant date, String status, Long clientId,
-                                 List<Article> articles, String type, int quantity) {
+                                 List<Article> articles, String type, int quantity, String descriptionArticle) {
         logger.info("Mise à jour de la facture : ID={}, description={}, date={}, status={}, clientId={}, articles.size={}, type={}, quantiteTotal={}",
                 id, description, date, status, clientId, articles != null ? articles.size() : 0, type, quantity);
 
         // Vérification des champs obligatoires
-        if (description == null || date == null || status == null || articles == null || type == null) {
+        if (description == null || date == null || status == null || articles == null || type == null || descriptionArticle == null) {
             logger.warn("Informations facture incomplètes");
             return false;
         }
@@ -139,7 +140,8 @@ public class FactureServiceImpl implements FactureService {
                 client,
                 new ArrayList<>(articles),
                 TypeInvoice.valueOf(type),
-                quantity
+                quantity,
+                descriptionArticle
         );
         invoice.setId(id); // Assurez-vous que l'ID est défini avant la mise à jour
         invoice.calculatePrice();

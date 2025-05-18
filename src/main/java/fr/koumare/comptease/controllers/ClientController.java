@@ -19,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -28,6 +29,8 @@ import javafx.scene.Scene;
 import org.hibernate.mapping.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.hibernate.Hibernate;
+
 
 
 import java.io.IOException;
@@ -253,6 +256,8 @@ public class ClientController extends BaseController implements Initializable {
 
     ObservableList<Client> listAllClients= FXCollections.observableArrayList(clientService.getAllClients());
     ObservableList<Invoice> listAllInvoices;
+    Invoice selectInvoice;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         logger.info("Initialisation de  ClientController");
@@ -262,8 +267,11 @@ public class ClientController extends BaseController implements Initializable {
             {
                 btn.getStyleClass().add("btnVoirDetails");
                 btn.setOnAction(event->{
-                Client client = getTableView().getItems().get(getIndex());
-                logger.info("Affichage des détails du client : {}", client.getFirstName());
+                int index= getIndex();
+                ObservableList<Client> items = getTableView().getItems();
+                if(index >= 0  && index < items.size()){
+                    Client client = items.get(index);
+                    logger.info("Affichage des détails du client : {}", client.getFirstName());
                 try {
                     listAllInvoices = FXCollections.observableArrayList(clientService.getClientDetails(client.getIdc()));
                     logger.info("Détails du client : {}", client.getIdc());
@@ -273,6 +281,8 @@ public class ClientController extends BaseController implements Initializable {
                 } catch (IOException e) {
                     logger.error("Erreur lors de l'affichage des détails du client : {}", e.getMessage());
                 }
+                } 
+                
             });}
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -331,6 +341,8 @@ public class ClientController extends BaseController implements Initializable {
             formInitial_hDetail.setVisible(true);
             form_modifDetail.setVisible(false);
             form_initial.setVisible(false);
+            tableClientDetail.getSelectionModel().clearSelection();
+
         }
        
         
@@ -359,12 +371,7 @@ public class ClientController extends BaseController implements Initializable {
         tableClient.setItems(list);
         //mofication de la ligne selectionnée
         tableClient.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-        if (newSelection != null) {
-           /*  formInitial_h.setVisible(false);
-            form_modif.setVisible(true);
-            form_add.setVisible(false);
-            remplirFormulaireModif(newSelection);*/
-
+        if (newSelection != null ) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/modifClientForm.fxml"));
                 Scene scene = new Scene(loader.load());
@@ -376,8 +383,8 @@ public class ClientController extends BaseController implements Initializable {
                 controller.setParentController(this);
                 controller.setClientData(newSelection);
                 
+                
                 stage.show();
-                tableClient.getSelectionModel().clearSelection();
             } catch (IOException e) {
                 logger.error("Erreur lors de l'ouverture du formulaire d'ajout de client : {}", e.getMessage());
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ouverture du formulaire d'ajout de client.");
@@ -387,98 +394,13 @@ public class ClientController extends BaseController implements Initializable {
 
     }
     
-    /*private void remplirFormulaireModif(Client client) {
-        modifId.setText(String.valueOf(client.getIdc())); 
-        modifNom.setText(client.getLastName());
-        modifPrenom.setText(client.getFirstName());
-        modifAdresse.setText(client.getAdresse());
-        modifContact.setText(client.getContact());
-        modifSolde.setText(String.valueOf(client.getSolde()));
-        modifNoteClient.setText(client.getNote());
-        
-    }*/
 
 
     // Ajoute un client
-    @FXML
-    private void AjoutClient(ActionEvent event) {
-        String contact = addContact.getText();
-        String prenom = addPrenom.getText();
-        String nom = addNom.getText();
-        String adresse = addAdresse.getText();
-        Double solde = 0.0;
-        Long idu = 1L;
-        String note = addNote.getText();
-        String siret = addSiret.getText();
-        String rib = addRib.getText();
-
-        logger.info("Ajout d'un client : {}", nom + " " + prenom + " " + adresse + " " + contact + " " + solde);
-        if(clientService.addClient(nom, prenom, adresse, contact, idu, solde, note, siret, rib)){
-            logger.info("Client ajouté : {}", nom + " " + prenom);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès.");
-
-            //recuperer le client ajouté
-            Optional<Client> addedClient = clientService.findByNames(nom, prenom);
-            if(addedClient.isPresent()) {
-                Client newClient = addedClient.get();
-                logger.info("Client ajouté : {}", newClient.getFirstName());
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Client ajouté avec succès : " + newClient.getFirstName() + " " + newClient.getLastName());
-                listAllClients = FXCollections.observableArrayList(clientService.getAllClients());
-                affiche(listAllClients);
-                EffacerChamps(event);
-            } else {
-                logger.error("Erreur lors de la récupération du client ajouté : {}", nom + " " + prenom);
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client ajouté.");
-            }
-        } else {
-            logger.error("Erreur lors de l'ajout du client : {}", nom + " " + prenom);
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ajout du client.");
-        }
-    }
+    //voir AddClientFormController
 
     // Modifie un client
-    /*@FXML
-    private void ModifClient(ActionEvent event) {
-        String nom=modifNom.getText();
-        String prenom=modifPrenom.getText();
-        String adresse=modifAdresse.getText();
-        String contact=modifContact.getText();
-        Double solde= Double.parseDouble(modifSolde.getText());
-        Long id=Long.parseLong(modifId.getText());
-        String note=modifNoteClient.getText();
-        logger.info("Note : {}", note);
-        logger.info("Modification d'un client : {}", nom +" "+ prenom);
-
-        if(clientService.updateClient(id,nom, prenom, adresse, contact, solde,note)){
-            logger.info("Client modifié : {}", nom +" "+ prenom);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès.");
-
-            if(clientService.updateClientBalance(id)){
-                logger.info("Solde du client modifié : {}", nom +" "+ prenom);
-            } else {
-                logger.error("Erreur lors de la modification du solde du client : {}", nom+" " + prenom);
-            }
-            //recuperer le client modifié
-            Optional<Client> updatedClient = clientService.findByNames(nom, prenom);
-            if(updatedClient.isPresent()) {
-                Client newClient = updatedClient.get();
-                logger.info("Client modifié : {}", newClient.getFirstName());
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
-                listAllClients=FXCollections.observableArrayList(clientService.getAllClients());
-                affiche(listAllClients);
-                EffacerChamps(event);
-                formInitial_h.setVisible(true);
-                form_modif.setVisible(false);
-                form_add.setVisible(false);
-            } else {
-                logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du client modifié.");
-            }
-        } else {
-            logger.error("Erreur lors de la modification du client : {}", nom+" " + prenom);
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du client.");
-        }
-    }*/
+    //voir ModifClientFormController
 
     // Supprime un client
     @FXML
@@ -572,13 +494,7 @@ public class ClientController extends BaseController implements Initializable {
         addNote.clear();
         addSiret.clear();
         addRib.clear();
-        /*modifId.setText("");
-        modifNom.setText("");
-        modifPrenom.setText("");
-        modifAdresse.setText("");
-        modifContact.setText("");
-        modifSolde.setText("");
-        modifNoteClient.setText("");*/
+        
     }
 
    
@@ -595,7 +511,7 @@ public class ClientController extends BaseController implements Initializable {
         form_modifDetail.setVisible(false);
 
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
-        desp.setCellValueFactory(new PropertyValueFactory<>("description"));
+        desp.setCellValueFactory(new PropertyValueFactory<>("descriptionArticle"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
         quantitep.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         prixUp.setCellValueFactory(cellData -> {
@@ -604,12 +520,7 @@ public class ClientController extends BaseController implements Initializable {
             return new ReadOnlyObjectWrapper<>(price);
         });
         prixTp.setCellValueFactory(new PropertyValueFactory<>("price"));
-        /*prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
-        prixTp.setCellValueFactory(cellData -> {
-            Invoice invoice = cellData.getValue();
-            double total = invoice.getPrice() * invoice.getQuantity(); //
-            return new ReadOnlyObjectWrapper<>((Double) total);
-        })*/;
+        
         Statutp.setCellValueFactory(new PropertyValueFactory<>("status"));
         if (list.isEmpty()) {
             tableClientDetail.setItems(FXCollections.observableArrayList()); // vider la table
@@ -621,9 +532,11 @@ public class ClientController extends BaseController implements Initializable {
                 if (newSelection != null) {
                     formInitial_hDetail.setVisible(false);
                     form_modifDetail.setVisible(true);
+                    selectInvoice = newSelection;
                     remplirFormulaireModifDetail(newSelection);
                 }
             });
+
         }
     }
 
@@ -634,10 +547,8 @@ public class ClientController extends BaseController implements Initializable {
         modifStatut.setText(invoice.getStatus().toString());
         if(invoice.getStatus() == StatusInvoice.UNPAID) {
             envoyerRappel.setVisible(true);
-        } 
-        /*modifPrixU.setText(String.valueOf(invoice.getPrice()));
-        modifPrixT.setText(String.valueOf(invoice.getPrice() * 4L));
-        modifDate.setText(String.valueOf(invoice.getDate()));*/
+        }
+        
     }
 
     @FXML
@@ -650,7 +561,7 @@ public class ClientController extends BaseController implements Initializable {
         }
         ObservableList<Invoice> list = FXCollections.observableArrayList(clientService.findByKeywordDetails(keyword));
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
-        desp.setCellValueFactory(new PropertyValueFactory<>("description"));
+        desp.setCellValueFactory(new PropertyValueFactory<>("descriptionArticle"));
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
         quantitep.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         prixUp.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -669,13 +580,7 @@ public class ClientController extends BaseController implements Initializable {
             logger.error("Erreur lors de l'affichage des détails du client : {}", e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'affichage des détails du client.");
         }
-       /* if (list.isEmpty()) {
-            showAlert(Alert.AlertType.INFORMATION, "Avertissement", "Aucun détail trouvé avec ce mot clé.");
-        } else {
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Détails trouvés : " + list.size());
-            tableClientDetail.setItems(list);
-            annulerRechercheDetail.setVisible(true);
-        }*/
+       
     }
 
     @FXML
@@ -724,17 +629,7 @@ public class ClientController extends BaseController implements Initializable {
     private void fctVoirDevis(ActionEvent event) {
         logger.info("Affichage du devis");
         //afficher factures.fxml        
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/factures.fxml"));
-            Scene scene = new Scene(loader.load(), 1300,720);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.setTitle("Factures");
-            stage.show();
-        } catch (IOException e) {
-            logger.error("Erreur lors de l'affichage du devis : {}", e.getMessage());
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'affichage du devis.");
-        }
+        showInvoiceDetails(selectInvoice);
     }
 
     @FXML
@@ -755,4 +650,23 @@ public class ClientController extends BaseController implements Initializable {
         listAllClients = FXCollections.observableArrayList(clientService.getAllClients());
         affiche(listAllClients);
     }
+
+    private void showInvoiceDetails(Invoice invoice) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/invoiceDetailPopup.fxml"));
+            Parent root = loader.load();
+            InvoiceDetailPopupController controller = loader.getController();
+            controller.setInvoice(invoice);
+            Stage stage = new Stage();
+            stage.setTitle("Détail de la facture");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            logger.error("Erreur lors de l'affichage du détail de la facture : {}", e.getMessage(), e);
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'afficher le détail de la facture : " + e.getMessage());
+        }
+    }
 }
+

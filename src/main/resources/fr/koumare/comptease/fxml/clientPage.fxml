@@ -123,7 +123,7 @@
                                                          </AnchorPane>
                                                          <AnchorPane fx:id="form_add" layoutX="3.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="990.0" styleClass="ftab" stylesheets="@../css/client.css" visible="false">
                                                             <children>
-                                                               <Button fx:id="addExecuter" layoutX="852.0" layoutY="99.0" mnemonicParsing="false" onAction="#AjoutClient" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Ajouter le client" AnchorPane.rightAnchor="14.666666666666629" />
+                                                               <Button fx:id="addExecuter" layoutX="852.0" layoutY="99.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="101.0" styleClass="btn1" text="Ajouter le client" AnchorPane.rightAnchor="14.666666666666629" />
                                                                <Label layoutX="405.0" layoutY="-4.0" style="-fx-margin-top: 0;-fx-font-weight: bold;" text="Nouveau Client">
                                                                   <font>
                                                                      <Font size="24.0" />
@@ -194,7 +194,7 @@
                                                                <TableView fx:id="tableClientDetail" layoutX="4.0" layoutY="6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="475.0" prefWidth="990.0" styleClass="table" stylesheets="@../css/client.css">
                                                                   <columns>
                                                                      <TableColumn fx:id="idp" maxWidth="1.7976931348623157E308" prefWidth="76.66668462753296" text="Identifiant " />
-                                                                     <TableColumn fx:id="desp" maxWidth="1.7976931348623157E308" prefWidth="317.3332748413086" text="Description" />
+                                                                     <TableColumn fx:id="desp" maxWidth="1.7976931348623157E308" prefWidth="317.3332748413086" text="Article" />
                                                                      <TableColumn fx:id="datep" maxWidth="1.7976931348623157E308" prefWidth="144.00003051757812" text="Date" />
                                                                      <TableColumn fx:id="quantitep" maxWidth="1.7976931348623157E308" prefWidth="94.00006103515625" text="Quantité" />
                                                                      <TableColumn fx:id="prixUp" maxWidth="1.7976931348623157E308" prefWidth="108.666748046875" text="Prix unitaire" />
