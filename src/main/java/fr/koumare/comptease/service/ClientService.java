@@ -38,5 +38,7 @@ public interface ClientService {
     void drawInDashboard() ;
 
     boolean modifDescriptionFacture(Long idInvoice, String description);
-
+    List<Client> getClientsWithHighestBalance();
+    List<Client> getClientsWithHighestBalanceByMonth(int year, int month);
+    Double getClientInvoiceSumByMonth(Long clientId, int year, int month);
 }

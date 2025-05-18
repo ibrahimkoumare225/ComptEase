@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.ObligationFiscaleController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.koumare.comptease.controllers.ObligationFiscaleController">
     <children>
         <AnchorPane prefHeight="720.0" prefWidth="1300.0" styleClass="body">
             <children>
@@ -73,13 +79,13 @@
                     <center>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane prefHeight="720.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <AnchorPane prefHeight="650.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <AnchorPane prefHeight="714.6666666666666" prefWidth="1000.0" styleClass="body1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <AnchorPane prefHeight="619.0" prefWidth="976.0" styleClass="body1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
                                                 <BorderPane fx:id="chartContainer" prefHeight="251.0" prefWidth="953.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="285.0" />
                                     <Label layoutX="117.0" layoutY="67.0" text="Montant " />
-                                                <TableView fx:id="obligationTable" prefHeight="673.0" prefWidth="988.0">
+                                                <TableView fx:id="obligationTable" prefHeight="580.0" prefWidth="988.0">
                                                     <columns>
                                                         <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
                                                         <TableColumn fx:id="montantColumn" prefWidth="100" text="Montant" />
@@ -87,9 +93,9 @@
                                                         <TableColumn fx:id="typeColumn" prefWidth="100" text="Type d'impôt" />
                                                     </columns>
                                                 </TableView>
-                                                <Button layoutX="25.0" layoutY="680.0" onAction="#handleAjouter" text="Ajouter" />
-                                                <Button layoutX="819.0" layoutY="680.0" onAction="#handleSupprimer" text="Supprimer" />
-                                                <Button layoutX="919.0" layoutY="680.0" onAction="#handleModifier" text="Modifier" />
+                                                <Button layoutX="25.0" layoutY="680.0" onAction="#handleAjouter" text="Ajouter" AnchorPane.topAnchor="600.0" />
+                                                <Button layoutX="819.0" layoutY="680.0" onAction="#handleSupprimer" text="Supprimer" AnchorPane.leftAnchor="800.0" AnchorPane.topAnchor="600.0" />
+                                                <Button layoutX="919.0" layoutY="680.0" onAction="#handleModifier" text="Modifier" AnchorPane.leftAnchor="890.0" AnchorPane.topAnchor="600.0" />
 
                                             </children>
                                         </AnchorPane>
