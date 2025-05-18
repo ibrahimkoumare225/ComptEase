@@ -74,3 +74,14 @@
     -fx-padding-bottom: 10px;
     -fx-background-color: transparent;
 }
+
+.label_info{
+    -fx-font-size: 14px;
+}
+
+.cb_info{
+    -fx-background-color: #fff;
+    -fx-border-color: #A4C2E0;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}

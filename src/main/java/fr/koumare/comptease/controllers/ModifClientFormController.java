@@ -89,7 +89,10 @@ public class ModifClientFormController {
             if(updatedClient.isPresent()) {
                 Client newClient = updatedClient.get();
                 logger.info("Client modifié : {}", newClient.getFirstName());
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Client modifié avec succès : " + newClient.getFirstName() +" " + newClient.getLastName());
+                if (parentController != null) {
+                    parentController.refreshClientList();
+                }
+                closeWindow();
                 
             } else {
                 logger.error("Erreur lors de la récupération du client modifié : {}", nom+" " + prenom);
