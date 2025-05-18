@@ -47,7 +47,7 @@ public class ObligationFiscaleController extends BaseController implements Initi
     {
         if (typeImpot != null)
         {
-            typeImpot.getItems().addAll("TVA", "IR", "IS");
+            typeImpot.getItems().addAll("CFP", "IR", "CS");
 
             amountField.setTextFormatter(new TextFormatter<>(change -> {
                 String newText = change.getControlNewText();

@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class Client {
-    //Modifier setId_user pour qu'il prenne l'utilisateur connecté
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idc;
@@ -19,7 +18,7 @@ public class Client {
     @JoinColumn(name= "id_user", nullable= false)
     private User user;
 
-    @Column(unique = true,name="contact", length = 20)
+    @Column(unique = true, name="contact", length = 20)
     private String contact;
 
     @Column(name = "last_name", nullable = false, length = 50)
@@ -37,16 +36,6 @@ public class Client {
     @Column(name = "note", nullable = true)
     private String note;
 
-    @Column(name = "siret", length = 14, unique = true)
-    private String siret;
-
-    @Column(name = "rib", length = 23)
-    private String rib;
-
-    /*@ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;*/
-
     @OneToMany(mappedBy = "client")
     private List<Devis> devis;
 
@@ -59,7 +48,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long idc, User user, String contact, String firstName, String lastName, String adresse, Double solde, String note, String siret, String rib) {
+    public Client(Long idc, User user, String contact, String lastName, String firstName, String adresse, Double solde, String note, List<Devis> devis, List<Invoice> invoices, List<Notification> notifications, String siret, String rib) {
         this.idc = idc;
         this.user = user;
         this.contact = contact;
@@ -68,18 +57,20 @@ public class Client {
         this.adresse = adresse;
         this.solde = solde;
         this.note = note;
+        this.devis = devis;
+        this.invoices = invoices;
+        this.notifications = notifications;
         this.siret = siret;
         this.rib = rib;
     }
 
-    //getters et setters
     public Long getIdc() {
         return idc;
     }
     public void setIdc(Long id) {
         this.idc = id;
     }
-    
+
     public String getContact() {
         return contact;
     }
@@ -125,36 +116,17 @@ public class Client {
         }
         this.user.setId(1L);
     }
-    
-    /*public List<Devis> getDevis() {
-        return devis;
-    }
-    public void setDevis(List<Devis> devis) {
-        this.devis = devis;
-    }
-    public List<Invoice> getInvoices() {
-        return invoices;
-    }
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
-    }*/
+    @Column(name = "siret", length = 14, unique = true)
+    private String siret;
+
+    @Column(name = "rib", length = 23)
+    private String rib;
+
     public List<Notification> getNotifications() {
         return notifications;
     }
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
-    }
-    public String getSiret() {
-        return siret;
-    }
-    public void setSiret(String siret) {
-        this.siret = siret;
-    }
-    public String getRib() {
-        return rib;
-    }
-    public void setRib(String rib) {
-        this.rib = rib;
     }
     @Override
     public String toString() {
@@ -166,8 +138,8 @@ public class Client {
                 ", firstName='" + firstName + '\'' +
                 ", adresse='" + adresse + '\'' +
                 ", solde=" + solde +
-                ", siret='" + siret + '\'' +
-                ", rib='" + rib + '\'' +
                 '}';
     }
+
+
 }

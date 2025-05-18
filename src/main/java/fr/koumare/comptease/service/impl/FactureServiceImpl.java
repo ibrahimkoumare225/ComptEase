@@ -6,7 +6,6 @@ import fr.koumare.comptease.model.*;
 import fr.koumare.comptease.model.enumarated.TypeInvoice;
 import fr.koumare.comptease.model.enumarated.StatusInvoice;
 import fr.koumare.comptease.service.FactureService;
-import javafx.collections.ObservableList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,6 @@ public class FactureServiceImpl implements FactureService {
         this.invoiceDao = new InvoiceDao();
         this.clientDao = new ClientDao();
     }
-
 
     @Override
     public boolean addInvoice(String description, Instant date, String status, Long clientId,
@@ -49,7 +47,6 @@ public class FactureServiceImpl implements FactureService {
 
         try {
             TypeInvoice.valueOf(type);
-            // si le type est OUTGOING, clientId peut être null (dépense)
             if (!type.equals("OUTGOING") && clientId == null) {
                 logger.warn("ClientId requis pour une facture de type {}", type);
                 return false;
@@ -78,14 +75,13 @@ public class FactureServiceImpl implements FactureService {
                 description,
                 date,
                 StatusInvoice.valueOf(status),
-                client, // il pourra etre null
+                client,
                 new ArrayList<>(articles),
                 TypeInvoice.valueOf(type),
                 quantity,
                 descriptionArticle
         );
         invoice.calculatePrice();
-
 
         try {
             invoiceDao.saveFacture(invoice);
@@ -95,7 +91,6 @@ public class FactureServiceImpl implements FactureService {
             logger.error("Échec de l'ajout de la facture : {}", e.getMessage(), e);
             return false;
         }
-
     }
 
     @Override
@@ -110,10 +105,8 @@ public class FactureServiceImpl implements FactureService {
             return false;
         }
 
-
         try {
             TypeInvoice.valueOf(type);
-            // si le type est OUTGOING, clientId peut être null (dépense)
             if (!type.equals("OUTGOING") && clientId == null) {
                 logger.warn("ClientId requis pour une facture de type {}", type);
                 return false;
@@ -143,7 +136,7 @@ public class FactureServiceImpl implements FactureService {
                 quantity,
                 descriptionArticle
         );
-        invoice.setId(id); // Assurez-vous que l'ID est défini avant la mise à jour
+        invoice.setId(id);
         invoice.calculatePrice();
 
         try {
@@ -157,7 +150,6 @@ public class FactureServiceImpl implements FactureService {
         }
     }
 
-    //somme des factures impayees entrante
     @Override
     public Double getTotalUnpaidIncomingInvoices() {
         try {
@@ -170,7 +162,6 @@ public class FactureServiceImpl implements FactureService {
         }
     }
 
-    //sommes des factures impayees entrante
     @Override
     public Double getTotalPaidIncomingInvoices() {
         try {
@@ -183,7 +174,6 @@ public class FactureServiceImpl implements FactureService {
         }
     }
 
-
     @Override
     public Double getTotalOutgoingInvoices() {
         try {
@@ -195,8 +185,6 @@ public class FactureServiceImpl implements FactureService {
             throw new RuntimeException("Échec de la récupération du total des factures sortantes", e);
         }
     }
-
-
 
     @Override
     public List<Invoice> getAllInvoices() {
@@ -214,7 +202,7 @@ public class FactureServiceImpl implements FactureService {
     public boolean deleteInvoice(Long invoiceId) {
         try {
             logger.info("Tentative de suppression de la facture avec ID : {}", invoiceId);
-            invoiceDao.deleteInvoice(invoiceId); // appel au DAO
+            invoiceDao.deleteInvoice(invoiceId);
             clientDao.getClientInvoiceSum(invoiceId);
             logger.info("Facture supprimée avec succès : ID={}", invoiceId);
             return true;
@@ -224,17 +212,11 @@ public class FactureServiceImpl implements FactureService {
         }
     }
 
-
-//    @Override
-//    public void generatePDF(Document document) {
-//        super.generatePDF(document);
-//    }
-
     @Override
     public boolean updateArticle(Long id, String description, List<String> category, int quantite, Double price) {
         logger.info("Mise à jour de l'article : {}", description);
         Optional<Article> optionalArticle = invoiceDao.getArticleById(id);
-       if(price<=0){
+        if (price <= 0) {
             logger.warn("Le prix de l'article doit être supérieur à 0");
             return false;
         }
@@ -252,6 +234,7 @@ public class FactureServiceImpl implements FactureService {
         }
         return true;
     }
+
     @Override
     public boolean enregistrerArticle(Article article) {
         logger.info("Enregistrement de l'article : {}", article);
@@ -279,5 +262,4 @@ public class FactureServiceImpl implements FactureService {
             throw new RuntimeException("Échec de la récupération de la quantité pour la facture", e);
         }
     }
-
 }

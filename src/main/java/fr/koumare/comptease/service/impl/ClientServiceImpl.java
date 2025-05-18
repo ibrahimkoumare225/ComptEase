@@ -7,6 +7,8 @@ import fr.koumare.comptease.model.Article;
 import fr.koumare.comptease.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -200,15 +202,36 @@ public class ClientServiceImpl implements ClientService {
             soldeParClients.put(client.getFirstName() + " " + client.getLastName(), client.getSolde());
         }
     }
+    @Override
+    public List<Client> getClientsWithHighestBalance() {
+        List<Client> clients = clientDao.getClientsWithHighestBalance();
+        logger.info("Retrieved {} clients with highest balance via service", clients.size());
+        return clients;
+    }
 
     @Override
-    public Invoice findInvoiceWithArticle(Long id){
-        logger.info("Recherche de la facture avec l'article : {}", id);
-        Invoice invoiceOptional = clientDao.findInvoiceWithArticle(id);
-        if (invoiceOptional == null) {
-            logger.warn("Facture non trouvée avec l'ID : {}", id);
-            return null;
-        } 
-        return invoiceOptional;
+    public List<Client> getClientsWithHighestBalanceByMonth(int year, int month) {
+        List<Client> clients = clientDao.getClientsWithHighestBalanceByMonth(year, month);
+        logger.info("Retrieved {} clients with highest balance for year {} and month {} via service", clients.size(), year, month);
+        return clients;
+    }
+
+    @Override
+    public Double getClientInvoiceSumByMonth(Long clientId, int year, int month) {
+        logger.info("Calculating invoice sum for client ID {} in year {} and month {}", clientId, year, month);
+        List<Invoice> invoices = clientDao.getClientDetails(clientId);
+        if (invoices == null || invoices.isEmpty()) {
+            logger.warn("No invoices found for client ID {} in year {} and month {}", clientId, year, month);
+            return 0.0;
+        }
+        double sum = invoices.stream()
+                .filter(invoice -> invoice.getDate() != null &&
+                        invoice.getDate().atZone(ZoneId.systemDefault()).getYear() == year &&
+                        invoice.getDate().atZone(ZoneId.systemDefault()).getMonthValue() == month &&
+                        invoice.getPrice() != null)
+                .mapToDouble(Invoice::getPrice)
+                .sum();
+        logger.info("Invoice sum for client ID {} in year {} and month {}: {}", clientId, year, month, sum);
+        return sum;
     }
 }
