@@ -98,23 +98,24 @@
                                     <children>
                                         <AnchorPane fx:id="accueilParam" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="1000.0"  styleClass="container" stylesheets="@../css/client.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" style="-fx-background-color: #f4f7f9;">
                                             <children>
-                                                <Label text="Paramètres" style="-fx-font-size: 28px; -fx-font-weight: bold;" layoutX="300" />
-                                                <Button fx:id="informationsEntreprise" layoutX="200.0" layoutY="100.0" onAction="#switchForm" mnemonicParsing="false" text="Informations de l'entreprise" styleClass="container_button">
+                                                <Label text="Paramètres" style="-fx-font-size: 28px; -fx-font-weight: bold;" layoutX="400" />
+                                                <Button fx:id="informationsEntreprise" layoutX="250.0" layoutY="100.0" onAction="#switchForm" mnemonicParsing="false" text="Informations de l'entreprise" styleClass="container_button">
                                                     <graphic>
                                                         <FontAwesomeIconView glyphName="BUILDING" size="20" />
                                                     </graphic>
                                                 </Button>
-                                                <Button fx:id="UsersEntreprise" layoutX="200.0" layoutY="175.0" onAction="#switchForm" mnemonicParsing="false" text="Comptes utilisateur" styleClass="container_button">
+
+                                                <Button fx:id="UsersEntreprise" layoutX="250.0" layoutY="175.0" onAction="#switchForm" mnemonicParsing="false" text="Comptes utilisateur" styleClass="container_button">
                                                     <graphic>
                                                         <FontAwesomeIconView glyphName="USERS" size="20" />
                                                     </graphic>
                                                 </Button>
-                                                <Button fx:id="nousContacter" layoutX="200.0" layoutY="250.0" onAction="#switchForm" mnemonicParsing="false" text="Nous contacter" styleClass="container_button">
+                                                <Button fx:id="nousContacter" layoutX="250.0" layoutY="250.0" onAction="#switchForm" mnemonicParsing="false" text="Nous contacter" styleClass="container_button">
                                                     <graphic>
                                                         <FontAwesomeIconView glyphName="ENVELOPE" size="20" />
                                                     </graphic>
                                                 </Button>
-                                                <Button fx:id="aPropos" layoutX="200.0" layoutY="315.0" onAction="#switchForm" mnemonicParsing="false" text="A propos" styleClass="container_button">
+                                                <Button fx:id="aPropos" layoutX="250.0" layoutY="315.0" onAction="#switchForm" mnemonicParsing="false" text="A propos" styleClass="container_button">
                                                     <graphic>
                                                         <FontAwesomeIconView glyphName="INFO_CIRCLE" size="20" /> 
                                                     </graphic>
