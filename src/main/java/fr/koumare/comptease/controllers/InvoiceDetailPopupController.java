@@ -65,22 +65,21 @@ public class InvoiceDetailPopupController {
         clientLabel.setText(client != null ? client.getFirstName() + " " + client.getLastName() : "-");
         statusLabel.setText(invoice.getStatus() != null ? invoice.getStatus().toString() : "");
         typeLabel.setText(invoice.getType() != null ? invoice.getType().toString() : "");
-        descriptionLabel.setText(invoice.getDescriptionArticle());
+        descriptionLabel.setText(invoice.getDescription());
 
-        /*if(invoice.getArticles().size() == 0) {
-            Article article = new Article();
-            article.setDescription(invoice.getDescriptionArticle());
-            article.setQuantite(invoice.getQuantity());
-            article.setPrice(invoice.getPrice()/invoice.getQuantity());
-            articles = FXCollections.observableArrayList(article);
-        } else {*/
-         Article art = new Article();
-            art.setDescription(invoice.getDescriptionArticle());
-            art.setQuantite(invoice.getQuantity());
-            art.setPrice(invoice.getPrice()/invoice.getQuantity());
-            //articles = FXCollections.observableArrayList(article);
-        articles = FXCollections.observableArrayList(art);
-        //}
+
+        articles = FXCollections.observableArrayList();
+        if (invoice.getArticles() != null && !invoice.getArticles().isEmpty()) {
+            articles.addAll(invoice.getArticles());
+        } else {
+            // pas d'artcile un message par defaut
+            Article defaultArticle = new Article();
+            defaultArticle.setDescription("Aucun article associé");
+            defaultArticle.setQuantite(0);
+            defaultArticle.setPrice(0.0);
+            articles.add(defaultArticle);
+        }
+
         descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         qtyCol.setCellValueFactory(new PropertyValueFactory<>("quantite"));
         unitCol.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -93,7 +92,7 @@ public class InvoiceDetailPopupController {
         double total = articles.stream().mapToDouble(a -> a.getPrice() * a.getQuantite()).sum();
         totalLabel.setText(String.format("%.2f €", total));
 
-        // Remplir les infos entreprise
+
         CompanyServiceImpl companyService = new CompanyServiceImpl();
         Company company = companyService.getCompanyInformations();
         if (company != null) {
@@ -115,14 +114,14 @@ public class InvoiceDetailPopupController {
             companyEmailLabel.setText("");
             companyCapitalLabel.setText("");
         }
-        // Remplir les infos client
+
         if (client != null) {
             clientNameLabel.setText(client.getFirstName() + " " + client.getLastName());
             clientAddressLabel.setText(client.getAdresse() != null ? client.getAdresse() : "");
             clientSiretLabel.setText(client.getSiret() != null ? "SIRET : " + client.getSiret() : "");
             clientRibLabel.setText(client.getRib() != null ? "RIB : " + client.getRib() : "");
             clientEmailLabel.setText(client.getContact() != null ? "Email : " + client.getContact() : "");
-            clientPhoneLabel.setText(""); // Ajoute ici si tu as un champ téléphone pour le client
+            clientPhoneLabel.setText("");
         } else {
             clientNameLabel.setText("");
             clientAddressLabel.setText("");
@@ -152,10 +151,10 @@ public class InvoiceDetailPopupController {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(file));
             document.open();
-            // Titre
+
             document.add(new Paragraph("FACTURE", com.itextpdf.text.FontFactory.getFont(com.itextpdf.text.FontFactory.HELVETICA_BOLD, 22)));
             document.add(new Paragraph(" "));
-            // Infos entreprise et client
+
             PdfPTable infoTable = new PdfPTable(2);
             infoTable.setWidthPercentage(100);
             PdfPCell cellEntreprise = new PdfPCell();
@@ -180,14 +179,14 @@ public class InvoiceDetailPopupController {
             infoTable.addCell(cellClient);
             document.add(infoTable);
             document.add(new Paragraph(" "));
-            // Infos facture
+            // les facture de la facture
             document.add(new Paragraph("Numéro : " + invoiceIdLabel.getText()));
             document.add(new Paragraph("Date : " + invoiceDateLabel.getText()));
             document.add(new Paragraph("Statut : " + statusLabel.getText()));
             document.add(new Paragraph("Type : " + typeLabel.getText()));
             document.add(new Paragraph("Description : " + descriptionLabel.getText()));
             document.add(new Paragraph(" "));
-            // Tableau des articles
+            // les articles
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
             table.addCell("Description");
@@ -217,4 +216,4 @@ public class InvoiceDetailPopupController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-} 
+}

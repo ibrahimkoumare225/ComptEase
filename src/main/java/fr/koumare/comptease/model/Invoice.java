@@ -39,8 +39,8 @@ public class Invoice {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "description_article", nullable = false)
-    private String descriptionArticle;
+//    @Column(name = "description_article", nullable = false)
+//    private String descriptionArticle;
 
     @Enumerated(EnumType.STRING)
     private TypeInvoice type;
@@ -65,8 +65,8 @@ public class Invoice {
     private List<Transaction> transactions = new ArrayList<>();
 
     // constructeur avec tous les paramètres
-    public Invoice(Double price, String description, Instant date, StatusInvoice status, Client client, List<Article> articles, TypeInvoice type, int quantity, String descriptionArticle) {
-        this.descriptionArticle = descriptionArticle;
+    public Invoice(Double price, String description, Instant date, StatusInvoice status, Client client, List<Article> articles, TypeInvoice type, int quantity /*String descriptionArticle*/) {
+//        this.descriptionArticle = descriptionArticle;
         this.price = price;
         this.description = description;
         this.date = date != null ? date : Instant.now();

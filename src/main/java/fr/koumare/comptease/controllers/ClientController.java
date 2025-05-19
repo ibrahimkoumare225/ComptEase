@@ -9,6 +9,7 @@ import fr.koumare.comptease.model.Invoice;
 import fr.koumare.comptease.service.ClientService;
 import fr.koumare.comptease.service.impl.ClientServiceImpl;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,11 +37,11 @@ import org.hibernate.Hibernate;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-
-
+import java.util.stream.Collectors;
 
 
 public class ClientController extends BaseController implements Initializable {
@@ -511,7 +512,18 @@ public class ClientController extends BaseController implements Initializable {
         form_modifDetail.setVisible(false);
 
         idp.setCellValueFactory(new PropertyValueFactory<>("id"));
-        desp.setCellValueFactory(new PropertyValueFactory<>("descriptionArticle"));
+//        desp.setCellValueFactory(new PropertyValueFactory<>("descriptionArticle"));
+        desp.setCellValueFactory(cellData -> {
+            Invoice invoice = cellData.getValue();
+            List<Article> articles = invoice.getArticles();
+            if (articles != null && !articles.isEmpty()) {
+                String articlesList = articles.stream()
+                        .map(Article::getDescription)
+                        .collect(Collectors.joining(", "));
+                return new SimpleStringProperty(articlesList);
+            }
+            return new SimpleStringProperty("Aucun article");
+        });
         datep.setCellValueFactory(new PropertyValueFactory<>("date"));
         quantitep.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         prixUp.setCellValueFactory(cellData -> {

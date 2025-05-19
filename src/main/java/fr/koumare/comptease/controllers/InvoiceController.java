@@ -393,15 +393,13 @@ public class InvoiceController extends BaseController implements Initializable {
                     client != null ? client.getFirstName() + " " + client.getLastName() : "null", description, status, type);
 
             int totalQuantity = articlesList.stream().mapToInt(Article::getQuantite).sum();
-            double totalPrice = articlesList.stream()
-                    .mapToDouble(article -> article.getPrice() * article.getQuantite())
-                    .sum();
 
-            String descriptionArticle=articleDescription.getText();
-            if(descriptionArticle.isEmpty()){
-                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer une description d'article.");
-                return;
-            }
+//            String descriptionArticle=articleDescription.getText();
+//            if(descriptionArticle.isEmpty()){
+//                showAlert(Alert.AlertType.WARNING, "Avertissement", "Veuillez entrer une description d'article.");
+//                return;
+//            }
+
             List<Article> persistentArticles = new ArrayList<>();
             for (Article article : articlesList) {
                 if (factureService.enregistrerArticle(article)) {
@@ -415,7 +413,7 @@ public class InvoiceController extends BaseController implements Initializable {
             }
 
 
-            if (factureService.addInvoice(description, Instant.now(), status, client != null ? client.getIdc() : null, persistentArticles, type, totalQuantity,descriptionArticle)) {
+            if (factureService.addInvoice(description, Instant.now(), status, client != null ? client.getIdc() : null, persistentArticles, type, totalQuantity /*descriptionArticle*/)) {
                 if (client != null) {
                     for (Article article : persistentArticles) {
                         int newQuantity;

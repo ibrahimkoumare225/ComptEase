@@ -71,7 +71,7 @@ public class InvoiceDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Query<Invoice> query = session.createQuery("SELECT DISTINCT i FROM Invoice i LEFT JOIN FETCH i.articles", Invoice.class);
+            Query<Invoice> query = session.createQuery("SELECT DISTINCT i FROM Invoice i LEFT JOIN FETCH i.articles a LEFT JOIN FETCH i.client c" ,Invoice.class);
             List<Invoice> invoices = query.list();
             transaction.commit();
             logger.info("Factures récupérées avec succès : {}", invoices.size());

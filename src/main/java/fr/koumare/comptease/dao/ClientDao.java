@@ -162,7 +162,7 @@ public class ClientDao {
     public List<Invoice> getClientDetails(Long clientId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             logger.info("Retrieving details for client ID: {}", clientId);
-            List<Invoice> invoices = session.createQuery("FROM Invoice WHERE client.idc = :clientId", Invoice.class)
+            List<Invoice> invoices = session.createQuery("SELECT DISTINCT i FROM Invoice i LEFT JOIN FETCH i.articles a LEFT JOIN FETCH i.client c WHERE i.client.idc = :clientId", Invoice.class)
                     .setParameter("clientId", clientId)
                     .list();
             logger.info("Found {} invoices for client ID: {}", invoices.size(), clientId);
