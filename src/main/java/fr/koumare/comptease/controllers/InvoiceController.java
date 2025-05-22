@@ -13,11 +13,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -220,16 +226,30 @@ public class InvoiceController extends BaseController implements Initializable {
         invoicesTable.getColumns().add(invoiceArticlesColumn);
 
         invoiceActionsColumn.setCellFactory(param -> new TableCell<Invoice, Void>() {
+            private final HBox buttons = new HBox(10);
+            private final Button detailsButton = new Button("Détails");
             private final Button deleteButton = new Button("Supprimer");
 
             {
-                deleteButton.setOnAction(event -> deleteInvoice(getTableRow().getItem()));
+                buttons.getChildren().addAll(detailsButton, deleteButton);
+                detailsButton.setOnAction(event -> {
+                    Invoice invoice = getTableRow().getItem();
+                    if (invoice != null) {
+                        showInvoiceDetails(invoice);
+                    }
+                });
+                deleteButton.setOnAction(event -> {
+                    Invoice invoice = getTableRow().getItem();
+                    if (invoice != null) {
+                        deleteInvoice(invoice);
+                    }
+                });
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty || getTableRow().getItem() == null ? null : deleteButton);
+                setGraphic(empty || getTableRow().getItem() == null ? null : buttons);
             }
         });
         invoicesTable.setItems(invoicesList);
@@ -602,5 +622,23 @@ public class InvoiceController extends BaseController implements Initializable {
         articleDescription.clear();
         articlePrice.clear();
         articleQuantity.clear();
+    }
+
+    private void showInvoiceDetails(Invoice invoice) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/koumare/comptease/fxml/invoiceDetailPopup.fxml"));
+            Parent root = loader.load();
+            InvoiceDetailPopupController controller = loader.getController();
+            controller.setInvoice(invoice);
+            Stage stage = new Stage();
+            stage.setTitle("Détail de la facture");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            logger.error("Erreur lors de l'affichage du détail de la facture : {}", e.getMessage(), e);
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'afficher le détail de la facture : " + e.getMessage());
+        }
     }
 }
